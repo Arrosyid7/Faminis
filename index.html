@@ -479,7 +479,7 @@
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJqQSmVwXbjH91j2wjJdxzeavKSs_zgT4LWPCZx3YnOTYzRmbDcJWRHbry45F86nWE/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEtjwIAFUIqw5lq_lSaosgbw8SzeVzTLtyEkuSxnYiv21YNVV7ZZ6KoSGTMtdWVqDy/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
         const NO_WA_ADMIN = '6285163205421'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
@@ -1103,6 +1103,7 @@
             btn.classList.add('border-brown-800', 'bg-brown-800/5', 'text-brown-800');
         }
 
+        // SELEKSI UKURAN
         function selectSize(size, btn) {
             selectedSize = size;
             document.getElementById('selected-size-text').innerText = `Terpilih: ${size}`;
@@ -1346,9 +1347,15 @@
         }
 
         // -----------------------------------------
-        // CHECKOUT & WHATSAPP REDIRECT
+        // CHECKOUT & WHATSAPP REDIRECT (✨ FIXED ✨)
         // -----------------------------------------
         async function checkoutWhatsApp() {
+            // Validasi apakah keranjang kosong
+            if (cart.length === 0) {
+                showToast("Keranjang belanja Anda kosong!");
+                return;
+            }
+
             const custName = document.getElementById('cust-name').value.trim();
             const custPhone = document.getElementById('cust-phone').value.trim();
             const custRegion = document.getElementById('cust-region').value.trim();
@@ -1475,6 +1482,27 @@
             
             showToast("Teks deskripsi produk berhasil disalin!");
         }
+
+        // EXPLICIT GLOBAL BINDINGS UNTUK ELEMEN IFRAME SANDBOX
+        window.switchPage = switchPage;
+        window.handleDetailBack = handleDetailBack;
+        window.handleSearch = handleSearch;
+        window.clearSearch = clearSearch;
+        window.filterCategory = filterCategory;
+        window.openDetail = openDetail;
+        window.selectColor = selectColor;
+        window.selectSize = selectSize;
+        window.changeQty = changeQty;
+        window.addToCart = addToCart;
+        window.updateCartQty = updateCartQty;
+        window.clearCart = clearCart;
+        window.checkoutWhatsApp = checkoutWhatsApp;
+        window.toggleAiChat = toggleAiChat;
+        window.sendAiChatMessage = sendAiChatMessage;
+        window.handleAiKeyPress = handleAiKeyPress;
+        window.generateProductMixMatch = generateProductMixMatch;
+        window.shareProduct = shareProduct;
+        window.showToast = showToast;
 
     </script>
 </body>
