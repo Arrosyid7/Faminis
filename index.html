@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Faminis Barokah</title>
+    <!-- Menggunakan Tailwind CSS untuk styling cepat dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Mencegah scroll horizontal dan menyembunyikan scrollbar */
+        body { -webkit-tap-highlight-color: transparent; overflow-x: hidden; background-color: #f3f4f6; }
+        ::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Layout khusus mobile (Max width seperti tampilan HP) */
+        .mobile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            padding-bottom: 80px; /* Ruang untuk bottom nav */
+        }
+
+        /* Utilitas Custom Tailwind */
+        .text-orange-custom { color: #f97316; }
+        .bg-orange-custom { background-color: #f97316; }
+        
+        /* Menyembunyikan page yang tidak aktif */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-btn.active {
+            background-color: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        /* Notifikasi Toast */
+        #toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: white; padding: 10px 20px;
+            border-radius: 30px; font-size: 14px; z-index: 1000;
+            display: none; transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased font-sans">
+
+    <!-- Notifikasi -->
+    <div id="toast">Berhasil ditambahkan</div>
+
+    <!-- KONTAINER UTAMA -->
+    <div class="mobile-container">
+        
+        <!-- PAGE 1: HOME -->
+        <div id="page-home" class="page active">
+            <!-- Header -->
+            <div class="p-5 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-custom font-bold text-lg">
+                        FB
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-gray-900 leading-tight">Faminis Barokah</h1>
+                        <p class="text-xs text-gray-500">Pusat Busana Muslim</p>
+                    </div>
+                </div>
+                <button class="relative p-2" onclick="switchPage('cart')">
+                    <i data-lucide="bell" class="w-6 h-6 text-gray-600"></i>
+                    <span id="notification-badge" class="absolute top-1 right-1 w-3 h-3 bg-orange-custom rounded-full hidden"></span>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="px-5 mb-5">
+                <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl p-2">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-2"></i>
+                    <input type="text" placeholder="Cari produk..." class="w-full bg-transparent border-none focus:outline-none px-3 text-sm">
+                    <button class="bg-orange-custom p-2 rounded-lg text-white">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Banner Promo Utama -->
+            <div class="px-5 mb-6">
+                <div class="bg-orange-100 rounded-2xl p-5 relative overflow-hidden flex items-center h-40">
+                    <div class="z-10 w-2/3">
+                        <h2 class="font-bold text-xl text-gray-900 mb-1">Promo Spesial<br>Hari Ini!</h2>
+                        <p class="text-xs text-gray-600 mb-3">Diskon hingga 50%</p>
+                        <button class="bg-orange-custom text-white text-xs font-bold py-2 px-4 rounded-full shadow-lg">Lihat Promo</button>
+                    </div>
+                    <!-- Hiasan shape -->
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-orange-custom rounded-full opacity-20"></div>
+                </div>
+            </div>
+
+            <!-- Kategori -->
+            <div class="pl-5 mb-6">
+                <div class="flex gap-3 overflow-x-auto hide-scroll pb-2 pr-5" id="category-container">
+                    <button class="category-btn active border border-gray-300 rounded-full px-5 py-2 text-sm whitespace-nowrap transition-colors" onclick="filterCategory('Semua', this)">Semua</button>
+                    <button class="category-btn border border-gray-300 text-gray-600 rounded-full px-5 py-2 text-sm whitespace-nowrap transition-colors" onclick="filterCategory('Gamis', this)">Gamis</button>
+                    <button class="category-btn border border-gray-300 text-gray-600 rounded-full px-5 py-2 text-sm whitespace-nowrap transition-colors" onclick="filterCategory('Hijab', this)">Hijab</button>
+                    <button class="category-btn border border-gray-300 text-gray-600 rounded-full px-5 py-2 text-sm whitespace-nowrap transition-colors" onclick="filterCategory('Atasan', this)">Atasan</button>
+                </div>
+            </div>
+
+            <!-- Katalog Produk -->
+            <div class="px-5">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 class="font-bold text-lg">Produk Populer</h3>
+                    <a href="#" class="text-xs text-orange-custom font-medium">Lihat Semua</a>
+                </div>
+                <!-- Grid Produk (Diisi oleh JS) -->
+                <div id="product-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Loading state -->
+                    <div class="col-span-2 text-center text-sm text-gray-500 py-10">Memuat produk...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: DETAIL PRODUK -->
+        <div id="page-detail" class="page">
+            <div class="p-5 flex justify-between items-center fixed top-0 w-full max-w-[480px] z-20 bg-white/80 backdrop-blur-md">
+                <button onclick="switchPage('home')" class="p-2 bg-gray-100 rounded-full"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                <button class="p-2 bg-gray-100 rounded-full"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+            </div>
+            
+            <div class="w-full h-80 bg-gray-200 mt-0 relative">
+                <img id="detail-img" src="" alt="Product" class="w-full h-full object-cover">
+            </div>
+
+            <div class="p-6 bg-white rounded-t-3xl -mt-6 relative z-10">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <p id="detail-category" class="text-xs text-gray-500 mb-1 uppercase tracking-wider"></p>
+                        <h2 id="detail-name" class="font-bold text-2xl leading-tight"></h2>
+                    </div>
+                    <h2 id="detail-price" class="font-bold text-xl text-orange-custom mt-1"></h2>
+                </div>
+                
+                <div class="flex items-center gap-4 text-xs text-gray-500 mb-6 mt-3">
+                    <span class="flex items-center gap-1"><i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i> 4.9</span>
+                    <span class="flex items-center gap-1"><i data-lucide="box" class="w-4 h-4"></i> Stok: <span id="detail-stock" class="font-bold text-gray-800"></span></span>
+                </div>
+
+                <h3 class="font-bold mb-2">Deskripsi</h3>
+                <p id="detail-desc" class="text-sm text-gray-500 leading-relaxed mb-6"></p>
+
+                <!-- Pilihan Warna -->
+                <h3 class="font-bold mb-3">Warna: <span id="selected-color-text" class="font-normal text-gray-500 text-sm"></span></h3>
+                <div id="color-options" class="flex gap-3 mb-6"></div>
+
+                <!-- Pilihan Ukuran -->
+                <h3 class="font-bold mb-3">Ukuran: <span id="selected-size-text" class="font-normal text-gray-500 text-sm"></span></h3>
+                <div id="size-options" class="flex gap-3 mb-8"></div>
+
+                <!-- Footer Detail (Jumlah & Tombol) -->
+                <div class="flex items-center justify-between mt-4 border-t pt-6 mb-20">
+                    <div class="flex items-center border rounded-full px-1 py-1">
+                        <button onclick="changeQty(-1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">-</button>
+                        <span id="detail-qty" class="w-8 text-center text-sm font-bold">1</span>
+                        <button onclick="changeQty(1)" class="w-8 h-8 rounded-full bg-orange-custom text-white flex items-center justify-center">+</button>
+                    </div>
+                    <button onclick="addToCart()" class="bg-orange-custom text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-orange-200 w-full ml-4">
+                        Masukan Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: PROMO -->
+        <div id="page-promo" class="page px-5 pt-5 pb-24">
+            <h2 class="font-bold text-2xl mb-6">Promo & Event</h2>
+            <div id="promo-list" class="space-y-5">
+                <!-- Promo diisi oleh JS -->
+                <div class="text-center text-sm text-gray-500 py-10">Memuat promo...</div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: KERANJANG -->
+        <div id="page-cart" class="page pt-5 pb-32">
+            <div class="px-5 flex items-center justify-between mb-6">
+                <button onclick="switchPage('home')" class="p-2 bg-gray-100 rounded-full"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                <h2 class="font-bold text-xl">Keranjang Belanja</h2>
+                <button onclick="clearCart()" class="p-2"><i data-lucide="trash-2" class="w-5 h-5 text-gray-400"></i></button>
+            </div>
+
+            <div id="cart-items" class="px-5 space-y-4 mb-6">
+                <!-- Item keranjang diisi JS -->
+            </div>
+
+            <!-- Ringkasan Pesanan -->
+            <div class="px-5 mt-8 border-t pt-6 bg-gray-50 rounded-t-3xl pb-24 h-full">
+                <h3 class="font-bold mb-4">Ringkasan Pesanan</h3>
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600 mb-4 border-b pb-4">
+                    <span>Ongkos Kirim</span>
+                    <span class="text-green-500 italic">Dihitung oleh Admin</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg mb-6">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-orange-custom">Rp 0</span>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6">
+                    <p class="text-xs text-gray-500 mb-2">Checkout akan dialihkan ke WhatsApp Admin Faminis Barokah.</p>
+                    <input type="text" id="cust-name" placeholder="Nama Anda (Opsional)" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm outline-none mb-2">
+                </div>
+
+                <button onclick="checkoutWhatsApp()" class="w-full bg-orange-custom text-white font-bold py-4 rounded-xl shadow-lg shadow-orange-200 flex items-center justify-center gap-2">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    Lanjut ke WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- PAGE 5: TENTANG TOKO -->
+        <div id="page-about" class="page px-5 pt-5 pb-24 text-center">
+            <div class="w-24 h-24 bg-orange-100 rounded-full mx-auto flex items-center justify-center text-4xl font-bold text-orange-custom mb-4 mt-8">
+                FB
+            </div>
+            <h2 class="font-bold text-2xl mb-1">Faminis Barokah</h2>
+            <p class="text-gray-500 text-sm mb-8">Menyediakan berbagai busana muslim berkualitas dengan harga terjangkau.</p>
+
+            <div class="space-y-3 max-w-sm mx-auto">
+                <a href="#" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-blue-600">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Facebook</p>
+                        <p class="text-xs text-gray-500">@faminisbarokah</p>
+                    </div>
+                </a>
+                <a href="#" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-pink-500">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Instagram</p>
+                        <p class="text-xs text-gray-500">@faminis.barokah</p>
+                    </div>
+                </a>
+                <a href="#" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-black">
+                        <i data-lucide="video" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">TikTok</p>
+                        <p class="text-xs text-gray-500">@faminisbarokah</p>
+                    </div>
+                </a>
+                <a href="#" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="w-10 h-10 bg-white shadow-sm rounded-full flex items-center justify-center text-green-500">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-bold text-sm">Lokasi Toko</p>
+                        <p class="text-xs text-gray-500">Lihat di Google Maps</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-gray-100 px-6 py-3 flex justify-between items-center z-50 rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.03)]">
+            <button onclick="switchPage('home')" id="nav-home" class="nav-btn flex flex-col items-center text-orange-custom">
+                <i data-lucide="home" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </button>
+            <button onclick="switchPage('promo')" id="nav-promo" class="nav-btn flex flex-col items-center text-gray-400 hover:text-orange-custom transition">
+                <i data-lucide="tag" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] font-medium">Promo</span>
+            </button>
+            <button onclick="switchPage('cart')" id="nav-cart" class="nav-btn flex flex-col items-center text-gray-400 hover:text-orange-custom transition relative">
+                <i data-lucide="shopping-bag" class="w-6 h-6 mb-1"></i>
+                <span id="cart-badge" class="absolute -top-1 right-0 w-4 h-4 bg-orange-custom text-white text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                <span class="text-[10px] font-medium">Keranjang</span>
+            </button>
+            <button onclick="switchPage('about')" id="nav-about" class="nav-btn flex flex-col items-center text-gray-400 hover:text-orange-custom transition">
+                <i data-lucide="store" class="w-6 h-6 mb-1"></i>
+                <span class="text-[10px] font-medium">Toko</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // INISIALISASI ICON
+        lucide.createIcons();
+
+        // -----------------------------------------
+        // KONFIGURASI DATABASE
+        // Ganti URL ini dengan URL Web App Apps Script Anda!
+        // -----------------------------------------
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkPryzAHSev_ied2vxF5zw27HRCUu82xvwHmTehThFCrWp-5gLfKRJOH1UeISWW3sU/exec'; // Contoh: 'https://script.google.com/macros/s/AKfycb.../exec'
+        const NO_WA_ADMIN = '6285163205421'; // Ganti dengan nomor WA Admin (Gunakan 62, tanpa 0)
+
+        // STATE APLIKASI
+        let productsData = [];
+        let promosData = [];
+        let cart = JSON.parse(localStorage.getItem('faminis_cart')) || [];
+        
+        let currentDetailProduct = null;
+        let selectedColor = "";
+        let selectedSize = "";
+        let currentQty = 1;
+
+        // DATA DUMMY (Akan digunakan jika SCRIPT_URL kosong)
+        const dummyProducts = [
+            { id: "P1", kategori: "Gamis", nama: "Gamis Syar'i Khadijah", deskripsi: "Bahan ceruty babydoll full furing, adem dan jatuh dipakai.", harga: 185000, gambar: "https://images.unsplash.com/photo-1589465885857-44edb59bbff2?auto=format&fit=crop&w=500&q=60", warna: ["Hitam", "Maroon", "Mocca"], ukuran: ["M", "L", "XL"], stok: 24 },
+            { id: "P2", kategori: "Hijab", nama: "Pashmina Plisket", deskripsi: "Pashmina tanpa setrika, mudah dibentuk, tegak di dahi.", harga: 35000, gambar: "https://images.unsplash.com/photo-1607583643358-3011a68132d7?auto=format&fit=crop&w=500&q=60", warna: ["Dusty", "Army", "Hitam"], ukuran: ["All Size"], stok: 100 },
+            { id: "P3", kategori: "Atasan", nama: "Tunik Linen Premium", deskripsi: "Atasan tunik casual cocok untuk kuliah atau kerja.", harga: 125000, gambar: "https://images.unsplash.com/photo-1515347619362-73bc3ee22f51?auto=format&fit=crop&w=500&q=60", warna: ["Putih", "Biru Muda"], ukuran: ["L", "XL"], stok: 15 },
+            { id: "P4", kategori: "Gamis", nama: "Dress Muslim Kasual", deskripsi: "Dress harian nyaman, busui friendly.", harga: 140000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Navy", "Abu"], ukuran: ["M", "L"], stok: 10 }
+        ];
+
+        const dummyPromos = [
+            { judul: "Live TikTok Sale!", gambar: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80", link: "#" },
+            { judul: "Diskon Toko Fisik Weekend", gambar: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80", link: "#" }
+        ];
+
+        // -----------------------------------------
+        // FUNGSI INISIALISASI & FETCH DATA
+        // -----------------------------------------
+        window.onload = async () => {
+            updateCartBadge();
+            
+            if (SCRIPT_URL) {
+                try {
+                    const res = await fetch(SCRIPT_URL + '?action=getData');
+                    const json = await res.json();
+                    if(json.status === 'success') {
+                        productsData = json.data.products;
+                        promosData = json.data.promos;
+                    }
+                } catch (e) {
+                    console.error("Gagal load dari Google Sheet, pakai dummy data", e);
+                    productsData = dummyProducts;
+                    promosData = dummyPromos;
+                }
+            } else {
+                // Pakai dummy jika URL belum diset
+                productsData = dummyProducts;
+                promosData = dummyPromos;
+            }
+
+            renderProducts(productsData);
+            renderPromos();
+        };
+
+        // -----------------------------------------
+        // NAVIGASI
+        // -----------------------------------------
+        function switchPage(pageId) {
+            // Sembunyikan semua page
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Tampilkan page tujuan
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Update Bottom Nav Warna
+            if(pageId !== 'detail') {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('text-orange-custom');
+                    btn.classList.add('text-gray-400');
+                });
+                const activeNav = document.getElementById(`nav-${pageId}`);
+                if(activeNav) {
+                    activeNav.classList.remove('text-gray-400');
+                    activeNav.classList.add('text-orange-custom');
+                }
+            }
+
+            // Render keranjang jika buka halaman keranjang
+            if(pageId === 'cart') renderCart();
+        }
+
+        // -----------------------------------------
+        // RENDER UI: HOME
+        // -----------------------------------------
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        function renderProducts(data) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            if(data.length === 0) {
+                grid.innerHTML = '<div class="col-span-2 text-center text-gray-500 py-10">Produk tidak ditemukan</div>';
+                return;
+            }
+
+            data.forEach(prod => {
+                const card = `
+                    <div class="bg-white rounded-2xl p-3 border border-gray-100 shadow-sm relative cursor-pointer" onclick="openDetail('${prod.id}')">
+                        <button class="absolute top-4 right-4 bg-white/80 p-1.5 rounded-full z-10 text-gray-400 hover:text-red-500">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </button>
+                        <div class="h-40 bg-gray-100 rounded-xl mb-3 overflow-hidden">
+                            <img src="${prod.gambar}" class="w-full h-full object-cover">
+                        </div>
+                        <p class="text-[10px] text-gray-400 mb-1 uppercase tracking-wide">${prod.kategori}</p>
+                        <h4 class="font-bold text-sm text-gray-800 mb-1 leading-tight line-clamp-2">${prod.nama}</h4>
+                        <p class="font-bold text-orange-custom text-sm">${formatRupiah(prod.harga)}</p>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+            lucide.createIcons();
+        }
+
+        function filterCategory(cat, btnElement) {
+            // Update styling button
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('active', 'bg-orange-custom', 'text-white', 'border-orange-custom');
+                b.classList.add('text-gray-600', 'border-gray-300');
+                b.style.backgroundColor = 'transparent';
+                b.style.color = '';
+            });
+            
+            btnElement.classList.add('active');
+            btnElement.style.backgroundColor = '#f97316';
+            btnElement.style.color = 'white';
+            btnElement.style.borderColor = '#f97316';
+
+            // Filter data
+            if (cat === 'Semua') {
+                renderProducts(productsData);
+            } else {
+                const filtered = productsData.filter(p => p.kategori.toLowerCase() === cat.toLowerCase());
+                renderProducts(filtered);
+            }
+        }
+
+        // -----------------------------------------
+        // RENDER UI: DETAIL PRODUK
+        // -----------------------------------------
+        function openDetail(id) {
+            currentDetailProduct = productsData.find(p => p.id === id);
+            if(!currentDetailProduct) return;
+
+            // Reset selection
+            selectedColor = "";
+            selectedSize = "";
+            currentQty = 1;
+
+            // Isi data ke DOM
+            document.getElementById('detail-img').src = currentDetailProduct.gambar;
+            document.getElementById('detail-category').innerText = currentDetailProduct.kategori;
+            document.getElementById('detail-name').innerText = currentDetailProduct.nama;
+            document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga);
+            document.getElementById('detail-stock').innerText = currentDetailProduct.stok;
+            document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi;
+            document.getElementById('detail-qty').innerText = currentQty;
+            
+            document.getElementById('selected-color-text').innerText = "Pilih";
+            document.getElementById('selected-size-text').innerText = "Pilih";
+
+            // Render Warna
+            const colorContainer = document.getElementById('color-options');
+            colorContainer.innerHTML = '';
+            // Konversi warna text ke hex untuk visual (Sederhana)
+            const colorMap = { "hitam": "#000", "maroon": "#800000", "navy": "#000080", "putih": "#fff", "mocca": "#a38068", "dusty": "#dca2a8" };
+            
+            currentDetailProduct.warna.forEach(w => {
+                const hex = colorMap[w.toLowerCase()] || '#ccc';
+                colorContainer.innerHTML += `
+                    <button onclick="selectColor('${w}', this)" class="color-btn w-8 h-8 rounded-full border-2 border-gray-200" style="background-color: ${hex};" title="${w}"></button>
+                `;
+            });
+
+            // Render Ukuran
+            const sizeContainer = document.getElementById('size-options');
+            sizeContainer.innerHTML = '';
+            currentDetailProduct.ukuran.forEach(s => {
+                sizeContainer.innerHTML += `
+                    <button onclick="selectSize('${s}', this)" class="size-btn px-4 py-1.5 border border-gray-300 rounded-full text-sm text-gray-600">${s}</button>
+                `;
+            });
+
+            switchPage('detail');
+        }
+
+        function selectColor(color, btn) {
+            selectedColor = color;
+            document.getElementById('selected-color-text').innerText = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-orange-custom', 'ring-offset-2'));
+            btn.classList.add('ring-2', 'ring-orange-custom', 'ring-offset-2');
+        }
+
+        function selectSize(size, btn) {
+            selectedSize = size;
+            document.getElementById('selected-size-text').innerText = size;
+            document.querySelectorAll('.size-btn').forEach(b => {
+                b.classList.remove('bg-orange-custom', 'text-white', 'border-orange-custom');
+                b.classList.add('text-gray-600', 'border-gray-300');
+            });
+            btn.classList.remove('text-gray-600', 'border-gray-300');
+            btn.classList.add('bg-orange-custom', 'text-white', 'border-orange-custom');
+        }
+
+        function changeQty(amount) {
+            currentQty += amount;
+            if(currentQty < 1) currentQty = 1;
+            if(currentQty > currentDetailProduct.stok) currentQty = currentDetailProduct.stok;
+            document.getElementById('detail-qty').innerText = currentQty;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
+        // -----------------------------------------
+        // LOGIKA KERANJANG
+        // -----------------------------------------
+        function addToCart() {
+            if(currentDetailProduct.warna.length > 0 && !selectedColor) {
+                showToast("Pilih warna terlebih dahulu!");
+                return;
+            }
+            if(currentDetailProduct.ukuran.length > 0 && !selectedSize) {
+                showToast("Pilih ukuran terlebih dahulu!");
+                return;
+            }
+
+            // Cek apakah item sudah ada di keranjang dengan varian yang sama
+            const existingItemIndex = cart.findIndex(item => 
+                item.id === currentDetailProduct.id && 
+                item.warna === selectedColor && 
+                item.ukuran === selectedSize
+            );
+
+            if(existingItemIndex > -1) {
+                cart[existingItemIndex].qty += currentQty;
+            } else {
+                cart.push({
+                    id: currentDetailProduct.id,
+                    nama: currentDetailProduct.nama,
+                    harga: currentDetailProduct.harga,
+                    gambar: currentDetailProduct.gambar,
+                    warna: selectedColor,
+                    ukuran: selectedSize,
+                    qty: currentQty
+                });
+            }
+
+            localStorage.setItem('faminis_cart', JSON.stringify(cart));
+            updateCartBadge();
+            showToast("Berhasil dimasukkan keranjang!");
+            
+            // Animasi kecil pada badge
+            const badge = document.getElementById('cart-badge');
+            badge.classList.add('scale-150');
+            setTimeout(() => badge.classList.remove('scale-150'), 200);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            if(totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+                document.getElementById('notification-badge').classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+                document.getElementById('notification-badge').classList.add('hidden');
+            }
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+            
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 text-gray-300 mx-auto mb-3"></i>
+                        <p class="text-gray-500">Keranjang masih kosong.</p>
+                        <button onclick="switchPage('home')" class="mt-4 text-orange-custom text-sm font-bold">Mulai Belanja</button>
+                    </div>`;
+                document.getElementById('cart-subtotal').innerText = "Rp 0";
+                document.getElementById('cart-total').innerText = "Rp 0";
+                lucide.createIcons();
+                return;
+            }
+
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += (item.harga * item.qty);
+                const variantText = [item.warna, item.ukuran].filter(Boolean).join(', ');
+                
+                container.innerHTML += `
+                    <div class="flex gap-4 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+                        <img src="${item.gambar}" class="w-20 h-24 object-cover rounded-xl bg-gray-100">
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-800 leading-tight">${item.nama}</h4>
+                                <p class="text-xs text-gray-500 mt-1">${variantText}</p>
+                                <p class="font-bold text-orange-custom text-sm mt-1">${formatRupiah(item.harga)}</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="flex items-center border rounded-full px-1">
+                                    <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 flex items-center justify-center text-gray-500">-</button>
+                                    <span class="w-6 text-center text-xs font-bold">${item.qty}</span>
+                                    <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 flex items-center justify-center text-gray-500">+</button>
+                                </div>
+                                <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500 p-1">
+                                    <i data-lucide="trash" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cart-subtotal').innerText = formatRupiah(subtotal);
+            document.getElementById('cart-total').innerText = formatRupiah(subtotal);
+            lucide.createIcons();
+        }
+
+        function updateCartQty(index, amount) {
+            cart[index].qty += amount;
+            if(cart[index].qty < 1) {
+                removeFromCart(index);
+                return;
+            }
+            saveAndRenderCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveAndRenderCart();
+        }
+
+        function clearCart() {
+            if(confirm("Hapus semua isi keranjang?")) {
+                cart = [];
+                saveAndRenderCart();
+            }
+        }
+
+        function saveAndRenderCart() {
+            localStorage.setItem('faminis_cart', JSON.stringify(cart));
+            updateCartBadge();
+            renderCart();
+        }
+
+        // -----------------------------------------
+        // CHECKOUT WHATSAPP & GOOGLE SHEETS
+        // -----------------------------------------
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                showToast("Keranjang kosong!");
+                return;
+            }
+
+            const custName = document.getElementById('cust-name').value || "Pelanggan";
+            let subtotal = 0;
+            
+            let textWA = `Halo Admin Faminis Barokah,\nSaya ingin memesan:\n\n`;
+            
+            cart.forEach((item, i) => {
+                subtotal += (item.harga * item.qty);
+                textWA += `${i+1}. *${item.nama}*\n`;
+                textWA += `   Varian: ${item.warna}, ${item.ukuran}\n`;
+                textWA += `   Jumlah: ${item.qty} x ${formatRupiah(item.harga)}\n`;
+                textWA += `   Sub: ${formatRupiah(item.harga * item.qty)}\n\n`;
+            });
+
+            textWA += `*Total Belanja: ${formatRupiah(subtotal)}*\n`;
+            textWA += `(Belum termasuk ongkir)\n\n`;
+            textWA += `Nama: ${custName}\n`;
+            textWA += `Mohon info total bayar dan ongkirnya ya kak. Terima kasih.`;
+
+            // Opsi: Kirim ke Google Sheets di background (Fire and Forget)
+            if(SCRIPT_URL) {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Penting agar tidak kena error CORS di browser
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nama_pelanggan: custName,
+                        items: cart,
+                        total: subtotal
+                    })
+                }).catch(e => console.log("Post ke sheet error/dibaikan", e));
+            }
+
+            // Redirect ke WA
+            const encodedText = encodeURIComponent(textWA);
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodedText}`;
+            window.open(waUrl, '_blank');
+
+            // Kosongkan keranjang setelah checkout sukses diarahkan
+            cart = [];
+            saveAndRenderCart();
+            switchPage('home');
+        }
+
+        // -----------------------------------------
+        // RENDER UI: PROMO
+        // -----------------------------------------
+        function renderPromos() {
+            const container = document.getElementById('promo-list');
+            container.innerHTML = '';
+            
+            promosData.forEach(p => {
+                container.innerHTML += `
+                    <a href="${p.link}" target="_blank" class="block bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                        <img src="${p.gambar}" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h3 class="font-bold text-gray-800">${p.judul}</h3>
+                            <p class="text-xs text-orange-custom mt-1 flex items-center gap-1">Lihat Detail <i data-lucide="chevron-right" class="w-3 h-3"></i></p>
+                        </div>
+                    </a>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+    </script>
+</body>
+</html>
