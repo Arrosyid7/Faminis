@@ -168,7 +168,7 @@
             </div>
         </div>
 
-        <!-- PAGE 2: DETAIL PRODUK (MENDUKUNG MULTI PHOTO SLIDER DAN RASIO 1:1) -->
+        <!-- PAGE 2: DETAIL PRODUK -->
         <div id="page-detail" class="page">
             <!-- Floating Header -->
             <div class="p-5 flex justify-between items-center absolute top-0 w-full max-w-[480px] z-30">
@@ -180,7 +180,7 @@
                 </button>
             </div>
             
-            <!-- Detail Image (Rasio Foto 1:1 & Image Slider) -->
+            <!-- Detail Image -->
             <div class="w-full aspect-square bg-cream-100 relative overflow-hidden">
                 <div id="detail-img-container" class="w-full h-full flex overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scroll" onscroll="updateSliderDots()"></div>
                 <div id="detail-img-dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 z-20 bg-brown-900/40 px-3 py-1.5 rounded-full backdrop-blur-sm pointer-events-none hidden"></div>
@@ -210,7 +210,7 @@
                 <h3 class="font-extrabold text-brown-800 text-sm mb-2">Deskripsi Produk</h3>
                 <p id="detail-desc" class="text-xs text-brown-600/90 leading-relaxed mb-6 font-medium"></p>
 
-                <!-- FITUR INTEGRASI GEMINI 1: PADU PADAN PRODUK AI (✨) -->
+                <!-- FITUR INTEGRASI GEMINI 1: PADU PADAN PRODUK AI -->
                 <div class="bg-cream-100 border border-cream-300 rounded-3xl p-4 mb-6 shadow-sm">
                     <div class="flex items-center gap-2 mb-3">
                         <i data-lucide="sparkles" class="w-5 h-5 text-brown-700 animate-pulse"></i>
@@ -479,7 +479,7 @@
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxi4prpPCwufAac4yc2hh_tV7rS93STr3AqVC7enNnE90PEAmv2dfka280drnAJZKZA/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJqQSmVwXbjH91j2wjJdxzeavKSs_zgT4LWPCZx3YnOTYzRmbDcJWRHbry45F86nWE/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
         const NO_WA_ADMIN = '6281234567890'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
@@ -1236,7 +1236,7 @@
                 const variantText = [item.warna, item.ukuran].filter(Boolean).join(' • ');
                 
                 container.innerHTML += `
-                    <div class="flex gap-4 bg-white p-3.5 rounded-2xl border border-cream-300 shadow-sm">
+                    <div class="flex gap-4 bg-white p-3.5 rounded-2xl border border-cream-300 shadow-sm relative">
                         <img src="${item.gambar}" class="w-20 h-24 object-cover rounded-xl bg-cream-100 border border-cream-300" onerror="this.src='https://placehold.co/150/EED9C4/4A3B32?text=FB'">
                         <div class="flex-1 flex flex-col justify-between">
                             <div>
@@ -1246,11 +1246,11 @@
                             </div>
                             <div class="flex justify-between items-center mt-3 pt-2.5 border-t border-cream-100">
                                 <div class="flex items-center border border-cream-300 bg-cream-100 rounded-lg p-0.5">
-                                    <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 flex items-center justify-center text-brown-800 font-bold bg-white rounded border border-cream-300 shadow-sm">-</button>
+                                    <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 flex items-center justify-center text-brown-800 font-bold bg-white rounded border border-cream-300 shadow-sm btn-press-effect">-</button>
                                     <span class="w-7 text-center text-xs font-bold text-brown-800">${item.qty}</span>
-                                    <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 flex items-center justify-center bg-brown-800 text-cream-50 rounded font-bold hover:bg-brown-900 shadow-sm">+</button>
+                                    <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 flex items-center justify-center bg-brown-800 text-cream-50 rounded font-bold hover:bg-brown-900 shadow-sm btn-press-effect">+</button>
                                 </div>
-                                <button onclick="removeFromCart(${index})" class="text-brown-400 hover:text-red-600 p-1 bg-cream-100 border border-cream-300 rounded-lg btn-press-effect" title="Hapus">
+                                <button onclick="removeFromCart(${index})" class="p-2 bg-cream-100 border border-cream-300 text-brown-800 rounded-xl btn-press-effect hover:bg-cream-200" title="Hapus">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -1264,6 +1264,62 @@
             lucide.createIcons();
         }
 
+        // -----------------------------------------
+        // SISTEM DIALOG KONFIRMASI KUSTOM (✨ FIXED ✨)
+        // -----------------------------------------
+        window.showCustomConfirm = function(title, message) {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('custom-modal');
+                const modalContent = modal.querySelector('div');
+                
+                document.getElementById('modal-title').innerText = title;
+                document.getElementById('modal-message').innerText = message;
+                
+                modal.classList.remove('hidden');
+                // Force reflow
+                modal.offsetWidth;
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+
+                const handleConfirm = () => {
+                    cleanup();
+                    resolve(true);
+                };
+
+                const handleCancel = () => {
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    modal.classList.add('opacity-0');
+                    modalContent.classList.add('scale-95');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                    }, 300);
+                    // Bersihkan listener setelah resolusi untuk mencegah kebocoran handler
+                    document.getElementById('modal-confirm-btn').removeEventListener('click', handleConfirm);
+                    document.getElementById('modal-cancel-btn').removeEventListener('click', handleCancel);
+                };
+
+                document.getElementById('modal-confirm-btn').addEventListener('click', handleConfirm);
+                document.getElementById('modal-cancel-btn').addEventListener('click', handleCancel);
+            });
+        };
+
+        // -----------------------------------------
+        // TOMBOL HAPUS PRODUK (✨ FIXED ✨)
+        // -----------------------------------------
+        window.removeFromCart = async function(index) {
+            if (index < 0 || index >= cart.length) return;
+            const confirmed = await showCustomConfirm("Hapus Produk", `Apakah Anda yakin ingin menghapus ${cart[index].nama} dari keranjang?`);
+            if (confirmed) {
+                cart.splice(index, 1);
+                saveAndRenderCart();
+                showToast("Produk dikeluarkan dari keranjang");
+            }
+        };
+
         function updateCartQty(index, amount) {
             cart[index].qty += amount;
             if(cart[index].qty < 1) {
@@ -1271,15 +1327,6 @@
                 return;
             }
             saveAndRenderCart();
-        }
-
-        async function removeFromCart(index) {
-            const confirmed = await showCustomConfirm("Hapus Produk", `Apakah Anda yakin ingin menghapus ${cart[index].nama} dari keranjang?`);
-            if (confirmed) {
-                cart.splice(index, 1);
-                saveAndRenderCart();
-                showToast("Produk dikeluarkan dari keranjang");
-            }
         }
 
         async function clearCart() {
