@@ -1349,11 +1349,8 @@
         // -----------------------------------------
         // CHECKOUT & WHATSAPP REDIRECT (✨ FIXED ✨)
         // -----------------------------------------
-        async function checkoutWhatsApp() {
-            // Validasi apakah keranjang kosong
-            if (cart.length === 0) {
-                showToast("Keranjang belanja Anda kosong!");
-                return;
+        function checkoutWhatsApp() {   // ✅ Hapus "async"
+    if (!cart.length) { showToast("Keranjang belanja Anda kosong!"); return; }
             }
 
             const custName = document.getElementById('cust-name').value.trim();
@@ -1434,14 +1431,22 @@
                 }
             }
 
-            const waUrl = `https://wa.me/${6285163205421}?text=${encodeURIComponent(receiptString)}`;
-            window.open(waUrl, '_blank');
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(msg)}`;
+    window.open(waUrl, '_blank');
+
+if (SCRIPT_URL) {
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ... })
+        }).catch(e => console.warn("Background save gagal (opsional):", e));
 
             cart = [];
-            saveAndRenderCart();
-            switchPage('home');
-            showToast("Pesanan dialihkan ke WhatsApp Admin!");
-        }
+    saveAndRenderCart();
+    switchPage('home');
+    showToast("Pesanan dikirim ke WhatsApp Admin! ✅");
+}
 
         // -----------------------------------------
         // PROMO & SOCIAL SHARES
