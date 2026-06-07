@@ -480,7 +480,7 @@
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEtjwIAFUIqw5lq_lSaosgbw8SzeVzTLtyEkuSxnYiv21YNVV7ZZ6KoSGTMtdWVqDy/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
-        const NO_WA_ADMIN = '6285163205421'; // Silakan gunakan format 62 tanpa + atau 0 depan
+        const NO_WA_ADMIN = '628'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
         // STATE UTAMA APLIKASI
@@ -1349,8 +1349,11 @@
         // -----------------------------------------
         // CHECKOUT & WHATSAPP REDIRECT (✨ FIXED ✨)
         // -----------------------------------------
-        function checkoutWhatsApp() {   // ✅ Hapus "async"
-    if (!cart.length) { showToast("Keranjang belanja Anda kosong!"); return; }
+        function checkoutWhatsApp() {
+            // Validasi apakah keranjang kosong
+            if (cart.length === 0) {
+                showToast("Keranjang belanja Anda kosong!");
+                return;
             }
 
             const custName = document.getElementById('cust-name').value.trim();
@@ -1431,22 +1434,26 @@
                 }
             }
 
-            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(msg)}`;
-    window.open(waUrl, '_blank');
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
 
-if (SCRIPT_URL) {
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ... })
-        }).catch(e => console.warn("Background save gagal (opsional):", e));
+            // ✅ Fetch ke Google Sheets di BACKGROUND (tidak pakai await, tidak menunda WA)
+           if (SCRIPT_URL) {
+               fetch(SCRIPT_URL, {
+                   method: 'POST',
+                   mode: 'no-cors',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify({ ... })
+                }).catch(e => console.warn("Background save gagal (opsional):", e));
+                // ✅ Tidak ada await — langsung lanjut tanpa nunggu
+            }
+
 
             cart = [];
-    saveAndRenderCart();
-    switchPage('home');
-    showToast("Pesanan dikirim ke WhatsApp Admin! ✅");
-}
+            saveAndRenderCart();
+            switchPage('home');
+            showToast("Pesanan dikirim ke WhatsApp Admin! ✅");
+        }
 
         // -----------------------------------------
         // PROMO & SOCIAL SHARES
