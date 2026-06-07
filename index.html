@@ -479,8 +479,8 @@
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEtjwIAFUIqw5lq_lSaosgbw8SzeVzTLtyEkuSxnYiv21YNVV7ZZ6KoSGTMtdWVqDy/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
-        const NO_WA_ADMIN = '628'; // Silakan gunakan format 62 tanpa + atau 0 depan
+        const SCRIPT_URL = ''; // Ganti dengan url Deployment Web App Apps Script Anda!
+        const NO_WA_ADMIN = '6281234567890'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
         // STATE UTAMA APLIKASI
@@ -1417,7 +1417,7 @@
             if(SCRIPT_URL) {
                 showToast("Menyimpan invoice...");
                 try {
-                    await fetch(SCRIPT_URL, {
+                    fetch(SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
@@ -1434,25 +1434,13 @@
                 }
             }
 
-            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(message)}`;
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
-
-            // ✅ Fetch ke Google Sheets di BACKGROUND (tidak pakai await, tidak menunda WA)
-           if (SCRIPT_URL) {
-               fetch(SCRIPT_URL, {
-                   method: 'POST',
-                   mode: 'no-cors',
-                   headers: { 'Content-Type': 'application/json' },
-                   body: JSON.stringify({ ... })
-                }).catch(e => console.warn("Background save gagal (opsional):", e));
-                // ✅ Tidak ada await — langsung lanjut tanpa nunggu
-            }
-
 
             cart = [];
             saveAndRenderCart();
             switchPage('home');
-            showToast("Pesanan dikirim ke WhatsApp Admin! ✅");
+            showToast("Pesanan dialihkan ke WhatsApp Admin!");
         }
 
         // -----------------------------------------
