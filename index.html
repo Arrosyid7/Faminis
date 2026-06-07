@@ -100,8 +100,9 @@
             <!-- Header -->
             <div class="p-5 flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-full bg-cream-100 flex items-center justify-center text-brown-800 border border-cream-300 font-extrabold text-lg shadow-sm">
-                        FB
+                    <!-- LOGO RESMI FAMINIS BAROKAH DARI GOOGLE DRIVE -->
+                    <div class="w-11 h-11 rounded-full bg-cream-100 border border-cream-300 shadow-sm overflow-hidden flex items-center justify-center">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
                     <div>
                         <h1 class="font-extrabold text-brown-800 leading-tight tracking-tight text-lg">Faminis Barokah</h1>
@@ -264,6 +265,7 @@
             <p class="text-xs text-brown-500 mb-6 font-medium">Dapatkan potongan khusus lewat promo TikTok Live dan toko fisik.</p>
             
             <div id="promo-list" class="space-y-5">
+                <!-- Promo diisi oleh JS secara dinamis -->
                 <div class="col-span-2 text-center text-sm text-brown-500 py-16 flex flex-col items-center gap-3">
                     <div class="w-8 h-8 border-4 border-brown-800 border-t-transparent rounded-full animate-spin"></div>
                 </div>
@@ -344,8 +346,9 @@
 
         <!-- PAGE 5: TENTANG TOKO -->
         <div id="page-about" class="page px-5 pt-5 pb-24 text-center">
-            <div class="w-24 h-24 bg-cream-100 border border-cream-300 rounded-full mx-auto flex items-center justify-center text-4xl font-extrabold text-brown-800 mb-4 mt-8 shadow-sm">
-                FB
+            <!-- LOGO BESAR DI HALAMAN TENTANG TOKO DARI GOOGLE DRIVE -->
+            <div class="w-24 h-24 bg-cream-100 border border-cream-300 rounded-full mx-auto flex items-center justify-center shadow-sm overflow-hidden">
+                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200/F7EFE5/4A3B32?text=FB';">
             </div>
             <h2 class="font-extrabold text-2xl text-brown-800 mb-1">Faminis Barokah</h2>
             <p class="text-brown-500 text-xs font-semibold tracking-wider uppercase mb-6">Pusat Grosir & Eceran Busana Muslimah</p>
@@ -403,13 +406,13 @@
             <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
         </button>
 
-        <!-- CHATBOX DRAWER ASISTEN AI (✨) -->
-        <div id="ai-chat-drawer" class="absolute inset-0 bg-white z-50 flex flex-col transform translate-y-full transition-transform duration-300">
+        <!-- CHATBOX DRAWER ASISTEN AI (✨) (Tinggi menyesuaikan ukuran layar user mobile) -->
+        <div id="ai-chat-drawer" class="fixed inset-y-0 left-0 right-0 mx-auto w-full max-w-[480px] bg-white z-50 flex flex-col transform translate-y-full transition-transform duration-300">
             <!-- Header Chat -->
             <div class="p-5 bg-brown-800 text-cream-50 flex justify-between items-center shadow-md">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center text-brown-800">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-brown-800 animate-spin"></i>
+                    <div class="w-10 h-10 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
                     <div>
                         <h3 class="font-bold text-sm">Asisten Gaya Faminis AI ✨</h3>
@@ -425,7 +428,9 @@
             <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto bg-cream-50 space-y-4">
                 <!-- Sambutan Awal -->
                 <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-brown-700 flex items-center justify-center text-cream-50 text-xs shrink-0">✨</div>
+                    <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                    </div>
                     <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
                         Assalamu'alaikum ukh/kak! Selamat datang di Faminis Barokah. Saya asisten gaya pribadi Anda. Ada yang bisa saya bantu hari ini? 
                         <br><br>
@@ -474,7 +479,7 @@
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXW1r30_w-d0WxtJ7iNKhb1E_zaNUZt9OUKo2KoTmnzuc2XZHhG9fTP0gyjKbxFyQ/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxi4prpPCwufAac4yc2hh_tV7rS93STr3AqVC7enNnE90PEAmv2dfka280drnAJZKZA/exec'; // Ganti dengan url Deployment Web App Apps Script Anda!
         const NO_WA_ADMIN = '6281234567890'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
@@ -504,7 +509,7 @@
         const dummyProducts = [
             { id: "P001", kategori: "Gamis", nama: "Gamis Syar'i Faminis Barokah", deskripsi: "Gamis muslimah eksklusif dari bahan wolfis premium grade A. Tekstur serat kain halus, sangat sejuk saat dikenakan, jatuh anggun di badan, dan tidak menerawang. Cocok digunakan untuk acara formal maupun daily wear.", harga: 150000, gambar: "https://images.unsplash.com/photo-1589465885857-44edb59bbff2?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Mocca", "Hitam", "Maroon", "Navy"], ukuran: ["S", "M", "L", "XL"], stok: 50 },
             { id: "P002", kategori: "Hijab", nama: "Pashmina Ceruty Babydoll", deskripsi: "Pashmina ceruty premium bertekstur pasir lembut berukuran 175x75 cm. Mudah dibentuk, tegak di dahi, tidak gampang bergeser dan memiliki jahitan tepi rapi khas butik terpercaya.", harga: 45000, gambar: "https://images.unsplash.com/photo-1607583643358-3011a68132d7?auto=format&fit=crop&w=500&q=60", warna: ["Dusty Pink", "Mocca", "Hitam", "Abu-Abu"], ukuran: ["All Size"], stok: 120 },
-            { id: "P003", kategori: "Atasan", nama: "Tunik Motif Bunga Barokah", deskripsi: "Tunik panjang elegan bermotif floral nan manis. Memakai bahan rayon viscose berkualitas tinggi yang terkenal dingin, berdaya serap tinggi, kancing depan bersahabat untuk ibu menyusui (busui friendly).", harga: 120000, gambar: "https://images.unsplash.com/photo-1515347619362-73bc3ee22f51?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=60", warna: ["Putih Sifon", "Soft Blue"], ukuran: ["L", "XL"], stok: 35 },
+            { id: "P003", kategori: "Atasan", nama: "Tunik Motif Bunga Barokah", deskripsi: "Tunik panjang elegan bermotif floral nan manis. Memakai bahan rayon viscose berkualitas tinggi yang terkenal dingin, berdaya serap tinggi, kancing depan bersahabat untuk ibu menyusui (busui friendly).", harga: 120000, gambar: "https://images.unsplash.com/photo-1515347619362-73bc3ee22f51?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=crop&w=500&q=60", warna: ["Putih Sifon", "Soft Blue"], ukuran: ["L", "XL"], stok: 35 },
             { id: "P004", kategori: "Gamis", nama: "Kaftan Silk Exclusive", deskripsi: "Kaftan berbahan silk satin premium dengan pendar berkilau mewah. Nyaman dipakai seharian dengan potongan longgar yang jatuh sempurna.", harga: 195000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Rose Gold", "Sage Green"], ukuran: ["All Size"], stok: 15 }
         ];
 
@@ -570,7 +575,6 @@
             }
 
             let delay = 1000;
-            // Rekursi/Loop dengan eksponensial backoff maksimal 5 kali percobaan
             for (let i = 0; i < 5; i++) {
                 try {
                     const response = await fetch(url, {
@@ -606,14 +610,13 @@
             targetDiv.innerHTML = `
                 <div class="flex items-center justify-center gap-2 py-3 text-brown-600 font-bold">
                     <div class="w-4 h-4 border-2 border-brown-700 border-t-transparent rounded-full animate-spin"></div>
-                    <span>AI sedang menyusun ide padu padan...</span>
+                    <span>AI sedang menyusun id padu padan...</span>
                 </div>
             `;
 
-            // Membuat konteks katalog produk agar AI bisa memberikan rekomendasi mix match dari toko
             const catalogContext = productsData.map(p => `- ${p.nama} (${p.kategori})`).join('\n');
             
-            const systemPrompt = "Kamu adalah Konsultan Fashion Butik Muslimah Faminis Barokah yang mewah, anggun, dan ramah. Berikan tips padu padan praktis, estetik, dan syar'i untuk produk yang ditanyakan pelanggan.";
+            const systemPrompt = "Kamu adalah Konsultan Fashion Muslimah Faminis Barokah yang mewah, anggun, dan ramah. Berikan tips padu padan praktis, estetik, dan syar'i untuk produk yang ditanyakan pelanggan.";
             const userPrompt = `
                 Tolong berikan 3 tips padu padan (mix and match) jilbab, bawahan, warna, dan aksesoris yang sangat cocok untuk produk ini:
                 - Nama: ${currentDetailProduct.nama}
@@ -629,7 +632,6 @@
 
             try {
                 const responseText = await callGeminiAPI(userPrompt, systemPrompt);
-                // Ubah format markdown sederhana ke HTML paragraf
                 const formattedHtml = responseText
                     .replace(/\n/g, '<br>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -657,6 +659,12 @@
                 drawer.classList.add('translate-y-full');
             }
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                toggleAiChat(false);
+            }
+        });
 
         function handleAiKeyPress(event) {
             if (event.key === 'Enter') {
@@ -686,7 +694,9 @@
             const tempAiId = 'ai-loading-' + Date.now();
             chatMessages.innerHTML += `
                 <div id="${tempAiId}" class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-brown-700 flex items-center justify-center text-cream-50 text-xs shrink-0 animate-pulse">✨</div>
+                    <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0 animate-pulse">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                    </div>
                     <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-500 font-medium">
                         <span class="inline-block animate-bounce">●</span>
                         <span class="inline-block animate-bounce [animation-delay:0.2s]">●</span>
@@ -696,7 +706,6 @@
             `;
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Kumpulkan daftar produk saat ini sebagai konteks tambahan AI
             const catalogList = productsData.map(p => `- ${p.nama} (${p.kategori}) seharga ${formatRupiah(p.harga)}`).join('\n');
             const systemInstruction = `Kamu adalah Asisten Fashion Muslimah pribadi bernama Faminis AI ✨ dari Butik Faminis Barokah. Layani ukh/kakak dengan tutur kata yang sangat sopan, ramah, Islami, dan hangat. Berikan inspirasi kombinasi busana muslim (Gamis, Hijab, Pashmina, Tunik, dll) dan bantu mereka memilih produk terbaik. Berikut adalah katalog produk butik kami:\n${catalogList}`;
 
@@ -707,12 +716,13 @@
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-                // Hapus Loading Bubble dan Ganti dengan Respon Asli AI
                 const loadingBubble = document.getElementById(tempAiId);
                 if (loadingBubble) {
                     loadingBubble.outerHTML = `
                         <div class="flex items-start gap-2.5">
-                            <div class="w-8 h-8 rounded-full bg-brown-700 flex items-center justify-center text-cream-50 text-xs shrink-0">✨</div>
+                            <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
+                                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                            </div>
                             <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
                                 ${formattedHtml}
                             </div>
@@ -736,44 +746,7 @@
         }
 
         // -----------------------------------------
-        // RENDER BANNER DINAMIS
-        // -----------------------------------------
-        function renderBanner(data) {
-            if (!data) return;
-            document.getElementById('banner-badge').innerText = data.badge || "EDISI BARU";
-            document.getElementById('banner-title').innerText = data.judul || "Gaya Anggun & Syar'i Menawan";
-            document.getElementById('banner-subtitle').innerText = data.subjudul || "Diskon s/d 50% Koleksi Tunik & Gamis";
-            document.getElementById('banner-btn').innerText = data.tombol_teks || "Lihat Promo";
-        }
-
-        // -----------------------------------------
-        // RENDER KATEGORI DINAMIS
-        // -----------------------------------------
-        function renderCategories(categories) {
-            const container = document.getElementById('category-container');
-            container.innerHTML = '';
-            
-            // Selalu buat tombol "Semua" secara statis sebagai opsi pertama
-            const semuaBtn = document.createElement('button');
-            semuaBtn.id = 'cat-Semua';
-            semuaBtn.className = 'category-btn active bg-brown-800 text-cream-50 border border-brown-800 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
-            semuaBtn.innerText = 'Semua';
-            semuaBtn.onclick = function() { filterCategory('Semua', semuaBtn); };
-            container.appendChild(semuaBtn);
-            
-            // Render kategori lainnya yang diambil dari spreadsheet
-            categories.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.id = `cat-${cat}`;
-                btn.className = 'category-btn bg-cream-100 text-brown-700 border border-cream-300 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
-                btn.innerText = cat;
-                btn.onclick = function() { filterCategory(cat, btn); };
-                container.appendChild(btn);
-            });
-        }
-
-        // -----------------------------------------
-        // NAVIGASI ANTAR HALAMAN
+        // SINKRONISASI NAVIGASI HALAMAN (FIXED)
         // -----------------------------------------
         function switchPage(pageId) {
             if (pageId !== 'detail') {
@@ -783,7 +756,10 @@
             // Sembunyikan semua page
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             // Tampilkan page tujuan
-            document.getElementById(`page-${pageId}`).classList.add('active');
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
             window.scrollTo(0, 0);
 
             // Update Bottom Nav Active Styling
@@ -812,13 +788,64 @@
         }
 
         // -----------------------------------------
+        // RENDER BANNER DINAMIS
+        // -----------------------------------------
+        function renderBanner(data) {
+            if (!data) return;
+            document.getElementById('banner-badge').innerText = data.badge || "EDISI BARU";
+            document.getElementById('banner-title').innerText = data.judul || "Gaya Anggun & Syar'i Menawan";
+            document.getElementById('banner-subtitle').innerText = data.subjudul || "Diskon s/d 50% Koleksi Tunik & Gamis";
+            document.getElementById('banner-btn').innerText = data.tombol_teks || "Lihat Promo";
+        }
+
+        // -----------------------------------------
+        // RENDER KATEGORI DINAMIS
+        // -----------------------------------------
+        function renderCategories(categories) {
+            const container = document.getElementById('category-container');
+            container.innerHTML = '';
+            
+            const semuaBtn = document.createElement('button');
+            semuaBtn.id = 'cat-Semua';
+            semuaBtn.className = 'category-btn active bg-brown-800 text-cream-50 border border-brown-800 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
+            semuaBtn.innerText = 'Semua';
+            semuaBtn.onclick = function() { filterCategory('Semua', semuaBtn); };
+            container.appendChild(semuaBtn);
+            
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.id = `cat-${cat}`;
+                btn.className = 'category-btn bg-cream-100 text-brown-700 border border-cream-300 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
+                btn.innerText = cat;
+                btn.onclick = function() { filterCategory(cat, btn); };
+                container.appendChild(btn);
+            });
+        }
+
+        // -----------------------------------------
+        // INDIKATOR BADGE KERANJANG
+        // -----------------------------------------
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((total, item) => total + item.qty, 0);
+            
+            if(totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+                document.getElementById('notification-badge').classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+                document.getElementById('notification-badge').classList.add('hidden');
+            }
+        }
+
+        // -----------------------------------------
         // RENDER DAN INTERAKSI PRODUK (HOME)
         // -----------------------------------------
         function formatRupiah(angka) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
         }
 
-        // RENDER PRODUK DI GRID HOME
         function renderProducts(data) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
@@ -836,7 +863,6 @@
             data.forEach(prod => {
                 const hargaDiskonStr = formatRupiah(prod.harga);
                 
-                // Ambil gambar pertama untuk thumbnail grid
                 let firstImg = "https://placehold.co/400x400/EED9C4/4A3B32?text=Faminis+Barokah";
                 if (prod.gambar) {
                     if (typeof prod.gambar === 'string') {
@@ -866,7 +892,6 @@
             lucide.createIcons();
         }
 
-        // LIVE PENCARIAN & FILTER
         function handleSearch(keyword) {
             const filtered = productsData.filter(p => 
                 p.nama.toLowerCase().includes(keyword.toLowerCase()) || 
@@ -875,7 +900,6 @@
             );
             renderProducts(filtered);
             
-            // Toggle tombol close search
             const iconBtn = document.getElementById('search-icon-btn');
             if (keyword.length > 0) {
                 iconBtn.setAttribute('data-lucide', 'x');
@@ -893,24 +917,40 @@
             }
         }
 
+        function filterCategory(cat, btnElement) {
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('bg-brown-800', 'text-cream-50', 'border-brown-800', 'active');
+                b.classList.add('bg-cream-100', 'text-brown-700', 'border-cream-300');
+            });
+            
+            btnElement.classList.add('bg-brown-800', 'text-cream-50', 'border-brown-800', 'active');
+            btnElement.classList.remove('bg-cream-100', 'text-brown-700', 'border-cream-300');
+
+            if (cat === 'Semua') {
+                renderProducts(productsData);
+            } else {
+                const filtered = productsData.filter(p => p.kategori.toLowerCase() === cat.toLowerCase());
+                renderProducts(filtered);
+            }
+        }
+
         // -----------------------------------------
-        // DETAIL PRODUK
+        // DETAIL PRODUK (PILIHAN VARIASI DAN STOK) (FIXED)
         // -----------------------------------------
         function openDetail(id) {
-            currentDetailProduct = productsData.find(p => p.id === id);
+            currentDetailProduct = productsData.find(p => String(p.id) === String(id));
             if(!currentDetailProduct) return;
 
-            // Reset state
             selectedColor = "";
             selectedSize = "";
             currentQty = 1;
 
-            // Bersihkan sisa output AI sebelumnya
             const aiBox = document.getElementById('ai-mixmatch-result');
-            aiBox.classList.add('hidden');
-            aiBox.innerHTML = '';
+            if (aiBox) {
+                aiBox.classList.add('hidden');
+                aiBox.innerHTML = '';
+            }
 
-            // Parse Gambar: mendukung pemisahan tanda koma di spreadsheet
             let images = [];
             if (currentDetailProduct.gambar) {
                 if (typeof currentDetailProduct.gambar === 'string') {
@@ -926,7 +966,6 @@
                 images = ["https://placehold.co/600x600/EED9C4/4A3B32?text=Faminis+Barokah"];
             }
 
-            // Render slider foto & dot indicators
             const imgContainer = document.getElementById('detail-img-container');
             const dotsContainer = document.getElementById('detail-img-dots');
             
@@ -934,7 +973,6 @@
             dotsContainer.innerHTML = '';
 
             images.forEach((imgUrl, index) => {
-                // Buat elemen slide baru
                 const slide = document.createElement('div');
                 slide.className = 'w-full h-full flex-shrink-0 snap-start snap-always relative';
                 slide.innerHTML = `
@@ -942,7 +980,6 @@
                 `;
                 imgContainer.appendChild(slide);
 
-                // Buat dot indicator jika gambar lebih dari satu
                 if (images.length > 1) {
                     const dot = document.createElement('div');
                     dot.className = `slider-dot h-1.5 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white w-4' : 'bg-white/40 w-1.5'}`;
@@ -950,29 +987,25 @@
                 }
             });
 
-            // Tampilkan/sembunyikan dot container berdasarkan jumlah gambar
             if (images.length > 1) {
                 dotsContainer.classList.remove('hidden');
             } else {
                 dotsContainer.classList.add('hidden');
             }
 
-            // Reset posisi scroll slider gambar ke slide awal
             imgContainer.scrollLeft = 0;
 
-            // Masukkan data ke DOM detail
-            document.getElementById('detail-category').innerText = currentDetailProduct.kategori;
-            document.getElementById('detail-name').innerText = currentDetailProduct.nama;
-            document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga);
-            document.getElementById('detail-old-price').innerText = formatRupiah(currentDetailProduct.harga * 1.25); // simulasi coret harga
-            document.getElementById('detail-stock').innerText = currentDetailProduct.stok;
-            document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi;
+            document.getElementById('detail-category').innerText = currentDetailProduct.kategori || "Umum";
+            document.getElementById('detail-name').innerText = currentDetailProduct.nama || "";
+            document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga || 0);
+            document.getElementById('detail-old-price').innerText = formatRupiah((currentDetailProduct.harga || 0) * 1.25);
+            document.getElementById('detail-stock').innerText = currentDetailProduct.stok || 0;
+            document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi || "Tidak ada deskripsi.";
             document.getElementById('detail-qty').innerText = currentQty;
             
             document.getElementById('selected-color-text').innerText = "Pilih Warna";
             document.getElementById('selected-size-text').innerText = "Pilih Ukuran";
 
-            // Render Varian Warna
             const colorContainer = document.getElementById('color-options');
             colorContainer.innerHTML = '';
             
@@ -989,29 +1022,56 @@
                 "rose gold": "#E3A89F"
             };
             
-            currentDetailProduct.warna.forEach(w => {
-                const hexColor = colorPaletteMap[w.toLowerCase().trim()] || '#7F5539';
-                colorContainer.innerHTML += `
-                    <button onclick="selectColor('${w}', this)" class="color-btn flex items-center gap-2 px-3 py-2 border border-cream-300 rounded-full text-xs font-semibold bg-white transition-all btn-press-effect">
-                        <span class="w-3.5 h-3.5 rounded-full shadow-inner" style="background-color: ${hexColor};"></span>
-                        <span>${w}</span>
-                    </button>
-                `;
-            });
+            let warnaList = [];
+            if (currentDetailProduct.warna) {
+                if (Array.isArray(currentDetailProduct.warna)) {
+                    warnaList = currentDetailProduct.warna;
+                } else if (typeof currentDetailProduct.warna === 'string') {
+                    warnaList = currentDetailProduct.warna.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                }
+            }
 
-            // Render Varian Ukuran
+            if (warnaList.length > 0) {
+                warnaList.forEach(w => {
+                    const hexColor = colorPaletteMap[w.toLowerCase().trim()] || '#7F5539';
+                    colorContainer.innerHTML += `
+                        <button onclick="selectColor('${w}', this)" class="color-btn flex items-center gap-2 px-3 py-2 border border-cream-300 rounded-full text-xs font-semibold bg-white transition-all btn-press-effect">
+                            <span class="w-3.5 h-3.5 rounded-full shadow-inner" style="background-color: ${hexColor};"></span>
+                            <span>${w}</span>
+                        </button>
+                    `;
+                });
+                document.getElementById('selected-color-text').parentElement.parentElement.classList.remove('hidden');
+            } else {
+                document.getElementById('selected-color-text').parentElement.parentElement.classList.add('hidden');
+            }
+
             const sizeContainer = document.getElementById('size-options');
             sizeContainer.innerHTML = '';
-            currentDetailProduct.ukuran.forEach(s => {
-                sizeContainer.innerHTML += `
-                    <button onclick="selectSize('${s}', this)" class="size-btn px-5 py-2.5 border border-cream-300 bg-white rounded-xl text-xs font-bold text-brown-700 transition-all btn-press-effect">${s}</button>
-                `;
-            });
+
+            let ukuranList = [];
+            if (currentDetailProduct.ukuran) {
+                if (Array.isArray(currentDetailProduct.ukuran)) {
+                    ukuranList = currentDetailProduct.ukuran;
+                } else if (typeof currentDetailProduct.ukuran === 'string') {
+                    ukuranList = currentDetailProduct.ukuran.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                }
+            }
+
+            if (ukuranList.length > 0) {
+                ukuranList.forEach(s => {
+                    sizeContainer.innerHTML += `
+                        <button onclick="selectSize('${s}', this)" class="size-btn px-5 py-2.5 border border-cream-300 bg-white rounded-xl text-xs font-bold text-brown-700 transition-all btn-press-effect">${s}</button>
+                    `;
+                });
+                document.getElementById('selected-size-text').parentElement.parentElement.classList.remove('hidden');
+            } else {
+                document.getElementById('selected-size-text').parentElement.parentElement.classList.add('hidden');
+            }
 
             switchPage('detail');
         }
 
-        // UPDATE STATUS TITIK INDIKATOR BANNER SAAT DIGESER (TOUCH/SCROLL)
         function updateSliderDots() {
             const container = document.getElementById('detail-img-container');
             const dots = document.querySelectorAll('.slider-dot');
@@ -1019,7 +1079,6 @@
             
             const scrollLeft = container.scrollLeft;
             const width = container.clientWidth;
-            // Dapatkan index slide aktif saat ini
             const activeIndex = Math.round(scrollLeft / width);
             
             dots.forEach((dot, index) => {
@@ -1044,7 +1103,6 @@
             btn.classList.add('border-brown-800', 'bg-brown-800/5', 'text-brown-800');
         }
 
-        // SELEKSI UKURAN
         function selectSize(size, btn) {
             selectedSize = size;
             document.getElementById('selected-size-text').innerText = `Terpilih: ${size}`;
@@ -1067,14 +1125,34 @@
         }
 
         // -----------------------------------------
-        // LOGIKA TRANSAKSI KERANJANG
+        // TAMBAHKAN PRODUK KE KERANJANG (✨ FIXED ✨)
         // -----------------------------------------
         function addToCart() {
-            if(currentDetailProduct.warna.length > 0 && !selectedColor) {
+            if(!currentDetailProduct) return;
+
+            let warnaList = [];
+            if (currentDetailProduct.warna) {
+                if (Array.isArray(currentDetailProduct.warna)) {
+                    warnaList = currentDetailProduct.warna;
+                } else if (typeof currentDetailProduct.warna === 'string') {
+                    warnaList = currentDetailProduct.warna.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                }
+            }
+
+            let ukuranList = [];
+            if (currentDetailProduct.ukuran) {
+                if (Array.isArray(currentDetailProduct.ukuran)) {
+                    ukuranList = currentDetailProduct.ukuran;
+                } else if (typeof currentDetailProduct.ukuran === 'string') {
+                    ukuranList = currentDetailProduct.ukuran.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                }
+            }
+
+            if (warnaList.length > 0 && !selectedColor) {
                 showToast("Pilih warna kesukaanmu dulu ya!");
                 return;
             }
-            if(currentDetailProduct.ukuran.length > 0 && !selectedSize) {
+            if (ukuranList.length > 0 && !selectedSize) {
                 showToast("Pilih ukuran tubuhmu dulu ya!");
                 return;
             }
@@ -1091,7 +1169,7 @@
 
             // Validasi apakah item dengan spesifikasi persis sama sudah ada
             const existingIndex = cart.findIndex(item => 
-                item.id === currentDetailProduct.id && 
+                String(item.id) === String(currentDetailProduct.id) && 
                 item.warna === selectedColor && 
                 item.ukuran === selectedSize
             );
@@ -1118,29 +1196,17 @@
             updateCartBadge();
             showToast("Dimasukkan ke Keranjang Belanja!");
             
-            // Beri sentuhan visual animasi pada badge
+            // Beri sentuhan visual animasi pada badge keranjang
             const badge = document.getElementById('cart-badge');
-            badge.classList.add('scale-150');
-            setTimeout(() => badge.classList.remove('scale-150'), 300);
-        }
-
-        // -----------------------------------------
-        // SISTEM KERANJANG BELANJA
-        // -----------------------------------------
-        function updateCartBadge() {
-            const badge = document.getElementById('cart-badge');
-            const totalQty = cart.reduce((total, item) => total + item.qty, 0);
-            
-            if(totalQty > 0) {
-                badge.innerText = totalQty;
-                badge.classList.remove('hidden');
-                document.getElementById('notification-badge').classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-                document.getElementById('notification-badge').classList.add('hidden');
+            if (badge) {
+                badge.classList.add('scale-150');
+                setTimeout(() => badge.classList.remove('scale-150'), 300);
             }
         }
 
+        // -----------------------------------------
+        // RENDER HALAMAN KERANJANG & FUNGSI (FIXED)
+        // -----------------------------------------
         function renderCart() {
             const container = document.getElementById('cart-items');
             container.innerHTML = '';
@@ -1233,7 +1299,7 @@
         }
 
         // -----------------------------------------
-        // CHECKOUT & WA REDIRECT DENGAN VALIDASI ALAMAT KETAT
+        // CHECKOUT & WHATSAPP REDIRECT
         // -----------------------------------------
         async function checkoutWhatsApp() {
             const custName = document.getElementById('cust-name').value.trim();
@@ -1242,7 +1308,6 @@
             const custStreet = document.getElementById('cust-street').value.trim();
             const custDetails = document.getElementById('cust-details').value.trim();
 
-            // VALIDASI FORMULIR WAJIB ISI (SESUAI GAMBAR)
             if(!custName) {
                 showToast("Nama Lengkap wajib diisi!");
                 document.getElementById('cust-name').focus();
@@ -1295,7 +1360,6 @@
             receiptString += `_Catatan: Biaya pengiriman dan metode pembayaran akan dipandu oleh Admin ya kak._\n\n`;
             receiptString += `Mohon segera diproses pesanannya ya Admin Barokah. Terima kasih!`;
 
-            // POST KE DATABASE GOOGLE SHEETS
             if(SCRIPT_URL) {
                 showToast("Menyimpan invoice...");
                 try {
@@ -1316,11 +1380,9 @@
                 }
             }
 
-            // REDIRECT KE WHATSAPP ADMIN
             const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(receiptString)}`;
             window.open(waUrl, '_blank');
 
-            // SELESAI & BERSIHKAN
             cart = [];
             saveAndRenderCart();
             switchPage('home');
@@ -1357,7 +1419,6 @@
             if(!currentDetailProduct) return;
             const textToCopy = `Beli ${currentDetailProduct.nama} seharga ${formatRupiah(currentDetailProduct.harga)} hanya di Faminis Barokah! Hubungi kami segera di WhatsApp.`;
             
-            // Menggunakan Fallback execCommand('copy') untuk lingkungan sandbox iframe
             const tempInput = document.createElement("input");
             tempInput.value = textToCopy;
             document.body.appendChild(tempInput);
