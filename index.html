@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,38 +12,45 @@
     <script>
         // Konfigurasi Tema Kustom Tailwind (Cream & Dark Brown)
         tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                cream: {
-                  50: '#FDFCF7',   // Background Utama halaman
-                  100: '#F7EFE5',  // Background Card / Alternatif ringan
-                  200: '#EED9C4',  // Accent warna cream sedang
-                  300: '#E3CBB3',  // Border tipis cream
-                  400: '#CDB49E',  // Elemen soft muted
-                },
-                brown: {
-                  500: '#9C6644',  // Cokelat hangat (Secondary & highlights)
-                  600: '#7F5539',  // Cokelat medium
-                  700: '#604D40',  // Cokelat gelap medium
-                  800: '#4A3B32',  // Cokelat Tua Utama (Primary text & button)
-                  900: '#352A24',  // Cokelat Sangat Tua (Hover / Pressed)
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FDFCF7',   // Background Utama halaman
+                            100: '#F7EFE5',  // Background Card / Alternatif ringan
+                            200: '#EED9C4',  // Accent warna cream sedang
+                            300: '#E3CBB3',  // Border tipis cream
+                            400: '#CDB49E',  // Elemen soft muted
+                        },
+                        brown: {
+                            500: '#9C6644',  // Cokelat hangat (Secondary & highlights)
+                            600: '#7F5539',  // Cokelat medium
+                            700: '#604D40',  // Cokelat gelap medium
+                            800: '#4A3B32',  // Cokelat Tua Utama (Primary text & button)
+                            900: '#352A24',  // Cokelat Sangat Tua (Hover / Pressed)
+                        }
+                    }
                 }
-              }
             }
-          }
         }
     </script>
     <style>
         /* Mencegah scroll horizontal dan menyembunyikan scrollbar bawaan */
-        body { 
-            -webkit-tap-highlight-color: transparent; 
-            overflow-x: hidden; 
-            background-color: #F7EFE5; 
+        body {
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            background-color: #F7EFE5;
         }
-        ::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         /* Layout khusus mobile (Max width seperti tampilan HP) */
         .mobile-container {
             max-width: 480px;
@@ -51,76 +59,108 @@
             min-height: 100vh;
             position: relative;
             box-shadow: 0 10px 30px rgba(74, 59, 50, 0.1);
-            padding-bottom: 90px; /* Ruang untuk bottom nav */
+            padding-bottom: 90px;
+            /* Ruang untuk bottom nav */
         }
-        
+
         /* Animasi transisi halaman */
-        .page { display: none; animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-        .page.active { display: block; }
-        
+        .page {
+            display: none;
+            animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Micro-interactions pada tombol */
         .btn-press-effect {
             transition: all 0.2s ease;
         }
+
         .btn-press-effect:active {
             transform: scale(0.95);
         }
     </style>
 </head>
+
 <body class="text-brown-800 antialiased font-sans">
 
     <!-- MODAL KONFIRMASI KUSTOM -->
-    <div id="custom-modal" class="fixed inset-0 bg-brown-900/40 z-[100] flex items-center justify-center p-5 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300 shadow-xl">
+    <div id="custom-modal"
+        class="fixed inset-0 bg-brown-900/40 z-[100] flex items-center justify-center p-5 hidden opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-2xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300 shadow-xl">
             <h3 id="modal-title" class="font-bold text-lg text-brown-800 mb-2">Konfirmasi</h3>
             <p id="modal-message" class="text-sm text-gray-600 mb-6 leading-relaxed">Apakah Anda yakin?</p>
             <div class="flex gap-3 justify-end">
-                <button id="modal-cancel-btn" class="px-4 py-2 border border-cream-300 text-gray-500 rounded-xl text-sm font-semibold hover:bg-cream-100 btn-press-effect">Batal</button>
-                <button id="modal-confirm-btn" class="px-4 py-2 bg-brown-800 text-white rounded-xl text-sm font-semibold hover:bg-brown-900 btn-press-effect">Ya, Lanjutkan</button>
+                <button id="modal-cancel-btn"
+                    class="px-4 py-2 border border-cream-300 text-gray-500 rounded-xl text-sm font-semibold hover:bg-cream-100 btn-press-effect">Batal</button>
+                <button id="modal-confirm-btn"
+                    class="px-4 py-2 bg-brown-800 text-white rounded-xl text-sm font-semibold hover:bg-brown-900 btn-press-effect">Ya,
+                    Lanjutkan</button>
             </div>
         </div>
     </div>
 
     <!-- NOTIFIKASI TOAST KUSTOM -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-brown-800/90 backdrop-blur-sm text-cream-50 px-5 py-3 rounded-full text-xs font-semibold tracking-wide shadow-lg z-[90] hidden flex items-center gap-2 transition-all duration-300">
+    <div id="toast"
+        class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-brown-800/90 backdrop-blur-sm text-cream-50 px-5 py-3 rounded-full text-xs font-semibold tracking-wide shadow-lg z-[90] hidden flex items-center gap-2 transition-all duration-300">
         <i data-lucide="check-circle" class="w-4 h-4 text-cream-200"></i>
         <span id="toast-text">Berhasil ditambahkan</span>
     </div>
 
     <!-- KONTAINER UTAMA -->
     <div class="mobile-container overflow-hidden">
-        
+
         <!-- PAGE 1: HOME -->
         <div id="page-home" class="page active">
             <!-- Header -->
             <div class="p-5 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <!-- LOGO RESMI FAMINIS BAROKAH DARI GOOGLE DRIVE -->
-                    <div class="w-11 h-11 rounded-full bg-cream-100 border border-cream-300 shadow-sm overflow-hidden flex items-center justify-center">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                    <div
+                        class="w-11 h-11 rounded-full bg-cream-100 border border-cream-300 shadow-sm overflow-hidden flex items-center justify-center">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                            alt="Logo Faminis Barokah" class="w-full h-full object-cover"
+                            onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
                     <div>
-                        <h1 class="font-extrabold text-brown-800 leading-tight tracking-tight text-lg">Faminis Barokah</h1>
+                        <h1 class="font-extrabold text-brown-800 leading-tight tracking-tight text-lg">Faminis Barokah
+                        </h1>
                         <p class="text-[10px] text-brown-500 font-medium tracking-wide">BUSANA MUSLIM PREMIUM</p>
                     </div>
                 </div>
-                <button class="relative p-2.5 bg-cream-100 rounded-full border border-cream-300 btn-press-effect" onclick="switchPage('cart')">
+                <button class="relative p-2.5 bg-cream-100 rounded-full border border-cream-300 btn-press-effect"
+                    onclick="switchPage('cart')">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-brown-800"></i>
-                    <span id="notification-badge" class="absolute top-0 right-0 w-3.5 h-3.5 bg-brown-800 border-2 border-cream-50 rounded-full hidden"></span>
+                    <span id="notification-badge"
+                        class="absolute top-0 right-0 w-3.5 h-3.5 bg-brown-800 border-2 border-cream-50 rounded-full hidden"></span>
                 </button>
             </div>
 
             <!-- Pencarian (Fungsi Live Filter Aktif) -->
             <div class="px-5 mb-5">
-                <div class="flex items-center bg-cream-100 border border-cream-300 rounded-2xl p-2.5 focus-within:border-brown-500 transition-colors">
+                <div
+                    class="flex items-center bg-cream-100 border border-cream-300 rounded-2xl p-2.5 focus-within:border-brown-500 transition-colors">
                     <i data-lucide="search" class="w-5 h-5 text-brown-500 ml-1"></i>
-                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Cari busana kesukaanmu..." class="w-full bg-transparent border-none focus:outline-none px-3 text-sm text-brown-800 placeholder-brown-400">
-                    <button class="bg-brown-800 p-2.5 rounded-xl text-cream-50 btn-press-effect" onclick="clearSearch()">
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)"
+                        placeholder="Cari busana kesukaanmu..."
+                        class="w-full bg-transparent border-none focus:outline-none px-3 text-sm text-brown-800 placeholder-brown-400">
+                    <button class="bg-brown-800 p-2.5 rounded-xl text-cream-50 btn-press-effect"
+                        onclick="clearSearch()">
                         <i id="search-icon-btn" data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                     </button>
                 </div>
@@ -128,12 +168,18 @@
 
             <!-- Banner Promo Utama -->
             <div class="px-5 mb-6">
-                <div class="bg-brown-800 rounded-3xl p-6 relative overflow-hidden flex items-center h-44 shadow-md shadow-brown-800/10">
+                <div
+                    class="bg-brown-800 rounded-3xl p-6 relative overflow-hidden flex items-center h-44 shadow-md shadow-brown-800/10">
                     <div class="z-10 w-2/3">
-                        <span id="banner-badge" class="bg-cream-200 text-brown-800 text-[9px] font-extrabold px-2.5 py-1 rounded-full tracking-wider uppercase mb-2 inline-block">EDISI BARU</span>
-                        <h2 id="banner-title" class="font-bold text-xl text-cream-50 mb-1 leading-tight">Gaya Anggun & Syar'i Menawan</h2>
-                        <p id="banner-subtitle" class="text-xs text-cream-200/80 mb-4 font-light">Diskon s/d 50% Koleksi Tunik & Gamis</p>
-                        <button id="banner-btn" onclick="switchPage('promo')" class="bg-cream-100 text-brown-800 text-xs font-bold py-2.5 px-5 rounded-xl shadow-md btn-press-effect hover:bg-white">
+                        <span id="banner-badge"
+                            class="bg-cream-200 text-brown-800 text-[9px] font-extrabold px-2.5 py-1 rounded-full tracking-wider uppercase mb-2 inline-block">EDISI
+                            BARU</span>
+                        <h2 id="banner-title" class="font-bold text-xl text-cream-50 mb-1 leading-tight">Gaya Anggun &
+                            Syar'i Menawan</h2>
+                        <p id="banner-subtitle" class="text-xs text-cream-200/80 mb-4 font-light">Diskon s/d 50% Koleksi
+                            Tunik & Gamis</p>
+                        <button id="banner-btn" onclick="switchPage('promo')"
+                            class="bg-cream-100 text-brown-800 text-xs font-bold py-2.5 px-5 rounded-xl shadow-md btn-press-effect hover:bg-white">
                             Lihat Promo
                         </button>
                     </div>
@@ -161,7 +207,8 @@
                 <div id="product-grid" class="grid grid-cols-2 gap-4">
                     <!-- Loading state -->
                     <div class="col-span-2 text-center text-sm text-brown-500 py-16 flex flex-col items-center gap-3">
-                        <div class="w-8 h-8 border-4 border-brown-800 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-8 h-8 border-4 border-brown-800 border-t-transparent rounded-full animate-spin">
+                        </div>
                         <p class="font-medium">Mengambil busana cantik untukmu...</p>
                     </div>
                 </div>
@@ -172,39 +219,54 @@
         <div id="page-detail" class="page">
             <!-- Floating Header -->
             <div class="p-5 flex justify-between items-center absolute top-0 w-full max-w-[480px] z-30">
-                <button onclick="handleDetailBack()" class="p-3 bg-white/95 text-brown-800 rounded-full shadow-md backdrop-blur-sm border border-cream-300 btn-press-effect">
+                <button onclick="handleDetailBack()"
+                    class="p-3 bg-white/95 text-brown-800 rounded-full shadow-md backdrop-blur-sm border border-cream-300 btn-press-effect">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
-                <button onclick="shareProduct()" class="p-3 bg-white/95 text-brown-800 rounded-full shadow-md backdrop-blur-sm border border-cream-300 btn-press-effect">
+                <button onclick="shareProduct()"
+                    class="p-3 bg-white/95 text-brown-800 rounded-full shadow-md backdrop-blur-sm border border-cream-300 btn-press-effect">
                     <i data-lucide="share-2" class="w-5 h-5"></i>
                 </button>
             </div>
-            
+
             <!-- Detail Image -->
             <div class="w-full aspect-square bg-cream-100 relative overflow-hidden">
-                <div id="detail-img-container" class="w-full h-full flex overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scroll" onscroll="updateSliderDots()"></div>
-                <div id="detail-img-dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 z-20 bg-brown-900/40 px-3 py-1.5 rounded-full backdrop-blur-sm pointer-events-none hidden"></div>
-                <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-brown-900/30 via-transparent to-transparent pointer-events-none"></div>
+                <div id="detail-img-container"
+                    class="w-full h-full flex overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scroll"
+                    onscroll="updateSliderDots()"></div>
+                <div id="detail-img-dots"
+                    class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center justify-center gap-1.5 z-20 bg-brown-900/40 px-3 py-1.5 rounded-full backdrop-blur-sm pointer-events-none hidden">
+                </div>
+                <div
+                    class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-brown-900/30 via-transparent to-transparent pointer-events-none">
+                </div>
             </div>
 
             <!-- Detail Content -->
-            <div class="p-6 bg-cream-50 rounded-t-[32px] -mt-8 relative z-10 border-t border-cream-300 shadow-[0_-10px_30px_rgba(74,59,50,0.04)]">
+            <div
+                class="p-6 bg-cream-50 rounded-t-[32px] -mt-8 relative z-10 border-t border-cream-300 shadow-[0_-10px_30px_rgba(74,59,50,0.04)]">
                 <div class="flex justify-between items-start mb-3">
                     <div>
-                        <span id="detail-category" class="bg-brown-800 text-cream-50 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-2 inline-block"></span>
+                        <span id="detail-category"
+                            class="bg-brown-800 text-cream-50 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-2 inline-block"></span>
                         <h2 id="detail-name" class="font-extrabold text-2xl text-brown-800 leading-tight"></h2>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-brown-500 line-through block font-medium" id="detail-old-price"></span>
+                        <span class="text-xs text-brown-500 line-through block font-medium"
+                            id="detail-old-price"></span>
                         <h2 id="detail-price" class="font-extrabold text-xl text-brown-800 mt-1"></h2>
                     </div>
                 </div>
-                
+
                 <!-- Info Penilaian & Stok -->
-                <div class="flex items-center gap-4 text-xs text-brown-500 mb-6 mt-3 font-medium bg-cream-100 p-3 rounded-2xl border border-cream-300">
-                    <span class="flex items-center gap-1.5"><i data-lucide="star" class="w-4 h-4 text-yellow-500 fill-yellow-500"></i> <b class="text-brown-800">4.9</b></span>
+                <div
+                    class="flex items-center gap-4 text-xs text-brown-500 mb-6 mt-3 font-medium bg-cream-100 p-3 rounded-2xl border border-cream-300">
+                    <span class="flex items-center gap-1.5"><i data-lucide="star"
+                            class="w-4 h-4 text-yellow-500 fill-yellow-500"></i> <b
+                            class="text-brown-800">4.9</b></span>
                     <span class="h-4 w-px bg-cream-300"></span>
-                    <span class="flex items-center gap-1.5"><i data-lucide="package" class="w-4 h-4 text-brown-600"></i> Stok: <b id="detail-stock" class="text-brown-800"></b></span>
+                    <span class="flex items-center gap-1.5"><i data-lucide="package" class="w-4 h-4 text-brown-600"></i>
+                        Stok: <b id="detail-stock" class="text-brown-800"></b></span>
                 </div>
 
                 <h3 class="font-extrabold text-brown-800 text-sm mb-2">Deskripsi Produk</h3>
@@ -214,15 +276,21 @@
                 <div class="bg-cream-100 border border-cream-300 rounded-3xl p-4 mb-6 shadow-sm">
                     <div class="flex items-center gap-2 mb-3">
                         <i data-lucide="sparkles" class="w-5 h-5 text-brown-700 animate-pulse"></i>
-                        <h4 class="font-extrabold text-xs text-brown-800 tracking-wider uppercase">Inspirasi Padu Padan AI ✨</h4>
+                        <h4 class="font-extrabold text-xs text-brown-800 tracking-wider uppercase">Inspirasi Padu Padan
+                            AI ✨</h4>
                     </div>
-                    <p class="text-[10px] text-brown-500 leading-relaxed mb-4">Butuh saran hijab, bawahan, atau aksesoris yang serasi dengan pakaian ini? Biarkan asisten AI kami memberikan ide gaya terbaik.</p>
-                    <button onclick="generateProductMixMatch()" class="w-full bg-white hover:bg-cream-50 text-brown-800 font-extrabold py-3.5 px-4 rounded-2xl text-xs border border-cream-300 flex items-center justify-center gap-2 shadow-sm btn-press-effect">
+                    <p class="text-[10px] text-brown-500 leading-relaxed mb-4">Butuh saran hijab, bawahan, atau
+                        aksesoris yang serasi dengan pakaian ini? Biarkan asisten AI kami memberikan ide gaya terbaik.
+                    </p>
+                    <button onclick="generateProductMixMatch()"
+                        class="w-full bg-white hover:bg-cream-50 text-brown-800 font-extrabold py-3.5 px-4 rounded-2xl text-xs border border-cream-300 flex items-center justify-center gap-2 shadow-sm btn-press-effect">
                         <i data-lucide="wand-2" class="w-4 h-4 text-brown-600"></i>
                         Tanya Ide Gaya AI ✨
                     </button>
                     <!-- Hasil Rekomendasi AI -->
-                    <div id="ai-mixmatch-result" class="mt-4 text-xs text-brown-700 bg-white/70 p-4 rounded-2xl border border-cream-200 leading-relaxed hidden"></div>
+                    <div id="ai-mixmatch-result"
+                        class="mt-4 text-xs text-brown-700 bg-white/70 p-4 rounded-2xl border border-cream-200 leading-relaxed hidden">
+                    </div>
                 </div>
 
                 <!-- Pilihan Warna -->
@@ -246,12 +314,15 @@
                 <!-- Kontrol Jumlah & Tombol Keranjang -->
                 <div class="flex items-center justify-between gap-4 mt-4 border-t border-cream-300 pt-6">
                     <div class="flex items-center border border-cream-300 bg-cream-100 rounded-2xl p-1.5 shadow-sm">
-                        <button onclick="changeQty(-1)" class="w-9 h-9 rounded-xl bg-white text-brown-800 border border-cream-300 flex items-center justify-center font-bold btn-press-effect hover:bg-cream-50">-</button>
+                        <button onclick="changeQty(-1)"
+                            class="w-9 h-9 rounded-xl bg-white text-brown-800 border border-cream-300 flex items-center justify-center font-bold btn-press-effect hover:bg-cream-50">-</button>
                         <span id="detail-qty" class="w-9 text-center text-sm font-extrabold text-brown-800">1</span>
-                        <button onclick="changeQty(1)" class="w-9 h-9 rounded-xl bg-brown-800 text-cream-50 flex items-center justify-center font-bold btn-press-effect hover:bg-brown-900">+</button>
+                        <button onclick="changeQty(1)"
+                            class="w-9 h-9 rounded-xl bg-brown-800 text-cream-50 flex items-center justify-center font-bold btn-press-effect hover:bg-brown-900">+</button>
                     </div>
-                    
-                    <button onclick="addToCart()" class="flex-1 bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect">
+
+                    <button onclick="addToCart()"
+                        class="flex-1 bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Masukan Keranjang
                     </button>
@@ -262,8 +333,9 @@
         <!-- PAGE 3: PROMO -->
         <div id="page-promo" class="page px-5 pt-5 pb-24">
             <h2 class="font-extrabold text-2xl text-brown-800 mb-2">Penawaran Menarik</h2>
-            <p class="text-xs text-brown-500 mb-6 font-medium">Dapatkan potongan khusus lewat promo TikTok Live dan toko fisik.</p>
-            
+            <p class="text-xs text-brown-500 mb-6 font-medium">Dapatkan potongan khusus lewat promo TikTok Live dan toko
+                fisik.</p>
+
             <div id="promo-list" class="space-y-5">
                 <!-- Promo diisi oleh JS secara dinamis -->
                 <div class="col-span-2 text-center text-sm text-brown-500 py-16 flex flex-col items-center gap-3">
@@ -275,11 +347,14 @@
         <!-- PAGE 4: KERANJANG (Sistem Cek Stok, Pengisian Alamat Cerdas & WhatsApp) -->
         <div id="page-cart" class="page pt-5 pb-32">
             <div class="px-5 flex items-center justify-between mb-6">
-                <button onclick="switchPage('home')" class="p-3 bg-cream-100 border border-cream-300 rounded-full text-brown-800 btn-press-effect">
+                <button onclick="switchPage('home')"
+                    class="p-3 bg-cream-100 border border-cream-300 rounded-full text-brown-800 btn-press-effect">
                     <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 </button>
                 <h2 class="font-extrabold text-xl text-brown-800">Keranjang Belanja</h2>
-                <button onclick="clearCart()" class="p-3 bg-cream-100 border border-cream-300 rounded-full text-brown-800 btn-press-effect" title="Kosongkan Keranjang">
+                <button onclick="clearCart()"
+                    class="p-3 bg-cream-100 border border-cream-300 rounded-full text-brown-800 btn-press-effect"
+                    title="Kosongkan Keranjang">
                     <i data-lucide="trash-2" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -287,9 +362,10 @@
             <div id="cart-items" class="px-5 space-y-4 mb-6"></div>
 
             <!-- Ringkasan Invoice & Formulir Pengiriman -->
-            <div id="cart-summary-section" class="px-5 mt-8 border-t border-cream-300 pt-6 bg-cream-100 rounded-t-[32px] pb-24 shadow-inner">
+            <div id="cart-summary-section"
+                class="px-5 mt-8 border-t border-cream-300 pt-6 bg-cream-100 rounded-t-[32px] pb-24 shadow-inner">
                 <h3 class="font-extrabold text-brown-800 mb-4 text-base">Rincian Belanja</h3>
-                
+
                 <div class="space-y-2.5 text-sm text-brown-600 border-b border-cream-300 pb-4 mb-4">
                     <div class="flex justify-between font-medium">
                         <span>Total Produk</span>
@@ -297,7 +373,9 @@
                     </div>
                     <div class="flex justify-between font-medium items-center">
                         <span>Biaya Pengiriman</span>
-                        <span class="text-xs bg-brown-800 text-cream-50 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Dihitung Admin</span>
+                        <span
+                            class="text-xs bg-brown-800 text-cream-50 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Dihitung
+                            Admin</span>
                     </div>
                 </div>
 
@@ -308,36 +386,54 @@
 
                 <!-- FORMULIR ALAMAT PENERIMA -->
                 <div class="bg-white p-6 rounded-3xl border border-cream-300 mb-6 shadow-sm space-y-5">
-                    <h4 class="font-extrabold text-base text-brown-800 pb-1 border-b border-cream-100">Alamat Pengiriman</h4>
-                    
+                    <h4 class="font-extrabold text-base text-brown-800 pb-1 border-b border-cream-100">Alamat Pengiriman
+                    </h4>
+
                     <div class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors">
-                        <label class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nama Lengkap</label>
-                        <input type="text" id="cust-name" placeholder="Masukkan nama lengkap penerima..." class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
+                        <label
+                            class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nama
+                            Lengkap</label>
+                        <input type="text" id="cust-name" placeholder="Masukkan nama lengkap penerima..."
+                            class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
                     </div>
 
                     <div class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors">
-                        <label class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nomor Telepon</label>
-                        <input type="number" id="cust-phone" placeholder="Contoh: 0812345678..." class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
+                        <label
+                            class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nomor
+                            Telepon</label>
+                        <input type="number" id="cust-phone" placeholder="Contoh: 0812345678..."
+                            class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
                     </div>
 
-                    <div class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors relative">
-                        <label class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Provinsi, Kota, Kecamatan, Kode Pos</label>
-                        <input type="text" id="cust-region" placeholder="Provinsi, Kota, Kecamatan, Kode Pos..." class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
+                    <div
+                        class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors relative">
+                        <label
+                            class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Provinsi,
+                            Kota, Kecamatan, Kode Pos</label>
+                        <input type="text" id="cust-region" placeholder="Provinsi, Kota, Kecamatan, Kode Pos..."
+                            class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
                     </div>
 
                     <div class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors">
-                        <label class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nama Jalan, Gedung, No. Rumah</label>
-                        <input type="text" id="cust-street" placeholder="Masukkan nama jalan, nomor rumah / gedung..." class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
+                        <label
+                            class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Nama
+                            Jalan, Gedung, No. Rumah</label>
+                        <input type="text" id="cust-street" placeholder="Masukkan nama jalan, nomor rumah / gedung..."
+                            class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
                     </div>
 
                     <div class="border-b border-cream-200 pb-1.5 focus-within:border-brown-500 transition-colors">
-                        <label class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Detail Lainnya (Cth: Blok / Unit No., Patokan)</label>
-                        <input type="text" id="cust-details" placeholder="Contoh: Depan masjid, pagar warna hitam..." class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
+                        <label
+                            class="text-[10px] font-extrabold text-brown-500 uppercase tracking-wider block mb-1">Detail
+                            Lainnya (Cth: Blok / Unit No., Patokan)</label>
+                        <input type="text" id="cust-details" placeholder="Contoh: Depan masjid, pagar warna hitam..."
+                            class="w-full bg-transparent text-sm text-brown-800 focus:outline-none font-semibold placeholder-brown-300">
                     </div>
                 </div>
 
                 <!-- Tombol Checkout -->
-                <button onclick="checkoutWhatsApp()" class="w-full bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect">
+                <button onclick="checkoutWhatsApp()"
+                    class="w-full bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect">
                     <i data-lucide="message-circle" class="w-5 h-5"></i>
                     Kirim Pesanan ke WhatsApp
                 </button>
@@ -347,21 +443,31 @@
         <!-- PAGE 5: TENTANG TOKO -->
         <div id="page-about" class="page px-5 pt-5 pb-24 text-center">
             <!-- LOGO BESAR DI HALAMAN TENTANG TOKO DARI GOOGLE DRIVE -->
-            <div class="w-24 h-24 bg-cream-100 border border-cream-300 rounded-full mx-auto flex items-center justify-center shadow-sm overflow-hidden">
-                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200/F7EFE5/4A3B32?text=FB';">
+            <div
+                class="w-24 h-24 bg-cream-100 border border-cream-300 rounded-full mx-auto flex items-center justify-center shadow-sm overflow-hidden">
+                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                    alt="Logo Faminis Barokah" class="w-full h-full object-cover"
+                    onerror="this.onerror=null; this.src='https://placehold.co/200/F7EFE5/4A3B32?text=FB';">
             </div>
             <h2 class="font-extrabold text-2xl text-brown-800 mb-1">Faminis Barokah</h2>
-            <p class="text-brown-500 text-xs font-semibold tracking-wider uppercase mb-6">Pusat Grosir & Eceran Busana Muslimah</p>
-            
+            <p class="text-brown-500 text-xs font-semibold tracking-wider uppercase mb-6">Pusat Grosir & Eceran Busana
+                Muslimah</p>
+
             <p class="text-sm text-brown-600/90 leading-relaxed max-w-sm mx-auto mb-8 font-medium">
-                Menyediakan koleksi gamis, hijab premium, tunik, dan busana muslimah modis berkualitas tinggi dengan jahitan rapi serta bahan ternyaman untuk ibadah dan hari istimewa Anda.
+                Menyediakan koleksi gamis, hijab premium, tunik, dan busana muslimah modis berkualitas tinggi dengan
+                jahitan rapi serta bahan ternyaman untuk ibadah dan hari istimewa Anda.
             </p>
 
             <!-- Card Sosmed Premium -->
             <div class="space-y-3.5 max-w-sm mx-auto">
-                <a href="https://tiktok.com/@faminisbarokah" target="_blank" class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
-                    <div class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-black border border-cream-300">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.11-1.47-.17-.12-.32-.26-.47-.39-.07.08-.12.16-.14.25-.09 2.58-.02 5.17-.07 7.75-.06 1.9-.53 3.86-1.72 5.34-1.4 1.83-3.72 2.83-6.02 2.73-2.52-.07-4.99-1.39-6.17-3.64-1.35-2.45-1.12-5.73.57-7.96 1.34-1.84 3.63-2.86 5.92-2.73.01 1.48.01 2.96.02 4.44-1.01-.16-2.14.18-2.82.97-.73.81-.84 2.05-.33 3.01.52 1.05 1.7 1.69 2.87 1.58 1.16-.06 2.19-.94 2.45-2.07.13-.53.11-1.08.12-1.63V.02z"/></svg>
+                <a href="https://tiktok.com/@faminisbarokah" target="_blank"
+                    class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
+                    <div
+                        class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-black border border-cream-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.11-1.47-.17-.12-.32-.26-.47-.39-.07.08-.12.16-.14.25-.09 2.58-.02 5.17-.07 7.75-.06 1.9-.53 3.86-1.72 5.34-1.4 1.83-3.72 2.83-6.02 2.73-2.52-.07-4.99-1.39-6.17-3.64-1.35-2.45-1.12-5.73.57-7.96 1.34-1.84 3.63-2.86 5.92-2.73.01 1.48.01 2.96.02 4.44-1.01-.16-2.14.18-2.82.97-.73.81-.84 2.05-.33 3.01.52 1.05 1.7 1.69 2.87 1.58 1.16-.06 2.19-.94 2.45-2.07.13-.53.11-1.08.12-1.63V.02z" />
+                        </svg>
                     </div>
                     <div class="text-left">
                         <p class="font-extrabold text-sm text-brown-800">Tiktok Shop</p>
@@ -370,49 +476,62 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 text-brown-500 ml-auto"></i>
                 </a>
 
-                <a href="https://instagram.com/faminis.barokah" target="_blank" class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
-                    <div class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-pink-700 border border-cream-300">
-                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                <a href="https://instagram.com/faminis.barokah" target="_blank"
+                    class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
+                    <div
+                        class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-pink-700 border border-cream-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                     </div>
                     <div class="text-left">
                         <p class="font-extrabold text-sm text-brown-800">Instagram Official</p>
-                        <p class="text-[10px] text-brown-500 font-semibold uppercase tracking-wider">@faminis.barokah</p>
+                        <p class="text-[10px] text-brown-500 font-semibold uppercase tracking-wider">@faminis.barokah
+                        </p>
                     </div>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-brown-500 ml-auto"></i>
                 </a>
 
-                <a href="https://maps.google.com" target="_blank" class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
-                    <div class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-green-600 border border-cream-300">
+                <a href="https://maps.google.com" target="_blank"
+                    class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
+                    <div
+                        class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-green-600 border border-cream-300">
                         <i data-lucide="map-pin" class="w-5 h-5"></i>
                     </div>
                     <div class="text-left">
                         <p class="font-extrabold text-sm text-brown-800">Kunjungi Toko Fisik</p>
-                        <p class="text-[10px] text-brown-500 font-semibold uppercase tracking-wider">Lokasi Google Maps</p>
+                        <p class="text-[10px] text-brown-500 font-semibold uppercase tracking-wider">Lokasi Google Maps
+                        </p>
                     </div>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-brown-500 ml-auto"></i>
                 </a>
             </div>
 
             <!-- Jam Operasional -->
-            <div class="mt-8 p-4 bg-cream-100 rounded-2xl border border-cream-300 max-w-sm mx-auto text-xs text-brown-600 font-medium leading-relaxed">
+            <div
+                class="mt-8 p-4 bg-cream-100 rounded-2xl border border-cream-300 max-w-sm mx-auto text-xs text-brown-600 font-medium leading-relaxed">
                 <p class="font-extrabold text-brown-800 mb-1">Jam Operasional Toko</p>
                 Setiap Hari: 08.00 - 17.00 WIB
             </div>
         </div>
 
         <!-- FITUR INTEGRASI GEMINI 2: TOMBOL MELAYANG ASISTEN GAYA AI (✨) -->
-        <button onclick="toggleAiChat(true)" class="fixed bottom-28 right-5 z-40 bg-brown-800 text-cream-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-brown-900 focus:outline-none animate-bounce btn-press-effect border-2 border-white" title="Asisten Gaya AI">
+        <button onclick="toggleAiChat(true)"
+            class="fixed bottom-28 right-5 z-40 bg-brown-800 text-cream-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-brown-900 focus:outline-none animate-bounce btn-press-effect border-2 border-white"
+            title="Asisten Gaya AI">
             <i data-lucide="message-square" class="w-6 h-6"></i>
             <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
         </button>
 
         <!-- CHATBOX DRAWER ASISTEN AI (✨) (Tinggi menyesuaikan ukuran layar user mobile) -->
-        <div id="ai-chat-drawer" class="fixed inset-y-0 left-0 right-0 mx-auto w-full max-w-[480px] bg-white z-50 flex flex-col transform translate-y-full transition-transform duration-300">
+        <div id="ai-chat-drawer"
+            class="fixed inset-y-0 left-0 right-0 mx-auto w-full max-w-[480px] bg-white z-50 flex flex-col transform translate-y-full transition-transform duration-300">
             <!-- Header Chat -->
             <div class="p-5 bg-brown-800 text-cream-50 flex justify-between items-center shadow-md">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo Faminis Barokah" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                    <div
+                        class="w-10 h-10 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                            alt="Logo Faminis Barokah" class="w-full h-full object-cover"
+                            onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
                     <div>
                         <h3 class="font-bold text-sm">Asisten Gaya Faminis AI ✨</h3>
@@ -428,42 +547,57 @@
             <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto bg-cream-50 space-y-4">
                 <!-- Sambutan Awal -->
                 <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                    <div
+                        class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
+                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                            alt="Logo" class="w-full h-full object-cover"
+                            onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
-                    <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
-                        Assalamu'alaikum ukh/kak! Selamat datang di Faminis Barokah. Saya asisten gaya pribadi Anda. Ada yang bisa saya bantu hari ini? 
+                    <div
+                        class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
+                        Assalamu'alaikum ukh/kak! Selamat datang di Faminis Barokah. Saya asisten gaya pribadi Anda. Ada
+                        yang bisa saya bantu hari ini?
                         <br><br>
-                        Kakak bisa tanya rekomendasi perpaduan hijab, pilihan warna busana untuk jenis kulit tertentu, hingga gaya syar'i terbaik untuk acara formal maupun daily wear! ✨
+                        Kakak bisa tanya rekomendasi perpaduan hijab, pilihan warna busana untuk jenis kulit tertentu,
+                        hingga gaya syar'i terbaik untuk acara formal maupun daily wear! ✨
                     </div>
                 </div>
             </div>
 
             <!-- Input Chat -->
             <div class="p-4 bg-white border-t border-cream-200 flex gap-2 items-center">
-                <input type="text" id="ai-chat-input" placeholder="Tanya tentang gaya baju / gamis..." class="flex-1 bg-cream-50 border border-cream-300 rounded-xl p-3.5 text-xs text-brown-800 focus:outline-none focus:border-brown-600 font-semibold" onkeypress="handleAiKeyPress(event)">
-                <button onclick="sendAiChatMessage()" class="bg-brown-800 hover:bg-brown-900 text-cream-50 p-3.5 rounded-xl btn-press-effect shadow-md flex items-center justify-center">
+                <input type="text" id="ai-chat-input" placeholder="Tanya tentang gaya baju / gamis..."
+                    class="flex-1 bg-cream-50 border border-cream-300 rounded-xl p-3.5 text-xs text-brown-800 focus:outline-none focus:border-brown-600 font-semibold"
+                    onkeypress="handleAiKeyPress(event)">
+                <button onclick="sendAiChatMessage()"
+                    class="bg-brown-800 hover:bg-brown-900 text-cream-50 p-3.5 rounded-xl btn-press-effect shadow-md flex items-center justify-center">
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
 
         <!-- BOTTOM NAVIGATION BAR -->
-        <div class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-cream-300 px-6 py-3.5 flex justify-between items-center z-40 rounded-t-3xl shadow-[0_-8px_30px_rgba(74,59,50,0.06)]">
-            <button onclick="switchPage('home')" id="nav-home" class="nav-btn flex flex-col items-center text-brown-800 btn-press-effect">
+        <div
+            class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-cream-300 px-6 py-3.5 flex justify-between items-center z-40 rounded-t-3xl shadow-[0_-8px_30px_rgba(74,59,50,0.06)]">
+            <button onclick="switchPage('home')" id="nav-home"
+                class="nav-btn flex flex-col items-center text-brown-800 btn-press-effect">
                 <i data-lucide="home" class="w-6 h-6 mb-1"></i>
                 <span class="text-[10px] font-bold tracking-wide">Home</span>
             </button>
-            <button onclick="switchPage('promo')" id="nav-promo" class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
+            <button onclick="switchPage('promo')" id="nav-promo"
+                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
                 <i data-lucide="tag" class="w-6 h-6 mb-1"></i>
                 <span class="text-[10px] font-bold tracking-wide">Promo</span>
             </button>
-            <button onclick="switchPage('cart')" id="nav-cart" class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect relative">
+            <button onclick="switchPage('cart')" id="nav-cart"
+                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect relative">
                 <i data-lucide="shopping-bag" class="w-6 h-6 mb-1"></i>
-                <span id="cart-badge" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brown-800 text-cream-50 text-[8px] font-extrabold rounded-full flex items-center justify-center hidden border border-white">0</span>
+                <span id="cart-badge"
+                    class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brown-800 text-cream-50 text-[8px] font-extrabold rounded-full flex items-center justify-center hidden border border-white">0</span>
                 <span class="text-[10px] font-bold tracking-wide">Keranjang</span>
             </button>
-            <button onclick="switchPage('about')" id="nav-about" class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
+            <button onclick="switchPage('about')" id="nav-about"
+                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
                 <i data-lucide="store" class="w-6 h-6 mb-1"></i>
                 <span class="text-[10px] font-bold tracking-wide">Toko</span>
             </button>
@@ -487,7 +621,7 @@
         let productsData = [];
         let promosData = [];
         let cart = JSON.parse(localStorage.getItem('faminis_cart')) || [];
-        
+
         // Data Kategori Default (Fallback jika SCRIPT_URL kosong / offline)
         let categoriesData = ["Gamis", "Hijab", "Atasan"];
 
@@ -498,7 +632,7 @@
             subjudul: "Diskon s/d 50% Koleksi Tunik & Gamis",
             tombol_teks: "Lihat Promo"
         };
-        
+
         let currentDetailProduct = null;
         let selectedColor = "";
         let selectedSize = "";
@@ -523,15 +657,15 @@
         // -----------------------------------------
         window.onload = async () => {
             updateCartBadge();
-            
+
             let loaded = false;
             if (SCRIPT_URL) {
                 const fetchPromise = fetch(SCRIPT_URL + '?action=getData').then(res => res.json());
                 const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 4000));
-                
+
                 try {
                     const json = await Promise.race([fetchPromise, timeoutPromise]);
-                    if(json.status === 'success') {
+                    if (json.status === 'success') {
                         productsData = json.data.products;
                         promosData = json.data.promos;
                         if (json.data.banner) {
@@ -565,11 +699,11 @@
         // -----------------------------------------
         async function callGeminiAPI(prompt, systemInstruction = "") {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
+
             const payload = {
                 contents: [{ parts: [{ text: prompt }] }]
             };
-            
+
             if (systemInstruction) {
                 payload.systemInstruction = { parts: [{ text: systemInstruction }] };
             }
@@ -582,11 +716,11 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    
+
                     if (!response.ok) {
                         throw new Error(`HTTP Error! Status: ${response.status}`);
                     }
-                    
+
                     const result = await response.json();
                     return result.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, Asisten AI sedang beristirahat sebentar.";
                 } catch (error) {
@@ -604,7 +738,7 @@
         // -----------------------------------------
         async function generateProductMixMatch() {
             if (!currentDetailProduct) return;
-            
+
             const targetDiv = document.getElementById('ai-mixmatch-result');
             targetDiv.classList.remove('hidden');
             targetDiv.innerHTML = `
@@ -615,7 +749,7 @@
             `;
 
             const catalogContext = productsData.map(p => `- ${p.nama} (${p.kategori})`).join('\n');
-            
+
             const systemPrompt = "Kamu adalah Konsultan Fashion Muslimah Faminis Barokah yang mewah, anggun, dan ramah. Berikan tips padu padan praktis, estetik, dan syar'i untuk produk yang ditanyakan pelanggan.";
             const userPrompt = `
                 Tolong berikan 3 tips padu padan (mix and match) jilbab, bawahan, warna, dan aksesoris yang sangat cocok untuk produk ini:
@@ -660,7 +794,7 @@
             }
         }
 
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 toggleAiChat(false);
             }
@@ -679,7 +813,7 @@
 
             inputEl.value = '';
             const chatMessages = document.getElementById('ai-chat-messages');
-            
+
             // Tambahkan Bubble Chat User
             chatMessages.innerHTML += `
                 <div class="flex items-start gap-2.5 justify-end">
@@ -752,7 +886,7 @@
             if (pageId !== 'detail') {
                 previousPage = pageId;
             }
-            
+
             // Sembunyikan semua page
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             // Tampilkan page tujuan
@@ -763,19 +897,19 @@
             window.scrollTo(0, 0);
 
             // Update Bottom Nav Active Styling
-            if(pageId !== 'detail') {
+            if (pageId !== 'detail') {
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.classList.remove('text-brown-800');
                     btn.classList.add('text-brown-400');
                 });
                 const activeNav = document.getElementById(`nav-${pageId}`);
-                if(activeNav) {
+                if (activeNav) {
                     activeNav.classList.remove('text-brown-400');
                     activeNav.classList.add('text-brown-800');
                 }
             }
 
-            if(pageId === 'cart') {
+            if (pageId === 'cart') {
                 renderCart();
                 setTimeout(() => {
                     lucide.createIcons();
@@ -804,20 +938,20 @@
         function renderCategories(categories) {
             const container = document.getElementById('category-container');
             container.innerHTML = '';
-            
+
             const semuaBtn = document.createElement('button');
             semuaBtn.id = 'cat-Semua';
             semuaBtn.className = 'category-btn active bg-brown-800 text-cream-50 border border-brown-800 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
             semuaBtn.innerText = 'Semua';
-            semuaBtn.onclick = function() { filterCategory('Semua', semuaBtn); };
+            semuaBtn.onclick = function () { filterCategory('Semua', semuaBtn); };
             container.appendChild(semuaBtn);
-            
+
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.id = `cat-${cat}`;
                 btn.className = 'category-btn bg-cream-100 text-brown-700 border border-cream-300 rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300 btn-press-effect';
                 btn.innerText = cat;
-                btn.onclick = function() { filterCategory(cat, btn); };
+                btn.onclick = function () { filterCategory(cat, btn); };
                 container.appendChild(btn);
             });
         }
@@ -828,8 +962,8 @@
         function updateCartBadge() {
             const badge = document.getElementById('cart-badge');
             const totalQty = cart.reduce((total, item) => total + item.qty, 0);
-            
-            if(totalQty > 0) {
+
+            if (totalQty > 0) {
                 badge.innerText = totalQty;
                 badge.classList.remove('hidden');
                 document.getElementById('notification-badge').classList.remove('hidden');
@@ -850,7 +984,7 @@
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
 
-            if(data.length === 0) {
+            if (data.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-2 text-center text-brown-500 py-16 flex flex-col items-center gap-2">
                         <i data-lucide="info" class="w-8 h-8 text-brown-400"></i>
@@ -862,7 +996,7 @@
 
             data.forEach(prod => {
                 const hargaDiskonStr = formatRupiah(prod.harga);
-                
+
                 let firstImg = "https://placehold.co/400x400/EED9C4/4A3B32?text=Faminis+Barokah";
                 if (prod.gambar) {
                     if (typeof prod.gambar === 'string') {
@@ -893,13 +1027,13 @@
         }
 
         function handleSearch(keyword) {
-            const filtered = productsData.filter(p => 
-                p.nama.toLowerCase().includes(keyword.toLowerCase()) || 
+            const filtered = productsData.filter(p =>
+                p.nama.toLowerCase().includes(keyword.toLowerCase()) ||
                 p.kategori.toLowerCase().includes(keyword.toLowerCase()) ||
                 p.deskripsi.toLowerCase().includes(keyword.toLowerCase())
             );
             renderProducts(filtered);
-            
+
             const iconBtn = document.getElementById('search-icon-btn');
             if (keyword.length > 0) {
                 iconBtn.setAttribute('data-lucide', 'x');
@@ -922,7 +1056,7 @@
                 b.classList.remove('bg-brown-800', 'text-cream-50', 'border-brown-800', 'active');
                 b.classList.add('bg-cream-100', 'text-brown-700', 'border-cream-300');
             });
-            
+
             btnElement.classList.add('bg-brown-800', 'text-cream-50', 'border-brown-800', 'active');
             btnElement.classList.remove('bg-cream-100', 'text-brown-700', 'border-cream-300');
 
@@ -939,7 +1073,7 @@
         // -----------------------------------------
         function openDetail(id) {
             currentDetailProduct = productsData.find(p => String(p.id) === String(id));
-            if(!currentDetailProduct) return;
+            if (!currentDetailProduct) return;
 
             selectedColor = "";
             selectedSize = "";
@@ -968,7 +1102,7 @@
 
             const imgContainer = document.getElementById('detail-img-container');
             const dotsContainer = document.getElementById('detail-img-dots');
-            
+
             imgContainer.innerHTML = '';
             dotsContainer.innerHTML = '';
 
@@ -1002,26 +1136,26 @@
             document.getElementById('detail-stock').innerText = currentDetailProduct.stok || 0;
             document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi || "Tidak ada deskripsi.";
             document.getElementById('detail-qty').innerText = currentQty;
-            
+
             document.getElementById('selected-color-text').innerText = "Pilih Warna";
             document.getElementById('selected-size-text').innerText = "Pilih Ukuran";
 
             const colorContainer = document.getElementById('color-options');
             colorContainer.innerHTML = '';
-            
-            const colorPaletteMap = { 
-                "hitam": "#1A1A1A", 
-                "maroon": "#7A1C1C", 
-                "navy": "#1F2937", 
-                "putih": "#F3F4F6", 
-                "mocca": "#BAA48A", 
+
+            const colorPaletteMap = {
+                "hitam": "#1A1A1A",
+                "maroon": "#7A1C1C",
+                "navy": "#1F2937",
+                "putih": "#F3F4F6",
+                "mocca": "#BAA48A",
                 "dusty": "#D2A2A7",
                 "abu-abu": "#9CA3AF",
                 "soft blue": "#B0C4DE",
                 "sage green": "#9FAF90",
                 "rose gold": "#E3A89F"
             };
-            
+
             let warnaList = [];
             if (currentDetailProduct.warna) {
                 if (Array.isArray(currentDetailProduct.warna)) {
@@ -1076,11 +1210,11 @@
             const container = document.getElementById('detail-img-container');
             const dots = document.querySelectorAll('.slider-dot');
             if (!container || dots.length === 0) return;
-            
+
             const scrollLeft = container.scrollLeft;
             const width = container.clientWidth;
             const activeIndex = Math.round(scrollLeft / width);
-            
+
             dots.forEach((dot, index) => {
                 if (index === activeIndex) {
                     dot.classList.remove('bg-white/40', 'w-1.5');
@@ -1117,8 +1251,8 @@
 
         function changeQty(amount) {
             currentQty += amount;
-            if(currentQty < 1) currentQty = 1;
-            if(currentQty > currentDetailProduct.stok) {
+            if (currentQty < 1) currentQty = 1;
+            if (currentQty > currentDetailProduct.stok) {
                 currentQty = currentDetailProduct.stok;
                 showToast(`Stok terbatas! Maksimal ${currentDetailProduct.stok} pcs`);
             }
@@ -1129,7 +1263,7 @@
         // TAMBAHKAN PRODUK KE KERANJANG (✨ FIXED ✨)
         // -----------------------------------------
         function addToCart() {
-            if(!currentDetailProduct) return;
+            if (!currentDetailProduct) return;
 
             let warnaList = [];
             if (currentDetailProduct.warna) {
@@ -1169,15 +1303,15 @@
             }
 
             // Validasi apakah item dengan spesifikasi persis sama sudah ada
-            const existingIndex = cart.findIndex(item => 
-                String(item.id) === String(currentDetailProduct.id) && 
-                item.warna === selectedColor && 
+            const existingIndex = cart.findIndex(item =>
+                String(item.id) === String(currentDetailProduct.id) &&
+                item.warna === selectedColor &&
                 item.ukuran === selectedSize
             );
 
-            if(existingIndex > -1) {
+            if (existingIndex > -1) {
                 cart[existingIndex].qty += currentQty;
-                if(cart[existingIndex].qty > currentDetailProduct.stok) {
+                if (cart[existingIndex].qty > currentDetailProduct.stok) {
                     cart[existingIndex].qty = currentDetailProduct.stok;
                     showToast("Mencapai batas stok maksimal tersedia");
                 }
@@ -1196,7 +1330,7 @@
             localStorage.setItem('faminis_cart', JSON.stringify(cart));
             updateCartBadge();
             showToast("Dimasukkan ke Keranjang Belanja!");
-            
+
             // Beri sentuhan visual animasi pada badge keranjang
             const badge = document.getElementById('cart-badge');
             if (badge) {
@@ -1211,8 +1345,8 @@
         function renderCart() {
             const container = document.getElementById('cart-items');
             container.innerHTML = '';
-            
-            if(cart.length === 0) {
+
+            if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-20 px-5 flex flex-col items-center">
                         <div class="w-20 h-20 bg-cream-100 rounded-full flex items-center justify-center text-brown-400 border border-cream-300 mb-4">
@@ -1235,7 +1369,7 @@
             cart.forEach((item, index) => {
                 subtotal += (item.harga * item.qty);
                 const variantText = [item.warna, item.ukuran].filter(Boolean).join(' • ');
-                
+
                 container.innerHTML += `
                     <div class="flex gap-4 bg-white p-3.5 rounded-2xl border border-cream-300 shadow-sm relative">
                         <img src="${item.gambar}" class="w-20 h-24 object-cover rounded-xl bg-cream-100 border border-cream-300" onerror="this.src='https://placehold.co/150/EED9C4/4A3B32?text=FB'">
@@ -1265,17 +1399,38 @@
             lucide.createIcons();
         }
 
+        // NOTIFIKASI TOAST KUSTOM
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            if (toast && toastText) {
+                toastText.innerText = message;
+                toast.classList.remove('hidden');
+                // Force reflow
+                toast.offsetWidth;
+                toast.classList.remove('opacity-0', 'translate-y-2');
+                
+                // Sembunyikan setelah 2.5 detik
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-2');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }, 2500);
+            }
+        }
+
         // -----------------------------------------
         // SISTEM DIALOG KONFIRMASI KUSTOM (✨ FIXED ✨)
         // -----------------------------------------
-        window.showCustomConfirm = function(title, message) {
+        window.showCustomConfirm = function (title, message) {
             return new Promise((resolve) => {
                 const modal = document.getElementById('custom-modal');
                 const modalContent = modal.querySelector('div');
-                
+
                 document.getElementById('modal-title').innerText = title;
                 document.getElementById('modal-message').innerText = message;
-                
+
                 modal.classList.remove('hidden');
                 // Force reflow
                 modal.offsetWidth;
@@ -1311,7 +1466,7 @@
         // -----------------------------------------
         // TOMBOL HAPUS PRODUK (✨ FIXED ✨)
         // -----------------------------------------
-        window.removeFromCart = async function(index) {
+        window.removeFromCart = async function (index) {
             if (index < 0 || index >= cart.length) return;
             const confirmed = await showCustomConfirm("Hapus Produk", `Apakah Anda yakin ingin menghapus ${cart[index].nama} dari keranjang?`);
             if (confirmed) {
@@ -1323,7 +1478,7 @@
 
         function updateCartQty(index, amount) {
             cart[index].qty += amount;
-            if(cart[index].qty < 1) {
+            if (cart[index].qty < 1) {
                 removeFromCart(index);
                 return;
             }
@@ -1331,7 +1486,7 @@
         }
 
         async function clearCart() {
-            if(cart.length === 0) return;
+            if (cart.length === 0) return;
             const confirmed = await showCustomConfirm("Kosongkan Keranjang", "Semua busana pilihan Anda akan dihapus dari daftar belanja.");
             if (confirmed) {
                 cart = [];
@@ -1362,27 +1517,27 @@
             const custStreet = document.getElementById('cust-street').value.trim();
             const custDetails = document.getElementById('cust-details').value.trim();
 
-            if(!custName) {
+            if (!custName) {
                 showToast("Nama Lengkap wajib diisi!");
                 document.getElementById('cust-name').focus();
                 return;
             }
-            if(!custPhone) {
+            if (!custPhone) {
                 showToast("Nomor Telepon wajib diisi!");
                 document.getElementById('cust-phone').focus();
                 return;
             }
-            if(!custRegion) {
+            if (!custRegion) {
                 showToast("Provinsi, Kota, Kecamatan, Kode Pos wajib diisi!");
                 document.getElementById('cust-region').focus();
                 return;
             }
-            if(!custStreet) {
+            if (!custStreet) {
                 showToast("Nama Jalan, Gedung, No. Rumah wajib diisi!");
                 document.getElementById('cust-street').focus();
                 return;
             }
-            if(!custDetails) {
+            if (!custDetails) {
                 showToast("Detail Lainnya (Blok / Patokan) wajib diisi!");
                 document.getElementById('cust-details').focus();
                 return;
@@ -1403,7 +1558,7 @@
             cart.forEach((item, i) => {
                 subtotal += (item.harga * item.qty);
                 const varText = [item.warna, item.ukuran].filter(Boolean).join(', ');
-                receiptString += `${i+1}. *${item.nama}*\n`;
+                receiptString += `${i + 1}. *${item.nama}*\n`;
                 receiptString += `   Varian: ${varText}\n`;
                 receiptString += `   Jumlah: ${item.qty} x ${formatRupiah(item.harga)}\n`;
                 receiptString += `   Subtotal: ${formatRupiah(item.harga * item.qty)}\n\n`;
@@ -1414,7 +1569,7 @@
             receiptString += `_Catatan: Biaya pengiriman dan metode pembayaran akan dipandu oleh Admin ya kak._\n\n`;
             receiptString += `Mohon segera diproses pesanannya ya Admin Barokah. Terima kasih!`;
 
-            if(SCRIPT_URL) {
+            if (SCRIPT_URL) {
                 showToast("Menyimpan invoice...");
                 try {
                     fetch(SCRIPT_URL, {
@@ -1434,7 +1589,7 @@
                 }
             }
 
-            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(msg)}`;
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(receiptString)}`;
             window.open(waUrl, '_blank');
 
             cart = [];
@@ -1449,7 +1604,7 @@
         function renderPromos() {
             const container = document.getElementById('promo-list');
             container.innerHTML = '';
-            
+
             promosData.forEach(p => {
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-cream-300">
@@ -1470,16 +1625,16 @@
         }
 
         function shareProduct() {
-            if(!currentDetailProduct) return;
+            if (!currentDetailProduct) return;
             const textToCopy = `Beli ${currentDetailProduct.nama} seharga ${formatRupiah(currentDetailProduct.harga)} hanya di Faminis Barokah! Hubungi kami segera di WhatsApp.`;
-            
+
             const tempInput = document.createElement("input");
             tempInput.value = textToCopy;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            
+
             showToast("Teks deskripsi produk berhasil disalin!");
         }
 
@@ -1506,4 +1661,5 @@
 
     </script>
 </body>
+
 </html>
