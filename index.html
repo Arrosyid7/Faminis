@@ -613,7 +613,11 @@
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
         // -----------------------------------------
-        const SCRIPT_URL = ''; // Ganti dengan url Deployment Web App Apps Script Anda!
+        let SCRIPT_URL = '<?= ScriptApp.getService().getUrl() ?>';
+        // Fallback jika tidak di-render oleh Apps Script (misalnya ketika dijalankan secara lokal/file biasa)
+        if (SCRIPT_URL.startsWith('<?=')) {
+            SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhjyV7m6Ivqgs_a0qv72eUxADDEsPhEZx_lInXv0VoXhUHcpqcGt-SaoWfCItMU9k-/exec';
+        }
         const NO_WA_ADMIN = '6281234567890'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
