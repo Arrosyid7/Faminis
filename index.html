@@ -321,7 +321,7 @@
                             class="w-9 h-9 rounded-xl bg-brown-800 text-cream-50 flex items-center justify-center font-bold btn-press-effect hover:bg-brown-900">+</button>
                     </div>
 
-                    <button onclick="addToCart()"
+                    <button id="add-to-cart-btn" onclick="addToCart()"
                         class="flex-1 bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         Masukan Keranjang
@@ -648,7 +648,7 @@
             { id: "P001", kategori: "Gamis", nama: "Gamis Syar'i Faminis Barokah", deskripsi: "Gamis muslimah eksklusif dari bahan wolfis premium grade A. Tekstur serat kain halus, sangat sejuk saat dikenakan, jatuh anggun di badan, dan tidak menerawang. Cocok digunakan untuk acara formal maupun daily wear.", harga: 150000, gambar: "https://images.unsplash.com/photo-1589465885857-44edb59bbff2?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Mocca", "Hitam", "Maroon", "Navy"], ukuran: ["S", "M", "L", "XL"], stok: 50 },
             { id: "P002", kategori: "Hijab", nama: "Pashmina Ceruty Babydoll", deskripsi: "Pashmina ceruty premium bertekstur pasir lembut berukuran 175x75 cm. Mudah dibentuk, tegak di dahi, tidak gampang bergeser dan memiliki jahitan tepi rapi khas butik terpercaya.", harga: 45000, gambar: "https://images.unsplash.com/photo-1607583643358-3011a68132d7?auto=format&fit=crop&w=500&q=60", warna: ["Dusty Pink", "Mocca", "Hitam", "Abu-Abu"], ukuran: ["All Size"], stok: 120 },
             { id: "P003", kategori: "Atasan", nama: "Tunik Motif Bunga Barokah", deskripsi: "Tunik panjang elegan bermotif floral nan manis. Memakai bahan rayon viscose berkualitas tinggi yang terkenal dingin, berdaya serap tinggi, kancing depan bersahabat untuk ibu menyusui (busui friendly).", harga: 120000, gambar: "https://images.unsplash.com/photo-1515347619362-73bc3ee22f51?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=crop&w=500&q=60", warna: ["Putih Sifon", "Soft Blue"], ukuran: ["L", "XL"], stok: 35 },
-            { id: "P004", kategori: "Gamis", nama: "Kaftan Silk Exclusive", deskripsi: "Kaftan berbahan silk satin premium dengan pendar berkilau mewah. Nyaman dipakai seharian dengan potongan longgar yang jatuh sempurna.", harga: 195000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Rose Gold", "Sage Green"], ukuran: ["All Size"], stok: 15 }
+            { id: "P004", kategori: "Gamis", nama: "Kaftan Silk Exclusive", deskripsi: "Kaftan berbahan silk satin premium dengan pendar berkilau mewah. Nyaman dipakai seharian dengan potongan longgar yang jatuh sempurna.", harga: 195000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Rose Gold", "Sage Green"], ukuran: ["All Size"], stok: 0 }
         ];
 
         const dummyPromos = [
@@ -1010,12 +1010,17 @@
                     }
                 }
 
+                const isHabis = prod.stok === 0 || prod.stok === '0' || parseInt(prod.stok, 10) <= 0;
+                const habisBadge = isHabis ? `<span class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[8px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider z-10 shadow-sm">Habis</span>` : '';
+                const imgClass = isHabis ? 'w-full h-full object-cover opacity-50 grayscale' : 'w-full h-full object-cover';
+
                 const card = `
                     <div class="bg-white rounded-2xl p-3 border border-cream-300 shadow-sm relative cursor-pointer flex flex-col justify-between hover:shadow-md transition-shadow duration-300 btn-press-effect" onclick="openDetail('${prod.id}')">
                         <div>
                             <div class="h-44 bg-cream-100 rounded-xl mb-3 overflow-hidden relative">
-                                <img src="${firstImg}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x500/EED9C4/4A3B32?text=Faminis+Barokah'">
+                                <img src="${firstImg}" class="${imgClass}" onerror="this.src='https://placehold.co/400x500/EED9C4/4A3B32?text=Faminis+Barokah'">
                                 <span class="absolute top-2.5 left-2.5 bg-brown-800/90 text-cream-50 text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">${prod.kategori}</span>
+                                ${habisBadge}
                             </div>
                             <h4 class="font-extrabold text-xs text-brown-800 mb-1 leading-snug line-clamp-2">${prod.nama}</h4>
                         </div>
@@ -1081,7 +1086,9 @@
 
             selectedColor = "";
             selectedSize = "";
-            currentQty = 1;
+            
+            const isHabis = !currentDetailProduct.stok || parseInt(currentDetailProduct.stok, 10) <= 0;
+            currentQty = isHabis ? 0 : 1;
 
             const aiBox = document.getElementById('ai-mixmatch-result');
             if (aiBox) {
@@ -1137,9 +1144,30 @@
             document.getElementById('detail-name').innerText = currentDetailProduct.nama || "";
             document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga || 0);
             document.getElementById('detail-old-price').innerText = formatRupiah((currentDetailProduct.harga || 0) * 1.25);
-            document.getElementById('detail-stock').innerText = currentDetailProduct.stok || 0;
+            
+            const stockEl = document.getElementById('detail-stock');
+            if (isHabis) {
+                stockEl.innerHTML = `<span class="text-red-600 font-extrabold">Habis</span>`;
+            } else {
+                stockEl.innerHTML = `<span class="text-brown-800 font-bold">${currentDetailProduct.stok}</span>`;
+            }
+            
             document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi || "Tidak ada deskripsi.";
             document.getElementById('detail-qty').innerText = currentQty;
+
+            // Update add-to-cart button styling based on stock
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            if (addToCartBtn) {
+                if (isHabis) {
+                    addToCartBtn.innerHTML = `<i data-lucide="slash" class="w-5 h-5"></i> Stok Habis`;
+                    addToCartBtn.className = "flex-1 bg-gray-400 text-white font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 cursor-not-allowed";
+                    addToCartBtn.disabled = true;
+                } else {
+                    addToCartBtn.innerHTML = `<i data-lucide="shopping-cart" class="w-5 h-5"></i> Masukan Keranjang`;
+                    addToCartBtn.className = "flex-1 bg-brown-800 hover:bg-brown-900 text-cream-50 font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-brown-800/10 flex items-center justify-center gap-2 btn-press-effect";
+                    addToCartBtn.disabled = false;
+                }
+            }
 
             document.getElementById('selected-color-text').innerText = "Pilih Warna";
             document.getElementById('selected-size-text').innerText = "Pilih Ukuran";
@@ -1254,6 +1282,12 @@
         }
 
         function changeQty(amount) {
+            const isHabis = !currentDetailProduct.stok || parseInt(currentDetailProduct.stok, 10) <= 0;
+            if (isHabis) {
+                currentQty = 0;
+                document.getElementById('detail-qty').innerText = 0;
+                return;
+            }
             currentQty += amount;
             if (currentQty < 1) currentQty = 1;
             if (currentQty > currentDetailProduct.stok) {
@@ -1268,6 +1302,12 @@
         // -----------------------------------------
         function addToCart() {
             if (!currentDetailProduct) return;
+
+            const isHabis = !currentDetailProduct.stok || parseInt(currentDetailProduct.stok, 10) <= 0;
+            if (isHabis) {
+                showToast("Maaf, produk ini sedang habis!");
+                return;
+            }
 
             let warnaList = [];
             if (currentDetailProduct.warna) {
@@ -1481,6 +1521,14 @@
         };
 
         function updateCartQty(index, amount) {
+            const product = productsData.find(p => String(p.id) === String(cart[index].id));
+            const maxStock = product ? parseInt(product.stok, 10) : 0;
+            
+            if (amount > 0 && cart[index].qty >= maxStock) {
+                showToast(`Stok terbatas! Maksimal ${maxStock} pcs`);
+                return;
+            }
+            
             cart[index].qty += amount;
             if (cart[index].qty < 1) {
                 removeFromCart(index);
