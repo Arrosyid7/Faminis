@@ -177,7 +177,7 @@
                         <h2 id="banner-title" class="font-bold text-xl text-cream-50 mb-1 leading-tight">Gaya Anggun &
                             Syar'i Menawan</h2>
                         <p id="banner-subtitle" class="text-xs text-cream-200/80 mb-4 font-light">Diskon s/d 50% Koleksi
-                            Tunik & Gamis</p>
+                            Gamis & Mukena</p>
                         <button id="banner-btn" onclick="switchPage('promo')"
                             class="bg-cream-100 text-brown-800 text-xs font-bold py-2.5 px-5 rounded-xl shadow-md btn-press-effect hover:bg-white">
                             Lihat Promo
@@ -251,9 +251,7 @@
                             class="bg-brown-800 text-cream-50 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-2 inline-block"></span>
                         <h2 id="detail-name" class="font-extrabold text-2xl text-brown-800 leading-tight"></h2>
                     </div>
-                    <div class="text-right">
-                        <span class="text-xs text-brown-500 line-through block font-medium"
-                            id="detail-old-price"></span>
+                    <div class="text-right w-fit shrink-0">
                         <h2 id="detail-price" class="font-extrabold text-xl text-brown-800 mt-1"></h2>
                     </div>
                 </div>
@@ -279,7 +277,7 @@
                         <h4 class="font-extrabold text-xs text-brown-800 tracking-wider uppercase">Inspirasi Padu Padan
                             AI ✨</h4>
                     </div>
-                    <p class="text-[10px] text-brown-500 leading-relaxed mb-4">Butuh saran hijab, bawahan, atau
+                    <p class="text-[10px] text-brown-500 leading-relaxed mb-4">Butuh saran padu padan warna, bawahan, atau
                         aksesoris yang serasi dengan pakaian ini? Biarkan asisten AI kami memberikan ide gaya terbaik.
                     </p>
                     <button onclick="generateProductMixMatch()"
@@ -454,7 +452,7 @@
                 Muslimah</p>
 
             <p class="text-sm text-brown-600/90 leading-relaxed max-w-sm mx-auto mb-8 font-medium">
-                Menyediakan koleksi gamis, hijab premium, tunik, dan busana muslimah modis berkualitas tinggi dengan
+                Menyediakan koleksi gamis, kaftan, dan mukena premium berkualitas tinggi dengan
                 jahitan rapi serta bahan ternyaman untuk ibadah dan hari istimewa Anda.
             </p>
 
@@ -541,7 +539,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-sm">Asisten Gaya Faminis AI ✨</h3>
-                        <p class="text-[10px] text-cream-300">Konsultasi Hijab & Gamis Premium</p>
+                        <p class="text-[10px] text-cream-300">Konsultasi Busana Muslimah Premium</p>
                     </div>
                 </div>
                 <button onclick="toggleAiChat(false)" class="p-2 text-cream-200 hover:text-white btn-press-effect">
@@ -564,7 +562,7 @@
                         Assalamu'alaikum ukh/kak! Selamat datang di Faminis Barokah. Saya asisten gaya pribadi Anda. Ada
                         yang bisa saya bantu hari ini?
                         <br><br>
-                        Kakak bisa tanya rekomendasi perpaduan hijab, pilihan warna busana untuk jenis kulit tertentu,
+                        Kakak bisa tanya rekomendasi padu padan warna busana muslimah, pilihan warna untuk jenis kulit tertentu,
                         hingga gaya syar'i terbaik untuk acara formal maupun daily wear! ✨
                     </div>
                 </div>
@@ -633,13 +631,13 @@
         let cart = JSON.parse(localStorage.getItem('faminis_cart')) || [];
 
         // Data Kategori Default (Fallback jika SCRIPT_URL kosong / offline)
-        let categoriesData = ["Gamis", "Hijab", "Atasan"];
+        let categoriesData = ["Gamis", "Mukena"];
 
         // Data Banner Default (Fallback jika SCRIPT_URL kosong / offline)
         let bannerData = {
             badge: "EDISI BARU",
             judul: "Gaya Anggun & Syar'i Menawan",
-            subjudul: "Diskon s/d 50% Koleksi Tunik & Gamis",
+            subjudul: "Diskon s/d 50% Koleksi Gamis & Mukena",
             tombol_teks: "Lihat Promo"
         };
 
@@ -652,13 +650,12 @@
         // DATA CADANGAN / DUMMY JIKA GOOGLE SHEETS API BELUM DISIAPKAN
         const dummyProducts = [
             { id: "P001", kategori: "Gamis", nama: "Gamis Syar'i Faminis Barokah", deskripsi: "Gamis muslimah eksklusif dari bahan wolfis premium grade A. Tekstur serat kain halus, sangat sejuk saat dikenakan, jatuh anggun di badan, dan tidak menerawang. Cocok digunakan untuk acara formal maupun daily wear.", harga: 150000, gambar: "https://images.unsplash.com/photo-1589465885857-44edb59bbff2?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Mocca", "Hitam", "Maroon", "Navy"], ukuran: ["S", "M", "L", "XL"], stok: 50 },
-            { id: "P002", kategori: "Hijab", nama: "Pashmina Ceruty Babydoll", deskripsi: "Pashmina ceruty premium bertekstur pasir lembut berukuran 175x75 cm. Mudah dibentuk, tegak di dahi, tidak gampang bergeser dan memiliki jahitan tepi rapi khas butik terpercaya.", harga: 45000, gambar: "https://images.unsplash.com/photo-1607583643358-3011a68132d7?auto=format&fit=crop&w=500&q=60", warna: ["Dusty Pink", "Mocca", "Hitam", "Abu-Abu"], ukuran: ["All Size"], stok: 120 },
-            { id: "P003", kategori: "Atasan", nama: "Tunik Motif Bunga Barokah", deskripsi: "Tunik panjang elegan bermotif floral nan manis. Memakai bahan rayon viscose berkualitas tinggi yang terkenal dingin, berdaya serap tinggi, kancing depan bersahabat untuk ibu menyusui (busui friendly).", harga: 120000, gambar: "https://images.unsplash.com/photo-1515347619362-73bc3ee22f51?auto=format&fit=crop&w=500&q=60, https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=crop&w=500&q=60", warna: ["Putih Sifon", "Soft Blue"], ukuran: ["L", "XL"], stok: 35 },
-            { id: "P004", kategori: "Gamis", nama: "Kaftan Silk Exclusive", deskripsi: "Kaftan berbahan silk satin premium dengan pendar berkilau mewah. Nyaman dipakai seharian dengan potongan longgar yang jatuh sempurna.", harga: 195000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Rose Gold", "Sage Green"], ukuran: ["All Size"], stok: 0 }
+            { id: "P002", kategori: "Mukena", nama: "Mukena Silk Premium Barokah", deskripsi: "Mukena eksklusif dengan bahan adem, lembut, tidak menerawang, cocok untuk ibadah sholat khusyuk sehari-hari maupun hari raya.", harga: 185000, gambar: "https://images.unsplash.com/photo-1589465885857-44edb59bbff2?auto=format&fit=crop&w=500&q=60", warna: ["Putih", "Mocca", "Soft Green"], ukuran: ["All Size"], stok: 80 },
+            { id: "P003", kategori: "Gamis", nama: "Kaftan Silk Exclusive", deskripsi: "Kaftan berbahan silk satin premium dengan pendar berkilau mewah. Nyaman dipakai seharian dengan potongan longgar yang jatuh sempurna.", harga: 195000, gambar: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60", warna: ["Rose Gold", "Sage Green"], ukuran: ["All Size"], stok: 0 }
         ];
 
         const dummyPromos = [
-            { id: "PR01", judul: "TikTok Live Sale: Diskon 30% Spesial Hijab!", gambar: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80", link: "https://tiktok.com/@faminisbarokah" },
+            { id: "PR01", judul: "Live Sale: Diskon 30% Spesial Koleksi Baru!", gambar: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80", link: "https://tiktok.com/@faminis_barokah" },
             { id: "PR02", judul: "Promo Jumat Berkah - Diskon Gamis Offline", gambar: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80", link: "#" }
         ];
 
@@ -851,46 +848,103 @@
 
             let advice = `**Saran Padu Padan Cantik untuk ${name}:**\n\n`;
 
-            if (category.includes("gamis") || category.includes("kaftan")) {
-                advice += `1. **Rekomendasi Hijab:** Sangat serasi jika dipadukan dengan **Pashmina Ceruty Babydoll** warna Mocca atau Dusty Pink untuk tampilan syar'i yang anggun dan lembut.\n`;
-                advice += `2. **Pilihan Warna:** Gunakan aksesoris dengan warna senada dari pilihan warna yang tersedia (${colors}) agar terlihat mewah.\n`;
-                advice += `3. **Gaya Acara:** Cocok ditambahkan flat shoes cream untuk sehari-hari atau high heels warna nude serta tas tangan kecil untuk menghadiri acara formal. ✨`;
-            } else if (category.includes("hijab") || category.includes("pashmina")) {
-                advice += `1. **Rekomendasi Busana:** Pashmina cantik ini sangat cocok dipadukan dengan **Gamis Syar'i Faminis Barokah** atau **Kaftan Silk Exclusive** kami.\n`;
-                advice += `2. **Kombinasi Warna:** Pilih warna kontras yang lembut. Misalnya, hijab warna Dusty Pink sangat pas disandingkan dengan gamis berwarna Mocca.\n`;
-                advice += `3. **Gaya Hijab:** Gunakan inner hijab (ciput) rajut agar tidak mudah bergeser, dan bentuk dengan gaya menjuntai ke dada untuk tampilan anggun maksimal. 🌸`;
-            } else if (category.includes("tunik") || category.includes("atasan")) {
-                advice += `1. **Rekomendasi Bawahan:** Padukan tunik floral ini dengan rok plisket atau celana bahan longgar berwarna putih atau cokelat muda.\n`;
-                advice += `2. **Kombinasi Hijab:** Pilihlah hijab segi empat polos dengan warna senada seperti Soft Blue atau Dusty Pink agar tidak terlalu ramai.\n`;
-                advice += `3. **Kesan Gaya:** Cocok untuk style semi-formal atau bersantai. Tambahkan bros kecil di bagian dada untuk mempermanis penampilan Anda. 🌟`;
+            if (category.includes("mukena")) {
+                advice += `1. **Khusus Ibadah Sholat:** Karena Mukena didesain khusus untuk ibadah sholat dan sudah menutup seluruh aurat (termasuk rambut) dengan sempurna, Kakak **tidak perlu lagi menggunakan hijab, kerudung, jilbab, atau pashmina tambahan**.\n`;
+                advice += `2. **Kombinasi Ibadah:** Padukan dengan sajadah lipat dengan motif/warna senada, serta tas mukena bawaannya agar mudah dibawa bepergian.\n`;
+                advice += `3. **Kenyamanan:** Gunakan inner wear (dalaman) kaos atau rayon katun yang menyerap keringat agar ibadah sholat semakin khusyuk dan nyaman. ✨`;
             } else {
-                advice += `1. **Perpaduan Warna:** Padukan dengan busana bernuansa pastel atau bumi (earthy tones) agar senada.\n`;
-                advice += `2. **Gaya Syar'i:** Gunakan kerudung lebar yang menutup dada dan bahan pakaian yang jatuh anggun.\n`;
-                advice += `3. **Sentuhan Akhir:** Tambahkan tas tangan simpel dan sepatu yang nyaman untuk menunjang aktivitas seharian.`;
+                // Cari produk lain di database yang bukan produk ini untuk rekomendasi padu padan
+                const otherProducts = productsData.filter(p => String(p.id) !== String(product.id));
+                advice += `1. **Pilihan Warna:** Gunakan perpaduan warna senada dari pilihan warna yang tersedia (${colors}) agar terlihat anggun.\n`;
+                
+                if (otherProducts.length > 0) {
+                    // Cari rekomendasi dari produk yang ada di database
+                    const gamisLain = otherProducts.filter(p => (p.kategori || '').toLowerCase().includes('gamis'));
+                    const mukenaLain = otherProducts.filter(p => (p.kategori || '').toLowerCase().includes('mukena'));
+                    
+                    if (gamisLain.length > 0) {
+                        advice += `2. **Rekomendasi Koleksi:** Untuk variasi gaya lainnya, Kakak juga bisa melihat koleksi gamis kami seperti **${gamisLain[0].nama}** yang juga berbahan premium dan sangat nyaman.\n`;
+                    } else if (mukenaLain.length > 0) {
+                        advice += `2. **Rekomendasi Koleksi:** Kami juga menyediakan mukena premium seperti **${mukenaLain[0].nama}** untuk kebutuhan ibadah Kakak.\n`;
+                    } else {
+                        advice += `2. **Rekomendasi Koleksi:** Padukan dengan koleksi butik kami lainnya yang tertera di halaman utama.\n`;
+                    }
+                } else {
+                    advice += `2. **Rekomendasi Koleksi:** Padukan dengan koleksi gamis atau busana muslimah butik kami lainnya yang tertera di halaman utama.\n`;
+                }
+                
+                advice += `3. **Gaya Acara:** Sangat cocok ditambahkan tas tangan simpel dan sepatu/sandal flat senada untuk menunjang penampilan anggun Anda sehari-hari maupun acara khusus. ✨`;
             }
             return advice;
         }
 
         function generateLocalFallbackChat(query) {
             query = query.toLowerCase();
-            let hasGamis = query.includes("gamis") || query.includes("kaftan") || query.includes("dress");
-            let hasHijab = query.includes("hijab") || query.includes("pashmina") || query.includes("jilbab") || query.includes("kerudung");
-            let hasTunik = query.includes("tunik") || query.includes("atasan") || query.includes("baju");
-            let hasHarga = query.includes("harga") || query.includes("berapa") || query.includes("murah") || query.includes("diskon");
-            let hasBahan = query.includes("bahan") || query.includes("kain") || query.includes("nyaman") || query.includes("panas");
+            let hasMukena = query.includes("mukena") || query.includes("sholat") || query.includes("rukuh");
+            let hasGamis = query.includes("gamis") || query.includes("kaftan") || query.includes("dress") || query.includes("jubah");
+            let hasHijab = query.includes("hijab") || query.includes("pashmina") || query.includes("jilbab") || query.includes("kerudung") || query.includes("ciput") || query.includes("khimar");
+            let hasTunik = query.includes("tunik") || query.includes("atasan") || query.includes("baju") || query.includes("blouse");
+            let hasHarga = query.includes("harga") || query.includes("berapa") || query.includes("murah") || query.includes("diskon") || query.includes("rp");
+            let hasBahan = query.includes("bahan") || query.includes("kain") || query.includes("nyaman") || query.includes("panas") || query.includes("adem");
 
-            if (hasGamis) {
-                return "Butik Faminis Barokah menyediakan **Gamis Syar'i Faminis** (wolfis premium, Rp 150.000) dan **Kaftan Silk Exclusive** (silk satin berkilau mewah, Rp 195.000). Keduanya berpotongan longgar, syar'i, dan sangat sejuk dipakai sehari-hari maupun ke kondangan, kak! Kakak tertarik dengan model yang mana? 🌸";
-            } else if (hasHijab) {
-                return "Untuk jilbab, kami memiliki **Pashmina Ceruty Babydoll** premium berukuran 175x75 cm seharga Rp 45.000. Bahannya bertekstur pasir lembut, mudah dibentuk, tegak di dahi, dan tersedia dalam warna Dusty Pink, Mocca, Hitam, dan Abu-Abu. Sangat cantik dipadukan dengan gamis kami! 🌟";
-            } else if (hasTunik) {
-                return "Koleksi tunik kami yang terpopuler adalah **Tunik Motif Bunga Barokah** seharga Rp 120.000, berbahan rayon viscose premium yang dingin, busui friendly, dan bermotif floral manis. Cocok dipadukan dengan rok plisket polos, kak! 🎀";
+            // Jika database kosong, beritahu pelanggan bahwa data sedang loading
+            if (productsData.length === 0) {
+                return "Assalamu'alaikum kak! Data katalog produk dan promo Butik Faminis Barokah sedang dimuat dari server. Silakan tunggu beberapa saat atau hubungi kami langsung ya! 🌸";
+            }
+
+            if (hasMukena) {
+                const dbMukenas = productsData.filter(p => (p.kategori || '').toLowerCase().includes('mukena') || (p.nama || '').toLowerCase().includes('mukena'));
+                if (dbMukenas.length > 0) {
+                    let response = "Butik Faminis Barokah memiliki koleksi mukena cantik berikut:\n";
+                    dbMukenas.forEach(m => {
+                        const stockText = parseInt(m.stok, 10) > 0 ? `stok tersedia: ${m.stok} pcs` : 'stok habis';
+                        response += `- **${m.nama}** (${m.deskripsi || 'Bahan adem untuk sholat'}, seharga ${formatRupiah(m.harga)}, ${stockText})\n`;
+                    });
+                    response += "\n*Catatan Penting:* Karena mukena dirancang khusus untuk ibadah sholat dan sudah menutup seluruh aurat (termasuk rambut) secara sempurna, Kakak **tidak perlu lagi menggunakan hijab, jilbab, atau pashmina tambahan** saat menggunakannya. Cukup padukan dengan sajadah kesayangan Kakak agar ibadah makin khusyuk! 🕌";
+                    return response;
+                } else {
+                    return "Saat ini Butik Faminis Barokah belum memiliki produk Mukena di dalam katalog yang ditampilkan. Silakan cek kembali berkala ya kak! 🕌";
+                }
+            } else if (hasGamis) {
+                const dbGamis = productsData.filter(p => (p.kategori || '').toLowerCase().includes('gamis') || (p.kategori || '').toLowerCase().includes('kaftan') || (p.nama || '').toLowerCase().includes('gamis') || (p.nama || '').toLowerCase().includes('kaftan'));
+                if (dbGamis.length > 0) {
+                    let response = "Butik Faminis Barokah memiliki koleksi Gamis & Kaftan cantik berikut:\n";
+                    dbGamis.forEach(g => {
+                        const stockText = parseInt(g.stok, 10) > 0 ? `stok: ${g.stok} pcs` : 'stok habis';
+                        response += `- **${g.nama}** (${g.deskripsi || 'Bahan adem & syar\'i'}, seharga ${formatRupiah(g.harga)}, ${stockText})\n`;
+                    });
+                    response += "\nKakak tertarik dengan model gamis yang mana? Semuanya syar'i dan adem dipakai! 🌸";
+                    return response;
+                } else {
+                    return "Saat ini Butik Faminis Barokah belum memiliki produk Gamis atau Kaftan di dalam katalog yang ditampilkan. 🌸";
+                }
+            } else if (hasHijab || hasTunik) {
+                return "Mohon maaf kak, Butik Faminis Barokah **tidak menjual** tunik dan hijab/pashmina ya. Kami hanya menjual produk-produk busana muslimah yang tertera di website/katalog kami, seperti Gamis, Kaftan, dan Mukena premium yang adem dan berkualitas tinggi. Silakan lihat katalog produk kami di bawah ya! 🌸";
             } else if (hasHarga) {
-                return "Harga koleksi busana muslim kami sangat terjangkau dengan kualitas premium:\n- Gamis Syar'i: Rp 150.000\n- Kaftan Silk: Rp 195.000\n- Tunik Bunga: Rp 120.000\n- Pashmina Ceruty: Rp 45.000\n\nKami juga sering mengadakan diskon live di TikTok! Kakak bisa check out langsung melalui WhatsApp atau TikTok kami ya. 🛍️";
+                let response = "Berikut adalah daftar harga produk yang tertera di katalog kami saat ini:\n";
+                productsData.forEach(p => {
+                    response += `- **${p.nama}**: ${formatRupiah(p.harga)}\n`;
+                });
+                return response + "\nKakak bisa memesan produk di atas secara langsung melalui menu Keranjang untuk checkout ke WhatsApp kami ya! 🛍️";
             } else if (hasBahan) {
-                return "Bahan pakaian di Faminis Barokah dipilih yang berkualitas tinggi:\n- **Wolfis Grade A** (Gamis): Halus, jatuh, tidak menerawang.\n- **Silk Satin Premium** (Kaftan): Mewah berkilau dan lembut.\n- **Rayon Viscose** (Tunik): Sangat dingin dan menyerap keringat.\n- **Ceruty Babydoll** (Pashmina): Bertekstur pasir lembut dan mudah dibentuk.\n\nSemua jahitan dijamin rapi sekelas butik, kak! 🧵";
+                let response = "Berikut informasi bahan kain produk yang ada di butik kami:\n";
+                productsData.forEach(p => {
+                    response += `- **${p.nama}**: ${p.deskripsi ? p.deskripsi.substring(0, 120) : 'Bahan kualitas premium khas Butik Faminis Barokah'}...\n`;
+                });
+                return response + "\nSemua bahan kami pilih yang paling adem, lembut, tidak menerawang, dan nyaman dipakai seharian. 🧵";
             } else {
-                return "Assalamu'alaikum kak! Butik Faminis Barokah menyediakan berbagai busana muslim premium seperti Gamis Syar'i, Kaftan Silk, Tunik Motif Bunga, dan Pashmina Ceruty. \n\nAda yang bisa saya bantu terkait detail ukuran, harga, bahan, atau rekomendasi padu padan warna? Kakak juga bisa langsung menghubungi admin via WhatsApp di menu Keranjang ya! 🌸";
+                let intro = "Assalamu'alaikum kak! Butik Faminis Barokah menjual busana muslimah premium berkualitas tinggi sesuai dengan katalog yang ditampilkan.\n\nBerikut katalog produk kami saat ini:\n";
+                productsData.forEach(p => {
+                    intro += `- **${p.nama}** (${p.kategori}) - ${formatRupiah(p.harga)}\n`;
+                });
+                if (promosData.length > 0) {
+                    intro += "\nPromo aktif:\n";
+                    promosData.forEach(pr => {
+                        intro += `- ${pr.judul}\n`;
+                    });
+                }
+                intro += "\nAda yang bisa saya bantu terkait detail ukuran, harga, bahan, atau rekomendasi padu padan warna? Kakak juga bisa menghubungi admin via WhatsApp di menu Keranjang! 🌸";
+                return intro;
             }
         }
 
@@ -909,17 +963,30 @@
                 </div>
             `;
 
-            const catalogContext = productsData.map(p => `- ${p.nama} (${p.kategori})`).join('\n');
+            const catalogContext = productsData.map(p => {
+                const colorsText = Array.isArray(p.warna) ? p.warna.join(', ') : (p.warna || '-');
+                const sizesText = Array.isArray(p.ukuran) ? p.ukuran.join(', ') : (p.ukuran || '-');
+                const stockText = parseInt(p.stok, 10) > 0 ? `Stok: ${p.stok}` : 'Stok: Habis';
+                return `- ID: ${p.id}, Nama: ${p.nama}, Kategori: ${p.kategori}, Harga: ${formatRupiah(p.harga)}, Deskripsi: ${p.deskripsi || '-'}, Warna: ${colorsText}, Ukuran: ${sizesText}, ${stockText}`;
+            }).join('\n');
 
-            const systemPrompt = "Kamu adalah Konsultan Fashion Muslimah Faminis Barokah yang mewah, anggun, dan ramah. Berikan tips padu padan praktis, estetik, dan syar'i untuk produk yang ditanyakan pelanggan.";
+            const systemPrompt = `Kamu adalah Konsultan Fashion Muslimah Faminis Barokah yang mewah, anggun, dan ramah. 
+Aturan Rekomendasi & Informasi:
+- Hanya berikan saran padu padan dan rekomendasikan produk lain jika produk tersebut benar-benar ada di dalam katalog produk butik kami di bawah ini. Jangan mengarang nama produk.
+- ATURAN KHUSUS MUKENA: Jika produk detail yang sedang dibahas adalah "Mukena" (atau berkategori Mukena), jelaskan bahwa Mukena didesain khusus untuk ibadah sholat dan sudah menutup seluruh aurat (termasuk rambut) secara lengkap. Tegaskan bahwa pengguna TIDAK PERLU menggunakan hijab, jilbab, kerudung, atau pashmina tambahan lagi. Berikan saran padu padan berupa sajadah, mukena bag (tas mukena), atau kenyamanan bahan untuk beribadah khusyuk.`;
+
+            const colorsText = Array.isArray(currentDetailProduct.warna) ? currentDetailProduct.warna.join(', ') : String(currentDetailProduct.warna || '');
+            const sizesText = Array.isArray(currentDetailProduct.ukuran) ? currentDetailProduct.ukuran.join(', ') : String(currentDetailProduct.ukuran || '');
+
             const userPrompt = `
                 Tolong berikan 3 tips padu padan (mix and match) jilbab, bawahan, warna, dan aksesoris yang sangat cocok untuk produk ini:
                 - Nama: ${currentDetailProduct.nama}
                 - Kategori: ${currentDetailProduct.kategori}
                 - Deskripsi: ${currentDetailProduct.deskripsi}
-                - Warna yang tersedia: ${currentDetailProduct.warna.join(', ')}
+                - Warna yang tersedia: ${colorsText}
+                - Ukuran yang tersedia: ${sizesText}
 
-                Jika memungkinkan, hubungkan kecocokannya dengan salah satu busana dari katalog toko kami berikut ini:
+                Rekomendasi padu padan wajib diselaraskan dengan katalog produk butik kami berikut ini:
                 ${catalogContext}
 
                 Berikan jawaban dengan gaya yang bersahabat, sopan, dan anggun dalam bahasa Indonesia. Jangan terlalu panjang, berikan poin-poin yang mudah dibaca.
@@ -1005,8 +1072,26 @@
             `;
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const catalogList = productsData.map(p => `- ${p.nama} (${p.kategori}) seharga ${formatRupiah(p.harga)}`).join('\n');
-            const systemInstruction = `Kamu adalah Asisten Fashion Muslimah pribadi bernama Faminis AI ✨ dari Butik Faminis Barokah. Layani ukh/kakak dengan tutur kata yang sangat sopan, ramah, Islami, dan hangat. Berikan inspirasi kombinasi busana muslim (Gamis, Hijab, Pashmina, Tunik, dll) dan bantu mereka memilih produk terbaik. Berikut adalah katalog produk butik kami:\n${catalogList}`;
+            const catalogList = productsData.map(p => {
+                const colorsText = Array.isArray(p.warna) ? p.warna.join(', ') : (p.warna || '-');
+                const sizesText = Array.isArray(p.ukuran) ? p.ukuran.join(', ') : (p.ukuran || '-');
+                const stockText = parseInt(p.stok, 10) > 0 ? `Stok: ${p.stok}` : 'Stok: Habis';
+                return `- ID: ${p.id}, Nama: ${p.nama}, Kategori: ${p.kategori}, Harga: ${formatRupiah(p.harga)}, Deskripsi: ${p.deskripsi || '-'}, Warna: ${colorsText}, Ukuran: ${sizesText}, ${stockText}`;
+            }).join('\n');
+
+            const promoList = promosData.map(pr => `- Judul Promo: ${pr.judul}, Link/Detail: ${pr.link || '#'}`).join('\n');
+
+            const systemInstruction = `Kamu adalah Asisten Fashion Muslimah pribadi bernama Faminis AI ✨ dari Butik Faminis Barokah. Layani ukh/kakak dengan tutur kata yang sangat sopan, ramah, Islami, dan hangat.
+
+PANDUAN UTAMA:
+1. Rekomendasi, informasi produk, dan promo WAJIB HANYA merujuk pada katalog produk dan promo aktif di bawah ini. Jangan pernah merekomendasikan produk, promo, warna, ukuran, atau detail yang tidak terdaftar di katalog kami. Jangan gunakan data fiktif atau dummy.
+2. Aturan Khusus Mukena: Jika produk yang ditanyakan atau dibahas adalah "Mukena" (atau memiliki kategori "Mukena"), jelaskan bahwa Mukena didesain khusus untuk ibadah sholat dan sudah menutup seluruh aurat (termasuk rambut) secara lengkap. Tegaskan secara ramah bahwa Kakak TIDAK PERLU lagi memakai hijab, jilbab, kerudung, atau pashmina tambahan saat mengenakan Mukena. Berikan saran padu padan berupa aksesoris ibadah seperti sajadah dengan motif/warna senada, tas mukena (mukena bag), atau kenyamanan bahan untuk beribadah khusyuk.
+
+Berikut adalah daftar katalog produk aktif kami saat ini (ditampilkan di halaman Home):
+${catalogList}
+
+Berikut adalah daftar promo aktif kami saat ini (ditampilkan di halaman Promo):
+${promoList}`;
 
             try {
                 let aiResponse = await callGeminiAPI(userText, systemInstruction);
@@ -1130,7 +1215,7 @@
             if (!data) return;
             document.getElementById('banner-badge').innerText = data.badge || "EDISI BARU";
             document.getElementById('banner-title').innerText = data.judul || "Gaya Anggun & Syar'i Menawan";
-            document.getElementById('banner-subtitle').innerText = data.subjudul || "Diskon s/d 50% Koleksi Tunik & Gamis";
+            document.getElementById('banner-subtitle').innerText = data.subjudul || "Diskon s/d 50% Koleksi Gamis & Mukena";
             document.getElementById('banner-btn').innerText = data.tombol_teks || "Lihat Promo";
         }
 
@@ -1341,7 +1426,6 @@
             document.getElementById('detail-category').innerText = currentDetailProduct.kategori || "Umum";
             document.getElementById('detail-name').innerText = currentDetailProduct.nama || "";
             document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga || 0);
-            document.getElementById('detail-old-price').innerText = formatRupiah((currentDetailProduct.harga || 0) * 1.25);
 
             const stockEl = document.getElementById('detail-stock');
             if (isHabis) {
