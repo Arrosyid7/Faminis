@@ -157,6 +157,7 @@
                     class="flex items-center bg-cream-100 border border-cream-300 rounded-2xl p-2.5 focus-within:border-brown-500 transition-colors">
                     <i data-lucide="search" class="w-5 h-5 text-brown-500 ml-1"></i>
                     <input type="text" id="search-input" oninput="handleSearch(this.value)"
+                        onkeydown="if(event.key === 'Enter') this.blur();"
                         placeholder="Cari busana kesukaanmu..."
                         class="w-full bg-transparent border-none focus:outline-none px-3 text-sm text-brown-800 placeholder-brown-400">
                     <button class="bg-brown-800 p-2.5 rounded-xl text-cream-50 btn-press-effect"
@@ -515,7 +516,7 @@
 
         <!-- FITUR INTEGRASI GEMINI 2: TOMBOL MELAYANG ASISTEN GAYA AI (✨) -->
         <button onclick="toggleAiChat(true)"
-            class="fixed bottom-28 right-5 z-40 bg-brown-800 text-cream-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-brown-900 focus:outline-none animate-bounce btn-press-effect border-2 border-white"
+            class="fixed bottom-28 right-5 z-40 bg-brown-800 text-cream-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-brown-900 focus:outline-none animate-bounce btn-press-effect border-2 border-white transition-all duration-300 transform"
             title="Asisten Gaya AI">
             <i data-lucide="message-square" class="w-6 h-6"></i>
             <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
@@ -834,6 +835,61 @@
         }
 
         // -----------------------------------------
+        // GEMINI LOCAL FALLBACK ENGINE
+        // -----------------------------------------
+        function generateLocalFallbackMixMatch(product) {
+            if (!product) return "Maaf kak, asisten AI sedang offline. Silakan hubungi Admin kami untuk konsultasi gaya ya! 🌸";
+            
+            let name = product.nama || "";
+            let category = (product.kategori || "").toLowerCase();
+            let colors = Array.isArray(product.warna) ? product.warna.join(', ') : String(product.warna || '');
+            
+            let advice = `**Saran Padu Padan Cantik untuk ${name}:**\n\n`;
+            
+            if (category.includes("gamis") || category.includes("kaftan")) {
+                advice += `1. **Rekomendasi Hijab:** Sangat serasi jika dipadukan dengan **Pashmina Ceruty Babydoll** warna Mocca atau Dusty Pink untuk tampilan syar'i yang anggun dan lembut.\n`;
+                advice += `2. **Pilihan Warna:** Gunakan aksesoris dengan warna senada dari pilihan warna yang tersedia (${colors}) agar terlihat mewah.\n`;
+                advice += `3. **Gaya Acara:** Cocok ditambahkan flat shoes cream untuk sehari-hari atau high heels warna nude serta tas tangan kecil untuk menghadiri acara formal. ✨`;
+            } else if (category.includes("hijab") || category.includes("pashmina")) {
+                advice += `1. **Rekomendasi Busana:** Pashmina cantik ini sangat cocok dipadukan dengan **Gamis Syar'i Faminis Barokah** atau **Kaftan Silk Exclusive** kami.\n`;
+                advice += `2. **Kombinasi Warna:** Pilih warna kontras yang lembut. Misalnya, hijab warna Dusty Pink sangat pas disandingkan dengan gamis berwarna Mocca.\n`;
+                advice += `3. **Gaya Hijab:** Gunakan inner hijab (ciput) rajut agar tidak mudah bergeser, dan bentuk dengan gaya menjuntai ke dada untuk tampilan anggun maksimal. 🌸`;
+            } else if (category.includes("tunik") || category.includes("atasan")) {
+                advice += `1. **Rekomendasi Bawahan:** Padukan tunik floral ini dengan rok plisket atau celana bahan longgar berwarna putih atau cokelat muda.\n`;
+                advice += `2. **Kombinasi Hijab:** Pilihlah hijab segi empat polos dengan warna senada seperti Soft Blue atau Dusty Pink agar tidak terlalu ramai.\n`;
+                advice += `3. **Kesan Gaya:** Cocok untuk style semi-formal atau bersantai. Tambahkan bros kecil di bagian dada untuk mempermanis penampilan Anda. 🌟`;
+            } else {
+                advice += `1. **Perpaduan Warna:** Padukan dengan busana bernuansa pastel atau bumi (earthy tones) agar senada.\n`;
+                advice += `2. **Gaya Syar'i:** Gunakan kerudung lebar yang menutup dada dan bahan pakaian yang jatuh anggun.\n`;
+                advice += `3. **Sentuhan Akhir:** Tambahkan tas tangan simpel dan sepatu yang nyaman untuk menunjang aktivitas seharian.`;
+            }
+            return advice;
+        }
+
+        function generateLocalFallbackChat(query) {
+            query = query.toLowerCase();
+            let hasGamis = query.includes("gamis") || query.includes("kaftan") || query.includes("dress");
+            let hasHijab = query.includes("hijab") || query.includes("pashmina") || query.includes("jilbab") || query.includes("kerudung");
+            let hasTunik = query.includes("tunik") || query.includes("atasan") || query.includes("baju");
+            let hasHarga = query.includes("harga") || query.includes("berapa") || query.includes("murah") || query.includes("diskon");
+            let hasBahan = query.includes("bahan") || query.includes("kain") || query.includes("nyaman") || query.includes("panas");
+
+            if (hasGamis) {
+                return "Butik Faminis Barokah menyediakan **Gamis Syar'i Faminis** (wolfis premium, Rp 150.000) dan **Kaftan Silk Exclusive** (silk satin berkilau mewah, Rp 195.000). Keduanya berpotongan longgar, syar'i, dan sangat sejuk dipakai sehari-hari maupun ke kondangan, kak! Kakak tertarik dengan model yang mana? 🌸";
+            } else if (hasHijab) {
+                return "Untuk jilbab, kami memiliki **Pashmina Ceruty Babydoll** premium berukuran 175x75 cm seharga Rp 45.000. Bahannya bertekstur pasir lembut, mudah dibentuk, tegak di dahi, dan tersedia dalam warna Dusty Pink, Mocca, Hitam, dan Abu-Abu. Sangat cantik dipadukan dengan gamis kami! 🌟";
+            } else if (hasTunik) {
+                return "Koleksi tunik kami yang terpopuler adalah **Tunik Motif Bunga Barokah** seharga Rp 120.000, berbahan rayon viscose premium yang dingin, busui friendly, dan bermotif floral manis. Cocok dipadukan dengan rok plisket polos, kak! 🎀";
+            } else if (hasHarga) {
+                return "Harga koleksi busana muslim kami sangat terjangkau dengan kualitas premium:\n- Gamis Syar'i: Rp 150.000\n- Kaftan Silk: Rp 195.000\n- Tunik Bunga: Rp 120.000\n- Pashmina Ceruty: Rp 45.000\n\nKami juga sering mengadakan diskon live di TikTok! Kakak bisa check out langsung melalui WhatsApp atau TikTok kami ya. 🛍️";
+            } else if (hasBahan) {
+                return "Bahan pakaian di Faminis Barokah dipilih yang berkualitas tinggi:\n- **Wolfis Grade A** (Gamis): Halus, jatuh, tidak menerawang.\n- **Silk Satin Premium** (Kaftan): Mewah berkilau dan lembut.\n- **Rayon Viscose** (Tunik): Sangat dingin dan menyerap keringat.\n- **Ceruty Babydoll** (Pashmina): Bertekstur pasir lembut dan mudah dibentuk.\n\nSemua jahitan dijamin rapi sekelas butik, kak! 🧵";
+            } else {
+                return "Assalamu'alaikum kak! Butik Faminis Barokah menyediakan berbagai busana muslim premium seperti Gamis Syar'i, Kaftan Silk, Tunik Motif Bunga, dan Pashmina Ceruty. \n\nAda yang bisa saya bantu terkait detail ukuran, harga, bahan, atau rekomendasi padu padan warna? Kakak juga bisa langsung menghubungi admin via WhatsApp di menu Keranjang ya! 🌸";
+            }
+        }
+
+        // -----------------------------------------
         // GEMINI IMPLEMENTASI 1: MIX & MATCH PRODUK AI
         // -----------------------------------------
         async function generateProductMixMatch() {
@@ -844,7 +900,7 @@
             targetDiv.innerHTML = `
                 <div class="flex items-center justify-center gap-2 py-3 text-brown-600 font-bold">
                     <div class="w-4 h-4 border-2 border-brown-700 border-t-transparent rounded-full animate-spin"></div>
-                    <span>AI sedang menyusun id padu padan...</span>
+                    <span>AI sedang menyusun ide padu padan...</span>
                 </div>
             `;
 
@@ -865,20 +921,24 @@
             `;
 
             try {
-                const responseText = await callGeminiAPI(userPrompt, systemPrompt);
+                let responseText = await callGeminiAPI(userPrompt, systemPrompt);
+                if (!responseText || typeof responseText !== 'string') {
+                    console.warn("Respons Gemini kosong, menggunakan fallback lokal.");
+                    responseText = generateLocalFallbackMixMatch(currentDetailProduct);
+                }
                 const formattedHtml = responseText
                     .replace(/\n/g, '<br>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>');
                 targetDiv.innerHTML = `<div class="prose max-w-none text-[11px] text-brown-800 space-y-2">${formattedHtml}</div>`;
             } catch (err) {
-                targetDiv.innerHTML = `
-                    <div class="text-red-600 p-2 bg-red-50 rounded-xl flex items-center gap-2">
-                        <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
-                        <span>${err.message}</span>
-                    </div>
-                `;
-                lucide.createIcons();
+                console.warn("Gagal memanggil API Gemini, menggunakan fallback lokal:", err);
+                const responseText = generateLocalFallbackMixMatch(currentDetailProduct);
+                const formattedHtml = responseText
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                targetDiv.innerHTML = `<div class="prose max-w-none text-[11px] text-brown-800 space-y-2">${formattedHtml}</div>`;
             }
         }
 
@@ -944,7 +1004,11 @@
             const systemInstruction = `Kamu adalah Asisten Fashion Muslimah pribadi bernama Faminis AI ✨ dari Butik Faminis Barokah. Layani ukh/kakak dengan tutur kata yang sangat sopan, ramah, Islami, dan hangat. Berikan inspirasi kombinasi busana muslim (Gamis, Hijab, Pashmina, Tunik, dll) dan bantu mereka memilih produk terbaik. Berikut adalah katalog produk butik kami:\n${catalogList}`;
 
             try {
-                const aiResponse = await callGeminiAPI(userText, systemInstruction);
+                let aiResponse = await callGeminiAPI(userText, systemInstruction);
+                if (!aiResponse || typeof aiResponse !== 'string') {
+                    console.warn("Respons Gemini kosong, menggunakan fallback lokal.");
+                    aiResponse = generateLocalFallbackChat(userText);
+                }
                 const formattedHtml = aiResponse
                     .replace(/\n/g, '<br>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -964,13 +1028,22 @@
                     `;
                 }
             } catch (err) {
+                console.warn("Gagal memanggil API Gemini, menggunakan fallback lokal:", err);
+                let aiResponse = generateLocalFallbackChat(userText);
+                const formattedHtml = aiResponse
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
                 const loadingBubble = document.getElementById(tempAiId);
                 if (loadingBubble) {
                     loadingBubble.outerHTML = `
                         <div class="flex items-start gap-2.5">
-                            <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-xs shrink-0">⚠️</div>
-                            <div class="bg-red-50 text-red-700 border border-red-200 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed">
-                                ${err.message}
+                            <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
+                                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                            </div>
+                            <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
+                                ${formattedHtml}
                             </div>
                         </div>
                     `;
@@ -1810,6 +1883,24 @@
 
             showToast("Teks deskripsi produk berhasil disalin!");
         }
+
+        // -----------------------------------------
+        // KONTROL VISIBILITAS TOMBOL MELAYANG AI SAAT SCROLL
+        // -----------------------------------------
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const aiButton = document.querySelector('[title="Asisten Gaya AI"]');
+            if (!aiButton) return;
+            
+            if (window.scrollY > lastScrollY && window.scrollY > 150) {
+                // Scroll ke bawah: sembunyikan tombol (mencegah klik tidak sengaja)
+                aiButton.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
+            } else {
+                // Scroll ke atas: tunjukkan tombol kembali
+                aiButton.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+            }
+            lastScrollY = window.scrollY;
+        }, { passive: true });
 
         // EXPLICIT GLOBAL BINDINGS UNTUK ELEMEN IFRAME SANDBOX
         window.switchPage = switchPage;
