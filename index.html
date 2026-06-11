@@ -580,26 +580,26 @@
         <div
             class="fixed bottom-0 w-full max-w-[480px] bg-white border-t border-cream-300 px-6 py-3.5 flex justify-between items-center z-40 rounded-t-3xl shadow-[0_-8px_30px_rgba(74,59,50,0.06)]">
             <button onclick="switchPage('home')" id="nav-home"
-                class="nav-btn flex flex-col items-center text-brown-800 btn-press-effect">
+                class="nav-btn flex flex-col items-center justify-center text-brown-800 bg-brown-800/10 rounded-2xl py-1.5 px-4 transition-all duration-300 btn-press-effect font-bold scale-105">
                 <i data-lucide="home" class="w-6 h-6 mb-1"></i>
-                <span class="text-[10px] font-bold tracking-wide">Home</span>
+                <span class="text-[10px] tracking-wide">Home</span>
             </button>
             <button onclick="switchPage('promo')" id="nav-promo"
-                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
+                class="nav-btn flex flex-col items-center justify-center text-brown-400 hover:text-brown-700 bg-transparent rounded-2xl py-1.5 px-4 transition-all duration-300 btn-press-effect">
                 <i data-lucide="tag" class="w-6 h-6 mb-1"></i>
-                <span class="text-[10px] font-bold tracking-wide">Promo</span>
+                <span class="text-[10px] tracking-wide">Promo</span>
             </button>
             <button onclick="switchPage('cart')" id="nav-cart"
-                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect relative">
+                class="nav-btn flex flex-col items-center justify-center text-brown-400 hover:text-brown-700 bg-transparent rounded-2xl py-1.5 px-4 transition-all duration-300 btn-press-effect relative">
                 <i data-lucide="shopping-bag" class="w-6 h-6 mb-1"></i>
                 <span id="cart-badge"
-                    class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-brown-800 text-cream-50 text-[8px] font-extrabold rounded-full flex items-center justify-center hidden border border-white">0</span>
-                <span class="text-[10px] font-bold tracking-wide">Keranjang</span>
+                    class="absolute -top-1 -right-1 w-4 h-4 bg-brown-800 text-cream-50 text-[8px] font-extrabold rounded-full flex items-center justify-center hidden border border-white">0</span>
+                <span class="text-[10px] tracking-wide">Keranjang</span>
             </button>
             <button onclick="switchPage('about')" id="nav-about"
-                class="nav-btn flex flex-col items-center text-brown-400 hover:text-brown-700 btn-press-effect">
+                class="nav-btn flex flex-col items-center justify-center text-brown-400 hover:text-brown-700 bg-transparent rounded-2xl py-1.5 px-4 transition-all duration-300 btn-press-effect">
                 <i data-lucide="store" class="w-6 h-6 mb-1"></i>
-                <span class="text-[10px] font-bold tracking-wide">Toko</span>
+                <span class="text-[10px] tracking-wide">Toko</span>
             </button>
         </div>
 
@@ -756,33 +756,75 @@
         // INTEGRASI UTAMA GEMINI API DENGAN RETRY & BACKOFF
         // -----------------------------------------
         async function callGeminiAPI(prompt, systemInstruction = "") {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            let useProxy = !apiKey;
+            let url = "";
+            let fetchOptions = {};
 
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }]
-            };
+            if (useProxy) {
+                // Gunakan Google Apps Script sebagai proxy (karena apiKey di frontend kosong)
+                if (!SCRIPT_URL) {
+                    throw new Error("Jalur koneksi API (SCRIPT_URL) tidak terdeteksi. Silakan hubungkan dengan Google Apps Script.");
+                }
+                
+                // Menggunakan GET request agar CORS didukung penuh oleh Google Apps Script
+                url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 
+                      'action=callGemini' + 
+                      '&prompt=' + encodeURIComponent(prompt) + 
+                      '&systemInstruction=' + encodeURIComponent(systemInstruction);
+                
+                fetchOptions = {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                };
+            } else {
+                // Panggil langsung dari browser jika API Key disuntik langsung di index.html
+                // Menggunakan model Gemini 1.5 Flash yang stabil dan terbaru
+                url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }]
+                };
 
-            if (systemInstruction) {
-                payload.systemInstruction = { parts: [{ text: systemInstruction }] };
+                if (systemInstruction) {
+                    payload.systemInstruction = { parts: [{ text: systemInstruction }] };
+                }
+
+                fetchOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                };
             }
 
             let delay = 1000;
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+                    const response = await fetch(url, fetchOptions);
 
                     if (!response.ok) {
-                        throw new Error(`HTTP Error! Status: ${response.status}`);
+                        const errText = await response.text();
+                        throw new Error(`HTTP Error! Status: ${response.status} - ${errText}`);
                     }
 
-                    const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, Asisten AI sedang beristirahat sebentar.";
+                    const json = await response.json();
+                    
+                    if (useProxy) {
+                        if (json.status === 'success') {
+                            return json.text;
+                        } else {
+                            // Tampilkan pesan kesalahan konfigurasi yang jelas
+                            throw new Error(json.message || "Gagal memproses rekomendasi gaya.");
+                        }
+                    } else {
+                        return json.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf, Asisten AI sedang beristirahat sebentar.";
+                    }
                 } catch (error) {
+                    console.warn(`Percobaan pemanggilan AI ke-${i + 1} gagal:`, error);
                     if (i === 4) {
+                        // Jika karena API key belum diatur, tampilkan pesan petunjuk
+                        if (error.message.includes("API Key Gemini belum diatur") || error.message.includes("GEMINI_API_KEY")) {
+                            throw new Error("Rekomendasi AI belum siap. Silakan masukkan API Key Gemini Anda di pengaturan Google Apps Script (Script Properties) atau di bagian atas file code.gs.");
+                        }
                         throw new Error("Layanan konsultasi AI sedang sibuk. Silakan coba beberapa saat lagi ya kak.");
                     }
                     await new Promise(resolve => setTimeout(resolve, delay));
@@ -981,13 +1023,13 @@
             // Update Bottom Nav Active Styling
             if (pageId !== 'detail') {
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('text-brown-800');
-                    btn.classList.add('text-brown-400');
+                    btn.classList.remove('text-brown-800', 'bg-brown-800/10', 'font-bold', 'scale-105');
+                    btn.classList.add('text-brown-400', 'bg-transparent', 'scale-100');
                 });
                 const activeNav = document.getElementById(`nav-${pageId}`);
                 if (activeNav) {
-                    activeNav.classList.remove('text-brown-400');
-                    activeNav.classList.add('text-brown-800');
+                    activeNav.classList.remove('text-brown-400', 'bg-transparent', 'scale-100');
+                    activeNav.classList.add('text-brown-800', 'bg-brown-800/10', 'font-bold', 'scale-105');
                 }
             }
 
