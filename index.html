@@ -558,7 +558,7 @@
                         Assalamu'alaikum ukh/kak! Selamat datang di Faminis Barokah. Saya asisten gaya pribadi Anda. Ada
                         yang bisa saya bantu hari ini?
                         <br><br>
-                        Kakak bisa tanya rekomendasi busana muslim, pilihan warna busana untuk jenis kulit tertentu,
+                        Kakak bisa tanya rekomendasi perpaduan hijab, pilihan warna busana untuk jenis kulit tertentu,
                         hingga gaya syar'i terbaik untuk acara formal maupun daily wear! ✨
                     </div>
                 </div>
@@ -618,7 +618,7 @@
         if (SCRIPT_URL.startsWith('<?=')) {
             SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhjyV7m6Ivqgs_a0qv72eUxADDEsPhEZx_lInXv0VoXhUHcpqcGt-SaoWfCItMU9k-/exec';
         }
-        const NO_WA_ADMIN = '6288980424363'; // Silakan gunakan format 62 tanpa + atau 0 depan
+        const NO_WA_ADMIN = '6281234567890'; // Silakan gunakan format 62 tanpa + atau 0 depan
         const apiKey = ""; // Otomatis disuntik oleh platform runtime
 
         // STATE UTAMA APLIKASI
@@ -657,45 +657,99 @@
         ];
 
         // -----------------------------------------
-        // TIMEOUT & RETRY FETCH
+        // SANKSI & RETRY FETCH (DENGAN LOCALSTORAGE CACHING & CACHE BUSTER)
         // -----------------------------------------
         window.onload = async () => {
             updateCartBadge();
 
-            let loaded = false;
+            // 1. Coba load data lama dari localStorage agar langsung tampil saat awal masuk (Instan!)
+            let cachedProducts = localStorage.getItem('faminis_products');
+            let cachedPromos = localStorage.getItem('faminis_promos');
+            let cachedBanner = localStorage.getItem('faminis_banner');
+            let cachedCategories = localStorage.getItem('faminis_categories');
+
+            if (cachedProducts) {
+                try {
+                    productsData = JSON.parse(cachedProducts);
+                    if (cachedPromos) promosData = JSON.parse(cachedPromos);
+                    if (cachedBanner) bannerData = JSON.parse(cachedBanner);
+                    if (cachedCategories) categoriesData = JSON.parse(cachedCategories);
+                    
+                    // Render data cache terlebih dahulu agar user tidak menunggu
+                    document.getElementById('product-count').innerText = `${productsData.length} Busana`;
+                    renderProducts(productsData);
+                    renderPromos();
+                    renderBanner(bannerData);
+                    renderCategories(categoriesData);
+                } catch (e) {
+                    console.error("Gagal memuat cache lokal:", e);
+                }
+            } else {
+                // Jika tidak ada cache, gunakan dummy data sebagai tampilan awal yang aman
+                productsData = dummyProducts;
+                promosData = dummyPromos;
+                
+                document.getElementById('product-count').innerText = `${productsData.length} Busana`;
+                renderProducts(productsData);
+                renderPromos();
+                renderBanner(bannerData);
+                renderCategories(categoriesData);
+            }
+
+            // 2. Fetch data terbaru dari Google Sheets di background (dengan Cache Buster & Timeout 10 detik)
             if (SCRIPT_URL) {
-                const fetchPromise = fetch(SCRIPT_URL + '?action=getData').then(res => res.json());
-                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 4000));
+                // Tambahkan timestamp untuk memotong cache browser (Cache Buster)
+                const cacheBusterUrl = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 'action=getData&t=' + Date.now();
+                
+                // Tambah timeout menjadi 10 detik agar memberi ruang pada cold-start Apps Script
+                const fetchPromise = fetch(cacheBusterUrl).then(res => res.json());
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000));
 
                 try {
                     const json = await Promise.race([fetchPromise, timeoutPromise]);
                     if (json.status === 'success') {
-                        productsData = json.data.products;
-                        promosData = json.data.promos;
-                        if (json.data.banner) {
-                            bannerData = json.data.banner;
+                        const freshProducts = json.data.products || [];
+                        const freshPromos = json.data.promos || [];
+                        const freshBanner = json.data.banner || bannerData;
+                        const freshCategories = (json.data.categories && json.data.categories.length > 0) ? json.data.categories : categoriesData;
+
+                        // Simpan data terbaru ke localStorage
+                        localStorage.setItem('faminis_products', JSON.stringify(freshProducts));
+                        localStorage.setItem('faminis_promos', JSON.stringify(freshPromos));
+                        localStorage.setItem('faminis_banner', JSON.stringify(freshBanner));
+                        localStorage.setItem('faminis_categories', JSON.stringify(freshCategories));
+
+                        // Perbarui data state aktif
+                        productsData = freshProducts;
+                        promosData = freshPromos;
+                        bannerData = freshBanner;
+                        categoriesData = freshCategories;
+
+                        // Cari tahu kategori mana yang sebelumnya aktif
+                        const oldActiveBtn = document.querySelector('.category-btn.active');
+                        const activeCategoryName = oldActiveBtn ? oldActiveBtn.id.replace('cat-', '') : 'Semua';
+
+                        // Perbarui data kategori di navbar
+                        renderCategories(categoriesData);
+
+                        // Perbarui produk sesuai kategori yang aktif saat ini
+                        const newActiveBtn = document.getElementById(`cat-${activeCategoryName}`) || document.getElementById('cat-Semua');
+                        if (newActiveBtn) {
+                            filterCategory(activeCategoryName, newActiveBtn);
+                        } else {
+                            renderProducts(productsData);
                         }
-                        if (json.data.categories && json.data.categories.length > 0) {
-                            categoriesData = json.data.categories;
-                        }
-                        loaded = true;
+                        
+                        document.getElementById('product-count').innerText = `${productsData.length} Busana`;
+                        renderPromos();
+                        renderBanner(bannerData);
+                        
+                        console.log("Data berhasil diperbarui dari Google Sheets!");
                     }
                 } catch (e) {
-                    console.warn("Gagal terhubung ke API, menggunakan data lokal / dummy.", e);
+                    console.warn("Gagal terhubung ke API saat revalidasi, menggunakan cache/dummy.", e);
                 }
             }
-
-            if (!loaded) {
-                productsData = dummyProducts;
-                promosData = dummyPromos;
-                categoriesData = ["Gamis", "Hijab", "Atasan"]; // fallback
-            }
-
-            document.getElementById('product-count').innerText = `${productsData.length} Busana`;
-            renderProducts(productsData);
-            renderPromos();
-            renderBanner(bannerData);
-            renderCategories(categoriesData);
         };
 
         // -----------------------------------------
@@ -886,7 +940,20 @@
         // -----------------------------------------
         // SINKRONISASI NAVIGASI HALAMAN (FIXED)
         // -----------------------------------------
+        let savedScrollPositions = {};
+
         function switchPage(pageId) {
+            const currentActivePage = document.querySelector('.page.active');
+            let isSamePage = false;
+            if (currentActivePage) {
+                const currentId = currentActivePage.id.replace('page-', '');
+                if (currentId === pageId) {
+                    isSamePage = true;
+                } else {
+                    savedScrollPositions[currentId] = window.scrollY;
+                }
+            }
+
             if (pageId !== 'detail') {
                 previousPage = pageId;
             }
@@ -898,7 +965,18 @@
             if (targetPage) {
                 targetPage.classList.add('active');
             }
-            window.scrollTo(0, 0);
+
+            // Atur scroll: jika mengklik tab yang sama, reset scroll ke atas
+            if (isSamePage) {
+                savedScrollPositions[pageId] = 0;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (savedScrollPositions[pageId] !== undefined) {
+                setTimeout(() => {
+                    window.scrollTo(0, savedScrollPositions[pageId]);
+                }, 20);
+            } else {
+                window.scrollTo(0, 0);
+            }
 
             // Update Bottom Nav Active Styling
             if (pageId !== 'detail') {
@@ -1646,6 +1724,7 @@
 
             cart = [];
             saveAndRenderCart();
+            savedScrollPositions['home'] = 0;
             switchPage('home');
             showToast("Pesanan dialihkan ke WhatsApp Admin!");
         }
