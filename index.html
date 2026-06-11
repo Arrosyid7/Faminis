@@ -157,8 +157,7 @@
                     class="flex items-center bg-cream-100 border border-cream-300 rounded-2xl p-2.5 focus-within:border-brown-500 transition-colors">
                     <i data-lucide="search" class="w-5 h-5 text-brown-500 ml-1"></i>
                     <input type="text" id="search-input" oninput="handleSearch(this.value)"
-                        onkeydown="if(event.key === 'Enter') this.blur();"
-                        placeholder="Cari busana kesukaanmu..."
+                        onkeydown="if(event.key === 'Enter') this.blur();" placeholder="Cari busana kesukaanmu..."
                         class="w-full bg-transparent border-none focus:outline-none px-3 text-sm text-brown-800 placeholder-brown-400">
                     <button class="bg-brown-800 p-2.5 rounded-xl text-cream-50 btn-press-effect"
                         onclick="clearSearch()">
@@ -461,7 +460,7 @@
 
             <!-- Card Sosmed Premium -->
             <div class="space-y-3.5 max-w-sm mx-auto">
-                <a href="https://tiktok.com/@faminisbarokah" target="_blank"
+                <a href="https://tiktok.com/@faminis_barokah" target="_blank"
                     class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
                     <div
                         class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-black border border-cream-300">
@@ -477,11 +476,17 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 text-brown-500 ml-auto"></i>
                 </a>
 
-                <a href="https://instagram.com/faminis.barokah" target="_blank"
+                <a href="https://instagram.com/barokah_faminis" target="_blank"
                     class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
                     <div
                         class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-pink-700 border border-cream-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="w-5 h-5">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                        </svg>
                     </div>
                     <div class="text-left">
                         <p class="font-extrabold text-sm text-brown-800">Instagram Official</p>
@@ -491,7 +496,7 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 text-brown-500 ml-auto"></i>
                 </a>
 
-                <a href="https://maps.google.com" target="_blank"
+                <a href="https://share.google/kTy1CPSTkVXjZCeNh" target="_blank"
                     class="flex items-center gap-4 bg-cream-100 hover:bg-cream-200/50 p-4 rounded-2xl border border-cream-300 transition-colors shadow-sm">
                     <div
                         class="w-11 h-11 bg-white shadow-sm rounded-full flex items-center justify-center text-green-600 border border-cream-300">
@@ -675,7 +680,7 @@
                     if (cachedPromos) promosData = JSON.parse(cachedPromos);
                     if (cachedBanner) bannerData = JSON.parse(cachedBanner);
                     if (cachedCategories) categoriesData = JSON.parse(cachedCategories);
-                    
+
                     // Render data cache terlebih dahulu agar user tidak menunggu
                     document.getElementById('product-count').innerText = `${productsData.length} Busana`;
                     renderProducts(productsData);
@@ -689,7 +694,7 @@
                 // Jika tidak ada cache, gunakan dummy data sebagai tampilan awal yang aman
                 productsData = dummyProducts;
                 promosData = dummyPromos;
-                
+
                 document.getElementById('product-count').innerText = `${productsData.length} Busana`;
                 renderProducts(productsData);
                 renderPromos();
@@ -701,7 +706,7 @@
             if (SCRIPT_URL) {
                 // Tambahkan timestamp untuk memotong cache browser (Cache Buster)
                 const cacheBusterUrl = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 'action=getData&t=' + Date.now();
-                
+
                 // Tambah timeout menjadi 10 detik agar memberi ruang pada cold-start Apps Script
                 const fetchPromise = fetch(cacheBusterUrl).then(res => res.json());
                 const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000));
@@ -740,11 +745,11 @@
                         } else {
                             renderProducts(productsData);
                         }
-                        
+
                         document.getElementById('product-count').innerText = `${productsData.length} Busana`;
                         renderPromos();
                         renderBanner(bannerData);
-                        
+
                         console.log("Data berhasil diperbarui dari Google Sheets!");
                     }
                 } catch (e) {
@@ -766,13 +771,13 @@
                 if (!SCRIPT_URL) {
                     throw new Error("Jalur koneksi API (SCRIPT_URL) tidak terdeteksi. Silakan hubungkan dengan Google Apps Script.");
                 }
-                
+
                 // Menggunakan GET request agar CORS didukung penuh oleh Google Apps Script
-                url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 
-                      'action=callGemini' + 
-                      '&prompt=' + encodeURIComponent(prompt) + 
-                      '&systemInstruction=' + encodeURIComponent(systemInstruction);
-                
+                url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') +
+                    'action=callGemini' +
+                    '&prompt=' + encodeURIComponent(prompt) +
+                    '&systemInstruction=' + encodeURIComponent(systemInstruction);
+
                 fetchOptions = {
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
@@ -781,7 +786,7 @@
                 // Panggil langsung dari browser jika API Key disuntik langsung di index.html
                 // Menggunakan model Gemini 1.5 Flash yang stabil dan terbaru
                 url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                
+
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }]
                 };
@@ -808,7 +813,7 @@
                     }
 
                     const json = await response.json();
-                    
+
                     if (useProxy) {
                         if (json.status === 'success') {
                             return json.text;
@@ -839,13 +844,13 @@
         // -----------------------------------------
         function generateLocalFallbackMixMatch(product) {
             if (!product) return "Maaf kak, asisten AI sedang offline. Silakan hubungi Admin kami untuk konsultasi gaya ya! 🌸";
-            
+
             let name = product.nama || "";
             let category = (product.kategori || "").toLowerCase();
             let colors = Array.isArray(product.warna) ? product.warna.join(', ') : String(product.warna || '');
-            
+
             let advice = `**Saran Padu Padan Cantik untuk ${name}:**\n\n`;
-            
+
             if (category.includes("gamis") || category.includes("kaftan")) {
                 advice += `1. **Rekomendasi Hijab:** Sangat serasi jika dipadukan dengan **Pashmina Ceruty Babydoll** warna Mocca atau Dusty Pink untuk tampilan syar'i yang anggun dan lembut.\n`;
                 advice += `2. **Pilihan Warna:** Gunakan aksesoris dengan warna senada dari pilihan warna yang tersedia (${colors}) agar terlihat mewah.\n`;
@@ -1034,7 +1039,7 @@
                     .replace(/\n/g, '<br>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>');
-                
+
                 const loadingBubble = document.getElementById(tempAiId);
                 if (loadingBubble) {
                     loadingBubble.outerHTML = `
@@ -1279,7 +1284,7 @@
 
             selectedColor = "";
             selectedSize = "";
-            
+
             const isHabis = !currentDetailProduct.stok || parseInt(currentDetailProduct.stok, 10) <= 0;
             currentQty = isHabis ? 0 : 1;
 
@@ -1337,14 +1342,14 @@
             document.getElementById('detail-name').innerText = currentDetailProduct.nama || "";
             document.getElementById('detail-price').innerText = formatRupiah(currentDetailProduct.harga || 0);
             document.getElementById('detail-old-price').innerText = formatRupiah((currentDetailProduct.harga || 0) * 1.25);
-            
+
             const stockEl = document.getElementById('detail-stock');
             if (isHabis) {
                 stockEl.innerHTML = `<span class="text-red-600 font-extrabold">Habis</span>`;
             } else {
                 stockEl.innerHTML = `<span class="text-brown-800 font-bold">${currentDetailProduct.stok}</span>`;
             }
-            
+
             document.getElementById('detail-desc').innerText = currentDetailProduct.deskripsi || "Tidak ada deskripsi.";
             document.getElementById('detail-qty').innerText = currentQty;
 
@@ -1646,7 +1651,7 @@
                 // Force reflow
                 toast.offsetWidth;
                 toast.classList.remove('opacity-0', 'translate-y-2');
-                
+
                 // Sembunyikan setelah 2.5 detik
                 setTimeout(() => {
                     toast.classList.add('opacity-0', 'translate-y-2');
@@ -1716,12 +1721,12 @@
         function updateCartQty(index, amount) {
             const product = productsData.find(p => String(p.id) === String(cart[index].id));
             const maxStock = product ? parseInt(product.stok, 10) : 0;
-            
+
             if (amount > 0 && cart[index].qty >= maxStock) {
                 showToast(`Stok terbatas! Maksimal ${maxStock} pcs`);
                 return;
             }
-            
+
             cart[index].qty += amount;
             if (cart[index].qty < 1) {
                 removeFromCart(index);
@@ -1891,7 +1896,7 @@
         window.addEventListener('scroll', () => {
             const aiButton = document.querySelector('[title="Asisten Gaya AI"]');
             if (!aiButton) return;
-            
+
             if (window.scrollY > lastScrollY && window.scrollY > 150) {
                 // Scroll ke bawah: sembunyikan tombol (mencegah klik tidak sengaja)
                 aiButton.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10');
