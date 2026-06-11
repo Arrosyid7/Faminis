@@ -115,6 +115,32 @@
         </div>
     </div>
 
+    <!-- MODAL BAGIKAN PRODUK KUSTOM -->
+    <div id="share-modal" onclick="if(event.target === this) closeShareModal()"
+        class="fixed inset-0 bg-brown-900/40 z-[100] flex items-center justify-center p-5 hidden opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-3xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300 shadow-xl border border-cream-300">
+            <h3 class="font-extrabold text-lg text-brown-800 mb-2 flex items-center gap-2">
+                <i data-lucide="share-2" class="w-5 h-5 text-brown-500"></i> Bagikan Produk
+            </h3>
+            <p class="text-xs text-brown-600/90 mb-6 font-medium">Silakan pilih opsi untuk membagikan produk ini:</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="shareLinkNative()"
+                    class="w-full flex items-center justify-center gap-2.5 py-3.5 bg-cream-100 border border-cream-300 hover:bg-cream-200 text-brown-800 rounded-2xl text-xs font-bold transition-all btn-press-effect">
+                    <i data-lucide="copy" class="w-4 h-4"></i> Bagikan & Salin Link Produk
+                </button>
+                <button onclick="shareToWhatsAppAdmin()"
+                    class="w-full flex items-center justify-center gap-2.5 py-3.5 bg-green-600 hover:bg-green-700 text-white rounded-2xl text-xs font-bold transition-all btn-press-effect">
+                    <i data-lucide="message-square" class="w-4 h-4"></i> Tanya Admin via WhatsApp
+                </button>
+                <button onclick="closeShareModal()"
+                    class="w-full py-3 text-brown-500 hover:text-brown-800 text-xs font-bold transition-all mt-2">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- NOTIFIKASI TOAST KUSTOM -->
     <div id="toast"
         class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-brown-800/90 backdrop-blur-sm text-cream-50 px-5 py-3 rounded-full text-xs font-semibold tracking-wide shadow-lg z-[90] hidden flex items-center gap-2 transition-all duration-300">
@@ -662,6 +688,14 @@
             { id: "PR02", judul: "Promo Jumat Berkah - Diskon Gamis Offline", gambar: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80", link: "#" }
         ];
 
+        function checkUrlForProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product') || window.location.hash.replace('#', '');
+            if (productId && productsData.some(p => String(p.id) === String(productId))) {
+                openDetail(productId);
+            }
+        }
+
         // -----------------------------------------
         // SANKSI & RETRY FETCH (DENGAN LOCALSTORAGE CACHING & CACHE BUSTER)
         // -----------------------------------------
@@ -687,6 +721,7 @@
                     renderPromos();
                     renderBanner(bannerData);
                     renderCategories(categoriesData);
+                    checkUrlForProduct();
                 } catch (e) {
                     console.error("Gagal memuat cache lokal:", e);
                 }
@@ -700,6 +735,7 @@
                 renderPromos();
                 renderBanner(bannerData);
                 renderCategories(categoriesData);
+                checkUrlForProduct();
             }
 
             // 2. Fetch data terbaru dari Google Sheets di background (dengan Cache Buster & Timeout 10 detik)
@@ -751,6 +787,7 @@
                         renderBanner(bannerData);
 
                         console.log("Data berhasil diperbarui dari Google Sheets!");
+                        checkUrlForProduct();
                     }
                 } catch (e) {
                     console.warn("Gagal terhubung ke API saat revalidasi, menggunakan cache/dummy.", e);
@@ -1988,16 +2025,75 @@ ${promoList}`;
 
         function shareProduct() {
             if (!currentDetailProduct) return;
-            const textToCopy = `Beli ${currentDetailProduct.nama} seharga ${formatRupiah(currentDetailProduct.harga)} hanya di Faminis Barokah! Hubungi kami segera di WhatsApp.`;
+            const modal = document.getElementById('share-modal');
+            if (!modal) return;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
 
+        function closeShareModal() {
+            const modal = document.getElementById('share-modal');
+            if (!modal) return;
+            
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function getProductShareUrl() {
+            if (!currentDetailProduct) return window.location.href;
+            return window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(currentDetailProduct.id);
+        }
+
+        async function shareLinkNative() {
+            if (!currentDetailProduct) return;
+            const productUrl = getProductShareUrl();
+            const shareText = `Beli ${currentDetailProduct.nama} seharga ${formatRupiah(currentDetailProduct.harga)} hanya di Faminis Barokah!`;
+
+            closeShareModal();
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: currentDetailProduct.nama,
+                        text: shareText,
+                        url: productUrl
+                    });
+                    showToast("Produk berhasil dibagikan!");
+                } catch (err) {
+                    copyLinkToClipboard(productUrl);
+                }
+            } else {
+                copyLinkToClipboard(productUrl);
+            }
+        }
+
+        function copyLinkToClipboard(url) {
             const tempInput = document.createElement("input");
-            tempInput.value = textToCopy;
+            tempInput.value = url;
             document.body.appendChild(tempInput);
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
+            showToast("Link produk disalin ke clipboard!");
+        }
 
-            showToast("Teks deskripsi produk berhasil disalin!");
+        function shareToWhatsAppAdmin() {
+            if (!currentDetailProduct) return;
+            const productUrl = getProductShareUrl();
+            const text = `Assalamu'alaikum Admin Faminis Barokah, saya tertarik dengan produk ${currentDetailProduct.nama}. Berikut link produknya: ${productUrl}`;
+            const waUrl = `https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(text)}`;
+            
+            closeShareModal();
+            window.open(waUrl, '_blank');
         }
 
         // -----------------------------------------
@@ -2037,6 +2133,9 @@ ${promoList}`;
         window.handleAiKeyPress = handleAiKeyPress;
         window.generateProductMixMatch = generateProductMixMatch;
         window.shareProduct = shareProduct;
+        window.closeShareModal = closeShareModal;
+        window.shareLinkNative = shareLinkNative;
+        window.shareToWhatsAppAdmin = shareToWhatsAppAdmin;
         window.showToast = showToast;
 
     </script>
