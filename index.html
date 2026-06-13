@@ -159,7 +159,7 @@
                     <!-- LOGO RESMI FAMINIS BAROKAH DARI GOOGLE DRIVE -->
                     <div
                         class="w-11 h-11 rounded-full bg-cream-100 border border-cream-300 shadow-sm overflow-hidden flex items-center justify-center">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                        <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
                             alt="Logo Faminis Barokah" class="w-full h-full object-cover"
                             onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
@@ -472,7 +472,7 @@
             <!-- LOGO BESAR DI HALAMAN TENTANG TOKO DARI GOOGLE DRIVE -->
             <div
                 class="w-24 h-24 bg-cream-100 border border-cream-300 rounded-full mx-auto flex items-center justify-center shadow-sm overflow-hidden">
-                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
                     alt="Logo Faminis Barokah" class="w-full h-full object-cover"
                     onerror="this.onerror=null; this.src='https://placehold.co/200/F7EFE5/4A3B32?text=FB';">
             </div>
@@ -562,7 +562,7 @@
                 <div class="flex items-center gap-3">
                     <div
                         class="w-10 h-10 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                        <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
                             alt="Logo Faminis Barokah" class="w-full h-full object-cover"
                             onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
@@ -582,7 +582,7 @@
                 <div class="flex items-start gap-2.5">
                     <div
                         class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
+                        <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv"
                             alt="Logo" class="w-full h-full object-cover"
                             onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
@@ -642,6 +642,29 @@
     <script>
         // INISIALISASI ICON
         lucide.createIcons();
+
+        // Fungsi pembantu untuk mengubah link Google Drive menjadi direct link dengan domain lh3.googleusercontent.com
+        // Menghindari pemblokiran cookie pihak ketiga di Safari / browser seluler.
+        function getDirectDriveUrl(url) {
+            if (!url) return '';
+            url = url.trim();
+            if (url.includes('drive.google.com')) {
+                let fileId = '';
+                const fileDMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (fileDMatch && fileDMatch[1]) {
+                    fileId = fileDMatch[1];
+                } else {
+                    const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (idMatch && idMatch[1]) {
+                        fileId = idMatch[1];
+                    }
+                }
+                if (fileId) {
+                    return `https://lh3.googleusercontent.com/d/${fileId}`;
+                }
+            }
+            return url;
+        }
 
         // -----------------------------------------
         // KONFIGURASI API DAN WHATSAPP
@@ -1122,7 +1145,7 @@ Aturan Rekomendasi & Informasi:
             chatMessages.innerHTML += `
                 <div id="${tempAiId}" class="flex items-start gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0 animate-pulse">
-                        <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                        <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                     </div>
                     <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-500 font-medium">
                         <span class="inline-block animate-bounce">●</span>
@@ -1172,7 +1195,7 @@ ${promoList}`;
                     loadingBubble.outerHTML = `
                         <div class="flex items-start gap-2.5">
                             <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
-                                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                                <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                             </div>
                             <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
                                 ${formattedHtml}
@@ -1193,7 +1216,7 @@ ${promoList}`;
                     loadingBubble.outerHTML = `
                         <div class="flex items-start gap-2.5">
                             <div class="w-8 h-8 rounded-full bg-cream-100 border border-cream-300 overflow-hidden flex items-center justify-center shrink-0">
-                                <img src="https://drive.google.com/uc?export=view&id=1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
+                                <img src="https://lh3.googleusercontent.com/d/1zc-A3zhkqz11ARs7uMHpIrefJW1BLryv" alt="Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100/F7EFE5/4A3B32?text=FB';">
                             </div>
                             <div class="bg-white border border-cream-300 p-3.5 rounded-2xl rounded-tl-none text-xs max-w-[80%] shadow-sm leading-relaxed text-brown-800 font-medium">
                                 ${formattedHtml}
@@ -1355,6 +1378,7 @@ ${promoList}`;
                         firstImg = prod.gambar[0];
                     }
                 }
+                firstImg = getDirectDriveUrl(firstImg);
 
                 const isHabis = prod.stok === 0 || prod.stok === '0' || parseInt(prod.stok, 10) <= 0;
                 const habisBadge = isHabis ? `<span class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[8px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider z-10 shadow-sm">Habis</span>` : '';
@@ -1464,10 +1488,11 @@ ${promoList}`;
             dotsContainer.innerHTML = '';
 
             images.forEach((imgUrl, index) => {
+                const directImgUrl = getDirectDriveUrl(imgUrl);
                 const slide = document.createElement('div');
                 slide.className = 'w-full h-full flex-shrink-0 snap-start snap-always relative';
                 slide.innerHTML = `
-                    <img src="${imgUrl}" alt="${currentDetailProduct.nama} - Slide ${index + 1}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x600/EED9C4/4A3B32?text=Faminis+Barokah'">
+                    <img src="${directImgUrl}" alt="${currentDetailProduct.nama} - Slide ${index + 1}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x600/EED9C4/4A3B32?text=Faminis+Barokah'">
                 `;
                 imgContainer.appendChild(slide);
 
@@ -1691,6 +1716,7 @@ ${promoList}`;
                     thumbnailImg = currentDetailProduct.gambar[0];
                 }
             }
+            thumbnailImg = getDirectDriveUrl(thumbnailImg);
 
             // Validasi apakah item dengan spesifikasi persis sama sudah ada
             const existingIndex = cart.findIndex(item =>
@@ -2005,10 +2031,11 @@ ${promoList}`;
             container.innerHTML = '';
 
             promosData.forEach(p => {
+                const directPromoImg = getDirectDriveUrl(p.gambar);
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-cream-300">
                         <div class="h-44 bg-cream-100 overflow-hidden relative">
-                            <img src="${p.gambar}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x300/EED9C4/4A3B32?text=Faminis+Barokah+Promo'">
+                            <img src="${directPromoImg}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x300/EED9C4/4A3B32?text=Faminis+Barokah+Promo'">
                             <span class="absolute top-3 right-3 bg-brown-800 text-cream-50 text-[9px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Klaim</span>
                         </div>
                         <div class="p-4">
