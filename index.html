@@ -471,6 +471,8 @@ body.hide-search .mobile-search-bar{display:none!important}
 @media(max-width:768px){
   .shell{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}
   .topbar{grid-column:1;padding:0 16px;height:58px}
+  /* di mobile: pakai search yang bawah saja */
+  .topbar-search{display:none}
   .sidebar{display:none}
   .main{padding-bottom:70px}
   .page{padding:16px}
@@ -495,7 +497,11 @@ body.hide-search .mobile-search-bar{display:none!important}
   .about-grid{grid-template-columns:1fr}
   .hours-card{grid-column:1}
   .toast{bottom:86px;font-size:.78rem;white-space:normal;max-width:calc(100vw - 32px);text-align:center}
-  .section-title{font-size:1.1rem}
+  /* HEADER SECTION (Home) - biar rapi di mobile */
+  .section-header{align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .section-header > *{min-width:0}
+  .section-title{font-size:1.1rem;line-height:1.25}
+  .section-count{margin-left:auto}
   .blog-detail-title{font-size:1.3rem}
 }
 </style>
