@@ -6,7 +6,7 @@
 
   <!-- Halaman Utama / Toko -->
   <url>
-    <loc>https://faminis-barokah.my.id/</loc>
+    <loc>https://www.faminisbarokah.my.id</loc>
     <lastmod>2025-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
 
   <!-- Halaman Artikel & Blog -->
   <url>
-    <loc>https://faminis-barokah.my.id/artikel.html</loc>
+    <loc>https://www.faminisbarokah.my.id/artikel.html</loc>
     <lastmod>2025-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -22,7 +22,7 @@
 
   <!-- Artikel: Panduan Memilih Gamis Wolfis -->
   <url>
-    <loc>https://faminis-barokah.my.id/artikel.html?id=b1</loc>
+    <loc>https://www.faminisbarokah.my.id/artikel.html?id=B001</loc>
     <lastmod>2025-06-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -30,18 +30,11 @@
 
   <!-- Artikel: Memilih Mukena yang Nyaman -->
   <url>
-    <loc>https://faminis-barokah.my.id/artikel.html?id=b2</loc>
+    <loc>https://www.faminisbarokah.my.id/artikel.html?id=B002</loc>
     <lastmod>2025-05-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Artikel: Inspirasi Outfit Muslimah -->
-  <url>
-    <loc>https://faminis-barokah.my.id/artikel.html?id=b3</loc>
-    <lastmod>2025-04-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
 
 </urlset>
