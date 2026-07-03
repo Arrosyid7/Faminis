@@ -7,7 +7,7 @@
   <title id="page-title">Artikel & Blog — Faminis Barokah | Supplier Gamis, Mukena, Daster Solo</title>
   <meta id="meta-description" name="description"
     content="Baca artikel tips busana muslimah, panduan memilih gamis, mukena, daster dari Faminis Barokah — supplier busana muslim terpercaya di Solo, dekat Pasar Klewer.">
-  <meta name="keywords"
+  <meta id="meta-keywords" name="keywords"
     content="supplier daster, supplier mukena, supplier gamis, supplier solo, pasar klewer, daster murah, mukena premium, gamis wolfis, faminis barokah, busana muslim solo, grosir busana muslim, gamis syari, mukena bordir, kaftan, tips busana muslimah">
   <meta name="author" content="Faminis Barokah">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -1055,8 +1055,6 @@
     if (SCRIPT_URL.startsWith('<?=')) {
       SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPIZD8miWMm4nSM8eJOeB9htfbRSbRgeDeBRXLMAlMWf-HAFsOydRuAYk_6IeZCOOn/exec';
     }
-    // URL untuk halaman artikel server-side (SEO optimal)
-    const ARTIKEL_BASE_URL = SCRIPT_URL + '?action=artikel&id=';
 
     // ── DATA ─────────────────────────────────────────────────
     let allArticles = [];
@@ -1147,10 +1145,7 @@
         const card = document.createElement('article');
         card.className = 'blog-card';
         card.setAttribute('data-id', a.id);
-        // Link ke halaman artikel server-side (SEO optimal)
-        const artikelUrl = ARTIKEL_BASE_URL + encodeURIComponent(a.id);
-        card.onclick = () => { window.location.href = artikelUrl; };
-        card.style.cursor = 'pointer';
+        card.onclick = () => { showDetail(a.id); updateURL(a.id); };
         card.innerHTML = `
           <div class="blog-card-img">
             <img src="${a.gambar || ''}" alt="${escHtml(a.judul)}" loading="lazy"
@@ -1204,7 +1199,7 @@
       related.forEach(r => {
         const card = document.createElement('article');
         card.className = 'blog-card';
-        card.onclick = () => { window.location.href = ARTIKEL_BASE_URL + encodeURIComponent(r.id); };
+        card.onclick = () => { showDetail(r.id); updateURL(r.id); };
         card.innerHTML = `
           <div class="blog-card-img" style="aspect-ratio:16/9">
             <img src="${r.gambar || ''}" alt="${escHtml(r.judul)}" loading="lazy" onerror="this.src='https://placehold.co/400x225/EDD9C4/1C1612?text=Faminis'">
@@ -1243,8 +1238,10 @@
       const title = `${a.judul} — Faminis Barokah`;
       const desc = `${a.ringkasan} | Faminis Barokah — Supplier gamis, mukena & daster premium di Solo.`;
       const url = `https://faminis-barokah.my.id/artikel.html?id=${a.id}`;
+      const kw = a.keywords || `supplier gamis solo, supplier mukena solo, faminis barokah, ${a.kategori}`;
       document.getElementById('page-title').textContent = title;
       document.getElementById('meta-description').content = desc;
+      document.getElementById('meta-keywords').content = kw;
       document.getElementById('meta-canonical').href = url;
       document.getElementById('og-title').content = title;
       document.getElementById('og-description').content = desc;
@@ -1260,6 +1257,7 @@
     function resetSEO() {
       document.getElementById('page-title').textContent = 'Artikel & Blog — Faminis Barokah | Supplier Gamis, Mukena, Daster Solo';
       document.getElementById('meta-description').content = 'Baca artikel tips busana muslimah, panduan memilih gamis, mukena, daster dari Faminis Barokah — supplier busana muslim terpercaya di Solo, dekat Pasar Klewer.';
+      document.getElementById('meta-keywords').content = 'supplier daster, supplier mukena, supplier gamis, supplier solo, pasar klewer, daster murah, mukena premium, gamis wolfis, faminis barokah, busana muslim solo, grosir busana muslim, gamis syari, mukena bordir, kaftan, tips busana muslimah';
       document.getElementById('meta-canonical').href = 'https://faminis-barokah.my.id/artikel.html';
       document.getElementById('og-url').content = 'https://faminis-barokah.my.id/artikel.html';
     }
