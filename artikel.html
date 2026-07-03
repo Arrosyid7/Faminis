@@ -152,14 +152,13 @@
     .topbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       padding: 0 32px;
-      height: 64px;
+      height: 68px;
       background: var(--ink);
       position: sticky;
       top: 0;
       z-index: 100;
-      gap: 16px;
+      gap: 16px
     }
 
     .topbar-logo {
@@ -167,11 +166,12 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
+      flex-shrink: 0
     }
 
     .topbar-logo-img {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       overflow: hidden;
       border: 2px solid var(--amber);
@@ -186,15 +186,16 @@
 
     .topbar-brand h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--cream-light);
+      letter-spacing: .01em;
       line-height: 1.2
     }
 
     .topbar-brand p {
-      font-size: .58rem;
-      letter-spacing: .16em;
+      font-size: .6rem;
+      letter-spacing: .18em;
       color: var(--amber);
       font-weight: 600;
       text-transform: uppercase
@@ -204,13 +205,15 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
+      padding: 9px 18px;
       border-radius: 99px;
       border: 1.5px solid rgba(255, 255, 255, .15);
       color: var(--cream-light);
-      font-size: .82rem;
+      font-size: .83rem;
       font-weight: 600;
       transition: var(--transition);
+      margin-left: auto;
+      flex-shrink: 0
     }
 
     .topbar-back:hover {
@@ -219,8 +222,8 @@
     }
 
     .topbar-back svg {
-      width: 15px;
-      height: 15px
+      width: 16px;
+      height: 16px
     }
 
     /* LAYOUT */
@@ -842,6 +845,14 @@
         height: 58px
       }
 
+      .topbar-back span {
+        display: none
+      }
+
+      .topbar-back {
+        padding: 9px 12px
+      }
+
       .container {
         padding: 24px 16px
       }
@@ -884,7 +895,7 @@
         <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
         <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
-      Ke Toko
+      <span>Ke Toko</span>
     </a>
   </header>
 
