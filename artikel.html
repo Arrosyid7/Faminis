@@ -1055,6 +1055,8 @@
     if (SCRIPT_URL.startsWith('<?=')) {
       SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPIZD8miWMm4nSM8eJOeB9htfbRSbRgeDeBRXLMAlMWf-HAFsOydRuAYk_6IeZCOOn/exec';
     }
+    // URL untuk halaman artikel server-side (SEO optimal)
+    const ARTIKEL_BASE_URL = SCRIPT_URL + '?action=artikel&id=';
 
     // ── DATA ─────────────────────────────────────────────────
     let allArticles = [];
@@ -1145,7 +1147,10 @@
         const card = document.createElement('article');
         card.className = 'blog-card';
         card.setAttribute('data-id', a.id);
-        card.onclick = () => { showDetail(a.id); updateURL(a.id); };
+        // Link ke halaman artikel server-side (SEO optimal)
+        const artikelUrl = ARTIKEL_BASE_URL + encodeURIComponent(a.id);
+        card.onclick = () => { window.location.href = artikelUrl; };
+        card.style.cursor = 'pointer';
         card.innerHTML = `
           <div class="blog-card-img">
             <img src="${a.gambar || ''}" alt="${escHtml(a.judul)}" loading="lazy"
@@ -1199,7 +1204,7 @@
       related.forEach(r => {
         const card = document.createElement('article');
         card.className = 'blog-card';
-        card.onclick = () => { showDetail(r.id); updateURL(r.id); };
+        card.onclick = () => { window.location.href = ARTIKEL_BASE_URL + encodeURIComponent(r.id); };
         card.innerHTML = `
           <div class="blog-card-img" style="aspect-ratio:16/9">
             <img src="${r.gambar || ''}" alt="${escHtml(r.judul)}" loading="lazy" onerror="this.src='https://placehold.co/400x225/EDD9C4/1C1612?text=Faminis'">
