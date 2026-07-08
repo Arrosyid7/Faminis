@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /temp.txt
+Disallow: /test.js
+
+Sitemap: https://faminisbarokah.my.id/sitemap.xml

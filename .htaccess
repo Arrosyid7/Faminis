@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Rewrite static sitemap.xml request to sitemap.php internally (Keep custom domain URL)
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+  # Rewrite clean paths /artikel/slug-artikel to artikel.html?slug=slug-artikel (Internal Rewrite)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^artikel/([a-zA-Z0-9_-]+)/?$ artikel.html?slug=$1 [QSA,L]
+</IfModule>
