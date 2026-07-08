@@ -55,26 +55,26 @@ const FALLBACK_PRODUCTS = [
   {
     id: "P001", kategori: "Mukena", nama: "Mukena Dewasa Premium Kawira",
     deskripsi: "Ibadah lebih khusyuk dengan mukena berpotongan super jumbo. Bahan Rayon Premium.",
-    harga: 150000, gambar: "https://lh3.googleusercontent.com/d/16Nx_5WwDy1XqAqKOsvUf6dZvLN7HCpnB",
-    warna: [], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
+    harga: 150000, harga_grosir: 135000, gambar: "https://lh3.googleusercontent.com/d/16Nx_5WwDy1XqAqKOsvUf6dZvLN7HCpnB",
+    warna: ["Mocca:20", "Putih:30"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
   },
   {
     id: "P002", kategori: "Mukena", nama: "Mukena Dewasa Premium Anyara",
     deskripsi: "Ibadah lebih khusyuk dengan mukena berpotongan super jumbo. Bahan Rayon Premium.",
-    harga: 150000, gambar: "https://lh3.googleusercontent.com/d/13zllHOLohYxpn7gQslkchjTBRXRAQdoV",
-    warna: [], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
+    harga: 150000, harga_grosir: 135000, gambar: "https://lh3.googleusercontent.com/d/13zllHOLohYxpn7gQslkchjTBRXRAQdoV",
+    warna: ["Navy:15", "Hitam:25", "Maroon:10"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
   },
   {
     id: "P014", kategori: "Daster", nama: "Daster batik jumbo Raras",
     deskripsi: "Pilihan tepat untuk santai di rumah dengan ruang gerak yang super lega.",
-    harga: 45000, gambar: "https://lh3.googleusercontent.com/d/14PuXK76D89Y0ddbcaTX7NAhf1UT3L5u-",
-    warna: ["Biru","Merah","Sage","Orange","Ungu"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
+    harga: 45000, harga_grosir: 40000, gambar: "https://lh3.googleusercontent.com/d/14PuXK76D89Y0ddbcaTX7NAhf1UT3L5u-",
+    warna: ["Biru:10", "Merah:5", "Sage:20", "Orange:0", "Ungu:15"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
   },
   {
     id: "P026", kategori: "Gamis", nama: "Gamis Wanita Dewasa Arunika",
     deskripsi: "Gamis wanita dewasa berkualitas premium, sejuk dan nyaman dipakai.",
-    harga: 95000, gambar: "https://lh3.googleusercontent.com/d/1G4EanbkOwIopSnVPaZyx5VHfhR47jg-K",
-    warna: ["G1","G2","G3","G4","G5"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
+    harga: 95000, harga_grosir: 85000, gambar: "https://lh3.googleusercontent.com/d/1G4EanbkOwIopSnVPaZyx5VHfhR47jg-K",
+    warna: ["G1:10", "G2:15", "G3:8", "G4:12", "G5:5"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
   }
 ];
 
@@ -83,7 +83,7 @@ const FALLBACK_PROMOS = [
   { id: "PR02", judul: "Grup Reseller Faminis", gambar: "https://lh3.googleusercontent.com/d/1_8962E-ca8iphDO7lVYIgHhnDoEGc1F3", link: "https://chat.whatsapp.com/DUm7GTpGYBJFSGyAC3uO2x" }
 ];
 
-const FALLBACK_CATEGORIES = ["Gamis", "Mukena", "Daster"];
+const FALLBACK_CATEGORIES = ["Gamis", "Mukena", "Daster", "Setelan"];
 
 const FALLBACK_BANNER = {
   badge: "EDISI BARU",
@@ -107,7 +107,7 @@ function sheetToObjects(sheetNames) {
     const values = sheet.getDataRange().getValues();
     if (values.length <= 1) return [];
     
-    const headers = values[0].map(h => String(h).trim().toLowerCase());
+    const headers = values[0].map(h => String(h).trim().toLowerCase().replace(/[\s\-]+/g, '_'));
     const objects = [];
     
     for (let i = 1; i < values.length; i++) {
@@ -120,8 +120,15 @@ function sheetToObjects(sheetNames) {
         let val = row[colIdx];
         
         // Convert types based on header names
-        if (header === 'harga' || header === 'stok' || header === 'menit_baca' || header === 'harga_grosir') {
+        if (header === 'harga' || header === 'menit_baca' || header === 'harga_grosir') {
           val = Number(val) || 0;
+        } else if (header === 'stok') {
+          const strVal = String(val).trim();
+          if (strVal.includes(',') || strVal.includes(':')) {
+            val = strVal;
+          } else {
+            val = Number(strVal) || 0;
+          }
         } else if (header === 'aktif' || header === 'is_active') {
           val = (String(val).toLowerCase() === 'true' || val === true || val === 1 || String(val).toLowerCase() === 'y');
         } else {
@@ -134,7 +141,8 @@ function sheetToObjects(sheetNames) {
     return objects;
   } catch (e) {
     if (typeof Logger !== 'undefined') {
-      Logger.log("Error reading sheet " + sheetNames.join("/") + ": " + e.toString());
+      const sheetNameStr = (sheetNames && typeof sheetNames.join === 'function') ? sheetNames.join("/") : String(sheetNames);
+      Logger.log("Error reading sheet " + sheetNameStr + ": " + e.toString());
     }
     return null;
   }
@@ -163,7 +171,7 @@ function getPromoData() {
 function getCategoriesData() {
   const data = sheetToObjects(["Kategori", "Categories"]);
   if (data && data.length > 0) {
-    return data.map(item => item.nama || item.kategori || item.name).filter(Boolean);
+    return data.map(item => item.nama_kategori || item.nama || item.kategori || item.name || Object.values(item)[0]).filter(Boolean);
   }
   return FALLBACK_CATEGORIES;
 }
@@ -583,5 +591,69 @@ function doGet(e) {
   } else {
     return HtmlService.createHtmlOutput("<h1>Faminis Barokah API Backend</h1><p>Running successfully.</p>")
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+}
+
+// ── SETUP SPREADSHEET TOOL ──────────────────────────────────────
+// Jalankan fungsi ini sekali di Google Apps Script untuk otomatis membuat kolom "Harga Grosir"
+function setupSpreadsheet() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) {
+      Logger.log("Error: Script tidak dijalankan dari Google Spreadsheet.");
+      return;
+    }
+    
+    let sheet = ss.getSheetByName("Produk") || ss.getSheetByName("Products");
+    if (!sheet) {
+      sheet = ss.getSheets()[0]; // Ambil sheet pertama jika nama tidak cocok
+    }
+    
+    const lastCol = sheet.getLastColumn();
+    const lastRow = sheet.getLastRow();
+    
+    if (lastCol === 0) {
+      Logger.log("Sheet kosong.");
+      return;
+    }
+    
+    const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(h => String(h).trim().toLowerCase().replace(/[\s\-]+/g, '_'));
+    
+    // Periksa apakah kolom harga_grosir sudah ada
+    const hasGrosir = headers.indexOf('harga_grosir') !== -1;
+    
+    if (!hasGrosir) {
+      // Tambahkan kolom di sebelah kanan kolom terakhir
+      sheet.insertColumnAfter(lastCol);
+      sheet.getRange(1, lastCol + 1).setValue("Harga Grosir");
+      
+      // Berikan nilai default 0 untuk baris data yang sudah ada
+      if (lastRow > 1) {
+        const range = sheet.getRange(2, lastCol + 1, lastRow - 1, 1);
+        const values = [];
+        for (let i = 0; i < lastRow - 1; i++) {
+          values.push([0]);
+        }
+        range.setValues(values);
+      }
+      
+      if (typeof SpreadsheetApp.getUi === 'function') {
+        SpreadsheetApp.getUi().alert("Berhasil! Kolom 'Harga Grosir' telah ditambahkan di sebelah kanan tabel Anda.");
+      } else {
+        Logger.log("Berhasil menambahkan kolom 'Harga Grosir'.");
+      }
+    } else {
+      if (typeof SpreadsheetApp.getUi === 'function') {
+        SpreadsheetApp.getUi().alert("Kolom 'Harga Grosir' sudah ada di spreadsheet Anda.");
+      } else {
+        Logger.log("Kolom 'Harga Grosir' sudah ada.");
+      }
+    }
+  } catch (e) {
+    if (typeof SpreadsheetApp.getUi === 'function') {
+      SpreadsheetApp.getUi().alert("Gagal menambahkan kolom: " + e.toString());
+    } else {
+      Logger.log("Gagal menambahkan kolom: " + e.toString());
+    }
   }
 }

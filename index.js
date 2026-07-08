@@ -6,7 +6,7 @@ let productsData = [];
 let promosData = [];
 let categoriesData = ["Gamis", "Mukena"];
 let bannerData = { badge: "EDISI BARU", judul: "Gaya Anggun & Syar'i Menawan", subjudul: "Diskon s/d 50% Koleksi Gamis & Mukena", tombol_teks: "Lihat Promo" };
-let cart = JSON.parse(localStorage.getItem('faminis_cart_v2')) || [];
+let cart = JSON.parse(localStorage.getItem('faminis_cart_v3')) || [];
 let currentProduct = null;
 let selectedColor = "";
 let selectedSize = "";
@@ -68,26 +68,26 @@ const DUMMY_PRODUCTS = [
   {
     id: "P001", kategori: "Mukena", nama: "Mukena Dewasa Premium Kawira",
     deskripsi: "Ibadah lebih khusyuk dengan mukena berpotongan super jumbo. Bahan Rayon Premium.",
-    harga: 150000, gambar: "https://lh3.googleusercontent.com/d/16Nx_5WwDy1XqAqKOsvUf6dZvLN7HCpnB",
-    warna: [], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
+    harga: 150000, harga_grosir: 135000, gambar: "https://lh3.googleusercontent.com/d/16Nx_5WwDy1XqAqKOsvUf6dZvLN7HCpnB",
+    warna: ["Mocca:20", "Putih:30"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
   },
   {
     id: "P002", kategori: "Mukena", nama: "Mukena Dewasa Premium Anyara",
     deskripsi: "Ibadah lebih khusyuk dengan mukena berpotongan super jumbo. Bahan Rayon Premium.",
-    harga: 150000, gambar: "https://lh3.googleusercontent.com/d/13zllHOLohYxpn7gQslkchjTBRXRAQdoV",
-    warna: [], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
+    harga: 150000, harga_grosir: 135000, gambar: "https://lh3.googleusercontent.com/d/13zllHOLohYxpn7gQslkchjTBRXRAQdoV",
+    warna: ["Navy:15", "Hitam:25", "Maroon:10"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Premium"
   },
   {
     id: "P014", kategori: "Daster", nama: "Daster batik jumbo Raras",
     deskripsi: "Pilihan tepat untuk santai di rumah dengan ruang gerak yang super lega.",
-    harga: 45000, gambar: "https://lh3.googleusercontent.com/d/14PuXK76D89Y0ddbcaTX7NAhf1UT3L5u-",
-    warna: ["Biru","Merah","Sage","Orange","Ungu"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
+    harga: 45000, harga_grosir: 40000, gambar: "https://lh3.googleusercontent.com/d/14PuXK76D89Y0ddbcaTX7NAhf1UT3L5u-",
+    warna: ["Biru:10", "Merah:5", "Sage:20", "Orange:0", "Ungu:15"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
   },
   {
     id: "P026", kategori: "Gamis", nama: "Gamis Wanita Dewasa Arunika",
     deskripsi: "Gamis wanita dewasa berkualitas premium, sejuk dan nyaman dipakai.",
-    harga: 95000, gambar: "https://lh3.googleusercontent.com/d/1G4EanbkOwIopSnVPaZyx5VHfhR47jg-K",
-    warna: ["G1","G2","G3","G4","G5"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
+    harga: 95000, harga_grosir: 85000, gambar: "https://lh3.googleusercontent.com/d/1G4EanbkOwIopSnVPaZyx5VHfhR47jg-K",
+    warna: ["G1:10", "G2:15", "G3:8", "G4:12", "G5:5"], ukuran: ["All Size"], stok: 50, bahan: "Rayon Bali"
   }
 ];
 const DUMMY_PROMOS = [
@@ -97,6 +97,52 @@ const DUMMY_PROMOS = [
 
 // ── HELPERS ──────────────────────────────────────────────────
 const IDR = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
+
+function parseWarnaStock(warnaStr, stokVal) {
+  if (!warnaStr) return { colors: [], hasColorStock: false };
+  
+  const colorsList = typeof warnaStr === 'string' 
+    ? warnaStr.split(',').map(s => s.trim()).filter(Boolean) 
+    : (Array.isArray(warnaStr) ? warnaStr : [String(warnaStr)]);
+    
+  let hasColorStock = false;
+  const hasColonFormat = colorsList.some(item => String(item).includes(':'));
+  
+  if (hasColonFormat) {
+    const colors = colorsList.map(item => {
+      const sItem = String(item);
+      if (sItem.includes(':')) {
+        const parts = sItem.split(':');
+        const name = parts[0].trim();
+        const stock = parseInt(parts[1].trim(), 10);
+        if (!isNaN(stock)) {
+          hasColorStock = true;
+          return { name, stock };
+        }
+      }
+      return { name: sItem, stock: null };
+    });
+    return { colors, hasColorStock };
+  }
+  
+  const stokStr = String(stokVal || '').trim();
+  const hasCommaStok = stokStr.includes(',');
+  
+  if (hasCommaStok) {
+    const stokList = stokStr.split(',').map(s => parseInt(s.trim(), 10));
+    const colors = colorsList.map((name, index) => {
+      const stock = !isNaN(stokList[index]) ? stokList[index] : 0;
+      hasColorStock = true;
+      return { name, stock };
+    });
+    return { colors, hasColorStock };
+  }
+  
+  const colors = colorsList.map(name => {
+    return { name, stock: null };
+  });
+  return { colors, hasColorStock: false };
+}
 
 function getDriveUrl(url) {
   if (!url) return '';
@@ -148,7 +194,14 @@ function getBahan(prod) {
   return 'Bahan Premium';
 }
 
-function isHabis(prod) { return !prod.stok || parseInt(prod.stok, 10) <= 0; }
+function isHabis(prod) {
+  const parsedWarna = parseWarnaStock(prod.warna, prod.stok);
+  if (parsedWarna.hasColorStock) {
+    const sum = parsedWarna.colors.reduce((s, c) => s + (c.stock || 0), 0);
+    return sum <= 0;
+  }
+  return !prod.stok || parseInt(prod.stok, 10) <= 0;
+}
 
 // ── TOAST ────────────────────────────────────────────────────
 let toastTimeout;
@@ -312,6 +365,7 @@ function renderProducts(data) {
       <div class="product-img image-loading-shell">
         ${renderImg(img, p.nama, 'logofaminis.png')}
         <span class="product-badge">${p.kategori}</span>
+        ${p.harga_grosir > 0 ? '<span class="product-badge-grosir">Grosir</span>' : ''}
         ${habis ? '<div class="product-badge-habis"><span>Stok Habis</span></div>' : ''}
         ${!habis ? `<button class="product-quick-add" onclick="event.preventDefault(); event.stopPropagation(); openDetail('${p.id}')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>` : ''}
       </div>
@@ -365,26 +419,62 @@ function openDetail(id) {
   document.getElementById('detail-desc').textContent = currentProduct.deskripsi || 'Tidak ada deskripsi.';
   document.getElementById('detail-bahan').textContent = getBahan(currentProduct);
   document.getElementById('detail-qty').textContent = 1;
-  const habis = isHabis(currentProduct);
-  document.getElementById('detail-stock').innerHTML = habis ? `<span style="color:#E53E3E;font-weight:700">Habis</span>` : `<strong>${currentProduct.stok}</strong>`;
+  
+  const parsedWarna = parseWarnaStock(currentProduct.warna, currentProduct.stok);
+  let displayStock = currentProduct.stok;
+  if (parsedWarna.hasColorStock) {
+    displayStock = parsedWarna.colors.reduce((sum, c) => sum + (c.stock || 0), 0);
+  }
+  const habis = displayStock <= 0;
+  document.getElementById('detail-stock').innerHTML = habis ? `<span style="color:#E53E3E;font-weight:700">Habis</span>` : `<strong>${displayStock}</strong>`;
+  
   const addBtn = document.getElementById('btn-add-cart');
   if (habis) { addBtn.textContent = 'Stok Habis'; addBtn.disabled = true; }
   else { addBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>Masukkan Keranjang`; addBtn.disabled = false; }
-  const colors = getStrList(currentProduct.warna);
+  
   const colorSec = document.getElementById('color-section');
   const colorOpts = document.getElementById('color-options');
   colorOpts.innerHTML = ''; document.getElementById('sel-color-lbl').textContent = '—';
-  if (colors.length > 0) {
+  
+  if (parsedWarna.colors.length > 0) {
     colorSec.style.display = '';
-    colors.forEach(c => {
+    parsedWarna.colors.forEach(c => {
       const btn = document.createElement('button'); btn.className = 'color-opt';
-      const lc = c.toLowerCase();
-      if (COLOR_PALETTE[lc]) btn.innerHTML = `<span class="color-swatch" style="background:${COLOR_PALETTE[lc]}"></span>${c}`;
-      else btn.textContent = c;
-      btn.onclick = () => { document.querySelectorAll('#color-options .color-opt').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedColor = c; document.getElementById('sel-color-lbl').textContent = c; };
+      const lc = c.name.toLowerCase();
+      
+      const stockText = parsedWarna.hasColorStock && c.stock !== null ? ` (${c.stock === 0 ? 'Habis' : c.stock})` : '';
+      
+      if (COLOR_PALETTE[lc]) btn.innerHTML = `<span class="color-swatch" style="background:${COLOR_PALETTE[lc]}"></span>${c.name}${stockText}`;
+      else btn.textContent = `${c.name}${stockText}`;
+      
+      const isColHabis = parsedWarna.hasColorStock && c.stock !== null && c.stock <= 0;
+      if (isColHabis) {
+        btn.classList.add('out-of-stock');
+        btn.title = "Stok Habis";
+      }
+      
+      btn.onclick = () => {
+        if (isColHabis) {
+          showToast(`Warna ${c.name} sedang habis!`);
+          return;
+        }
+        document.querySelectorAll('#color-options .color-opt').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedColor = c.name;
+        document.getElementById('sel-color-lbl').textContent = c.name;
+        
+        if (parsedWarna.hasColorStock && c.stock !== null) {
+          if (currentQty > c.stock) {
+            currentQty = Math.max(1, c.stock);
+            document.getElementById('detail-qty').textContent = currentQty;
+            updateDetailPriceDisplay();
+          }
+        }
+      };
       colorOpts.appendChild(btn);
     });
   } else { colorSec.style.display = 'none'; }
+  
   const sizes = getStrList(currentProduct.ukuran);
   const sizeSec = document.getElementById('size-section');
   const sizeOpts = document.getElementById('size-options');
@@ -428,7 +518,36 @@ function openDetail(id) {
   const scriptEl = document.getElementById('product-jsonld');
   if (scriptEl) scriptEl.textContent = JSON.stringify(sd, null, 2);
 
+  updateDetailPriceDisplay();
+
   switchPage('detail');
+}
+
+function updateDetailPriceDisplay() {
+  if (!currentProduct) return;
+  const priceRow = document.querySelector('.detail-price-row');
+  if (!priceRow) return;
+  
+  const hasGrosir = currentProduct.harga_grosir > 0;
+  const isGrosir = currentQty >= 3 && hasGrosir;
+  
+  if (hasGrosir) {
+    priceRow.style.display = 'flex';
+    priceRow.style.flexDirection = 'column';
+    priceRow.style.gap = '4px';
+    priceRow.style.alignItems = 'flex-start';
+    
+    priceRow.innerHTML = `
+      <span class="detail-price" id="detail-price" style="${isGrosir ? 'text-decoration: line-through; color: var(--ink-soft); font-size: 1.15rem;' : 'font-size: 1.6rem; color: var(--ink);'}">${IDR(currentProduct.harga)}</span>
+      <span class="detail-price-grosir-sub" style="font-size: 0.95rem; color: var(--amber-dark); font-weight: 700; display: flex; align-items: center; gap: 8px;">
+        Grosir: ${IDR(currentProduct.harga_grosir)} (Min. 3 Pcs)
+        ${isGrosir ? '<span class="badge-grosir-active">Grosir Aktif</span>' : ''}
+      </span>
+    `;
+  } else {
+    priceRow.style.display = 'block';
+    priceRow.innerHTML = `<span class="detail-price" id="detail-price">${IDR(currentProduct.harga)}</span>`;
+  }
 }
 
 function renderGallery() {
@@ -451,18 +570,33 @@ function renderGallery() {
 }
 
 function changeSlide(dir) { galleryIndex = (galleryIndex + dir + galleryImages.length) % galleryImages.length; renderGallery(); }
+
 function changeQty(delta) {
   if (!currentProduct || isHabis(currentProduct)) return;
-  const maxStock = parseInt(currentProduct.stok, 10);
+  let maxStock = parseInt(currentProduct.stok, 10) || 0;
+  const parsedWarna = parseWarnaStock(currentProduct.warna, currentProduct.stok);
+  if (parsedWarna.hasColorStock) {
+    if (selectedColor) {
+      const match = parsedWarna.colors.find(c => c.name === selectedColor);
+      if (match && match.stock !== null) {
+        maxStock = match.stock;
+      }
+    } else {
+      maxStock = Math.max(...parsedWarna.colors.map(c => c.stock || 0));
+    }
+  }
   currentQty = Math.max(1, Math.min(currentQty + delta, maxStock));
   if (currentQty >= maxStock && delta > 0) showToast(`Stok terbatas! Maks. ${maxStock} pcs`);
   document.getElementById('detail-qty').textContent = currentQty;
+  updateDetailPriceDisplay();
 }
 
 function addToCart() {
   if (!currentProduct || isHabis(currentProduct)) { showToast("Stok produk sedang habis!"); return; }
-  const colors = getStrList(currentProduct.warna); const sizes = getStrList(currentProduct.ukuran);
-  if (colors.length > 0 && !selectedColor) {
+  const parsedWarna = parseWarnaStock(currentProduct.warna, currentProduct.stok);
+  const sizes = getStrList(currentProduct.ukuran);
+  
+  if (parsedWarna.colors.length > 0 && !selectedColor) {
     showToast("Pilih warna terlebih dahulu!");
     const sec = document.getElementById('color-section');
     if (sec) {
@@ -482,15 +616,60 @@ function addToCart() {
     }
     return;
   }
+  
+  let maxStock = parseInt(currentProduct.stok, 10) || 0;
+  if (parsedWarna.hasColorStock && selectedColor) {
+    const match = parsedWarna.colors.find(c => c.name === selectedColor);
+    if (match && match.stock !== null) {
+      maxStock = match.stock;
+    }
+  }
+  
+  if (currentQty > maxStock) {
+    showToast(`Stok untuk warna ${selectedColor} tidak mencukupi! Maksimal ${maxStock} pcs`);
+    return;
+  }
+  
   const thumb = getFirstImg(currentProduct);
   const existing = cart.findIndex(i => String(i.id) === String(currentProduct.id) && i.warna === selectedColor && i.ukuran === selectedSize);
-  if (existing > -1) { cart[existing].qty = Math.min(cart[existing].qty + currentQty, parseInt(currentProduct.stok, 10)); }
-  else { cart.push({ id: currentProduct.id, nama: currentProduct.nama, harga: currentProduct.harga, gambar: thumb, warna: selectedColor, ukuran: selectedSize, qty: currentQty }); }
-  localStorage.setItem('faminis_cart_v2', JSON.stringify(cart));
+  if (existing > -1) {
+    const newQty = cart[existing].qty + currentQty;
+    if (newQty > maxStock) {
+      showToast(`Keranjang Anda sudah berisi ${cart[existing].qty} pcs. Stok maksimal warna ${selectedColor} adalah ${maxStock} pcs.`);
+      cart[existing].qty = maxStock;
+    } else {
+      cart[existing].qty = newQty;
+    }
+  }
+  else {
+    cart.push({
+      id: currentProduct.id,
+      nama: currentProduct.nama,
+      harga: currentProduct.harga,
+      gambar: thumb,
+      warna: selectedColor,
+      ukuran: selectedSize,
+      qty: currentQty
+    });
+  }
+  localStorage.setItem('faminis_cart_v3', JSON.stringify(cart));
   updateCartBadge(); showToast("Ditambahkan ke Keranjang Belanja!");
 }
 
 // ── CART ──────────────────────────────────────────────────────
+function getActivePrice(item, cartList) {
+  const prod = productsData.find(p => String(p.id) === String(item.id));
+  if (prod && prod.harga_grosir > 0) {
+    const totalQty = cartList
+      .filter(i => String(i.id) === String(item.id))
+      .reduce((sum, i) => sum + i.qty, 0);
+    if (totalQty >= 3) {
+      return prod.harga_grosir;
+    }
+  }
+  return item.harga;
+}
+
 function renderCart() {
   const container = document.getElementById('cart-items-section');
   const panel = document.getElementById('cart-summary-panel');
@@ -501,13 +680,18 @@ function renderCart() {
   panel.style.display = '';
   let subtotal = 0; container.innerHTML = '';
   cart.forEach((item, i) => {
-    subtotal += item.harga * item.qty;
+    const activePrice = getActivePrice(item, cart);
+    subtotal += activePrice * item.qty;
     const vt = [item.warna, item.ukuran].filter(Boolean).join(' · ');
+    const isGrosir = activePrice < item.harga;
+    
     const card = document.createElement('div'); card.className = 'cart-item-card';
     card.innerHTML = `<div class="cart-item-thumb image-loading-shell">${renderImg(item.gambar, item.nama, 'logofaminis.png')}</div>
     <div class="cart-item-body">
       <p class="cart-item-name">${item.nama}</p><p class="cart-item-variant">${vt}</p>
-      <p class="cart-item-price">${IDR(item.harga)}</p>
+      <p class="cart-item-price">
+        ${isGrosir ? `<span class="cart-item-price-original">${IDR(item.harga)}</span><span class="cart-item-price-grosir">${IDR(activePrice)}</span> <span class="badge-grosir">Grosir Min. 3</span>` : IDR(item.harga)}
+      </p>
       <div class="cart-item-actions">
         <div class="cart-qty-ctrl"><button class="cart-qty-btn" onclick="updateCartQty(${i},-1)">−</button><span class="cart-qty-num">${item.qty}</span><button class="cart-qty-btn" onclick="updateCartQty(${i},1)">+</button></div>
         <button class="cart-remove-btn" onclick="removeFromCart(${i})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
@@ -526,7 +710,19 @@ async function removeFromCart(i) {
 
 function updateCartQty(i, delta) {
   const prod = productsData.find(p => String(p.id) === String(cart[i].id));
-  const maxStock = prod ? parseInt(prod.stok, 10) : 999;
+  let maxStock = 999;
+  if (prod) {
+    const parsedWarna = parseWarnaStock(prod.warna, prod.stok);
+    if (parsedWarna.hasColorStock && cart[i].warna) {
+      const match = parsedWarna.colors.find(c => c.name === cart[i].warna);
+      if (match && match.stock !== null) {
+        maxStock = match.stock;
+      }
+    } else {
+      maxStock = parseInt(prod.stok, 10) || 0;
+    }
+  }
+  
   cart[i].qty += delta;
   if (cart[i].qty < 1) { removeFromCart(i); return; }
   if (cart[i].qty > maxStock) { cart[i].qty = maxStock; showToast(`Stok terbatas! Maks. ${maxStock} pcs`); }
@@ -539,7 +735,7 @@ async function clearCart() {
   if (!ok) return; cart = []; saveCart(); renderCart(); showToast("Keranjang dikosongkan");
 }
 
-function saveCart() { localStorage.setItem('faminis_cart_v2', JSON.stringify(cart)); updateCartBadge(); }
+function saveCart() { localStorage.setItem('faminis_cart_v3', JSON.stringify(cart)); updateCartBadge(); }
 
 // ── CHECKOUT ──────────────────────────────────────────────────
 function checkoutWhatsApp() {
@@ -557,9 +753,12 @@ function checkoutWhatsApp() {
   let subtotal = 0;
   let msg = `🛍️ *INVOICE ORDER FAMINIS BAROKAH*\n===============================\n\n*INFORMASI PENERIMA:*\n👤 *Nama:* ${name}\n📞 *Telepon:* ${phone}\n📍 *Wilayah:* ${region}\n🏠 *Jalan:* ${street}\n📝 *Detail:* ${detail}\n📅 *Tanggal:* ${new Date().toLocaleDateString('id-ID')}\n\n*DAFTAR BELANJA:*\n`;
   cart.forEach((item, i) => {
-    subtotal += item.harga * item.qty;
+    const activePrice = getActivePrice(item, cart);
+    subtotal += activePrice * item.qty;
     const vt = [item.warna, item.ukuran].filter(Boolean).join(', ');
-    msg += `${i + 1}. *${item.nama}*\n   Varian: ${vt || '-'}\n   ${item.qty} x ${IDR(item.harga)} = ${IDR(item.harga * item.qty)}\n\n`;
+    const isGrosir = activePrice < item.harga;
+    const priceText = isGrosir ? `(Grosir) ${IDR(activePrice)}` : IDR(item.harga);
+    msg += `${i + 1}. *${item.nama}*\n   Varian: ${vt || '-'}\n   ${item.qty} x ${priceText} = ${IDR(activePrice * item.qty)}\n\n`;
   });
   msg += `===============================\n*TOTAL ESTIMASI: ${IDR(subtotal)}*\n\n_Biaya pengiriman akan dikonfirmasi Admin ya kak. Terima kasih!_ 🌸`;
   window.open(`https://wa.me/${NO_WA_ADMIN}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -744,6 +943,17 @@ function toggleSeoIntro() {
   }
 }
 
+function getUniqueCategories(products, serverCats) {
+  const cats = new Set(["Gamis", "Mukena", "Setelan", "Daster"]);
+  if (Array.isArray(serverCats)) {
+    serverCats.forEach(c => { if (c && String(c).trim()) cats.add(String(c).trim()); });
+  }
+  if (Array.isArray(products)) {
+    products.forEach(p => { if (p.kategori && String(p.kategori).trim()) cats.add(String(p.kategori).trim()); });
+  }
+  return Array.from(cats);
+}
+
 // ── INIT ─────────────────────────────────────────────────────
 window.onload = async () => {
   const SCRIPT_URL = window.SCRIPT_URL;
@@ -751,19 +961,25 @@ window.onload = async () => {
   document.body.classList.remove('hide-search');
 
   try {
-    const cp = localStorage.getItem('faminis_products_v2');
+    const cp = localStorage.getItem('faminis_products_v3');
     const parsed = cp ? JSON.parse(cp) : null;
     if (parsed && Array.isArray(parsed) && parsed.length > 0) {
       productsData = parsed;
-      promosData = JSON.parse(localStorage.getItem('faminis_promos_v2') || '[]');
+      promosData = JSON.parse(localStorage.getItem('faminis_promos_v3') || '[]');
       blogsData = JSON.parse(localStorage.getItem('faminis_blogs_v1') || '[]');
-      bannerData = JSON.parse(localStorage.getItem('faminis_banner_v2') || JSON.stringify(bannerData));
-      categoriesData = JSON.parse(localStorage.getItem('faminis_cats_v2') || JSON.stringify(categoriesData));
+      bannerData = JSON.parse(localStorage.getItem('faminis_banner_v3') || JSON.stringify(bannerData));
+      categoriesData = getUniqueCategories(productsData, JSON.parse(localStorage.getItem('faminis_cats_v3') || '[]'));
     } else {
-      productsData = DUMMY_PRODUCTS; promosData = DUMMY_PROMOS; blogsData = DUMMY_BLOGS;
+      productsData = DUMMY_PRODUCTS;
+      promosData = DUMMY_PROMOS;
+      blogsData = DUMMY_BLOGS;
+      categoriesData = getUniqueCategories(productsData);
     }
   } catch (e) { 
-    productsData = DUMMY_PRODUCTS; promosData = DUMMY_PROMOS; blogsData = DUMMY_BLOGS;
+    productsData = DUMMY_PRODUCTS;
+    promosData = DUMMY_PROMOS;
+    blogsData = DUMMY_BLOGS;
+    categoriesData = getUniqueCategories(productsData);
   }
 
   if (productsData.length > 0) {
@@ -791,18 +1007,18 @@ window.onload = async () => {
       const fp = race.data.products || [];
       const fpr = race.data.promos || [];
       const fb = race.data.blogs || [];
-      if (fp.length > 0) {
-        productsData = fp;
-        promosData = fpr;
-        blogsData = fb;
-        bannerData = race.data.banner || bannerData;
-        categoriesData = (race.data.categories || []).length > 0 ? race.data.categories : categoriesData;
-      }
-      localStorage.setItem('faminis_products_v2', JSON.stringify(productsData));
-      localStorage.setItem('faminis_promos_v2', JSON.stringify(promosData));
+      
+      productsData = fp;
+      promosData = fpr;
+      blogsData = fb;
+      bannerData = race.data.banner || bannerData;
+      categoriesData = getUniqueCategories(productsData, race.data.categories);
+      
+      localStorage.setItem('faminis_products_v3', JSON.stringify(productsData));
+      localStorage.setItem('faminis_promos_v3', JSON.stringify(promosData));
       localStorage.setItem('faminis_blogs_v1', JSON.stringify(blogsData));
-      localStorage.setItem('faminis_banner_v2', JSON.stringify(bannerData));
-      localStorage.setItem('faminis_cats_v2', JSON.stringify(categoriesData));
+      localStorage.setItem('faminis_banner_v3', JSON.stringify(bannerData));
+      localStorage.setItem('faminis_cats_v3', JSON.stringify(categoriesData));
       renderBanner(bannerData);
       renderCategories(categoriesData);
       renderProducts(productsData);

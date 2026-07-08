@@ -662,6 +662,22 @@ body.hide-search .mobile-search-bar {
   z-index: 2
 }
 
+.product-badge-grosir {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: var(--amber);
+  color: var(--ink);
+  padding: 4px 10px;
+  border-radius: 99px;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
 .product-badge-habis {
   position: absolute;
   inset: 0;
@@ -1087,6 +1103,49 @@ body.hide-search .mobile-search-bar {
   font-weight: 600;
   color: var(--ink-soft);
   transition: var(--transition)
+}
+
+.color-opt.out-of-stock {
+  opacity: 0.4;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.color-opt.out-of-stock:hover {
+  border-color: var(--cream-mid);
+  color: var(--ink-soft);
+}
+
+.cart-item-price-original {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  margin-right: 6px;
+}
+
+.cart-item-price-grosir {
+  color: var(--amber-dark);
+  font-weight: 700;
+}
+
+.badge-grosir {
+  font-size: 0.7rem;
+  background: var(--amber-pale);
+  color: var(--amber-dark);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.badge-grosir-active {
+  font-size: 0.75rem;
+  background: var(--amber-pale);
+  color: var(--amber-dark);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: bold;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 
 .color-swatch {
